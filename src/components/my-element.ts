@@ -7,17 +7,17 @@ const tagName = 'my-element'
 export class MyElement extends LitElement {
     @property()
     name = ''
-    private ctlr = new RndController(this)
+    private generator = new Generator(this)
 
     render() {
-        return html` <p>Hello ${this.name} ! magic number is: ${this.ctlr.rnd}</p> `
+        return html` <p>Hello ${this.name} ! magic number is: ${this.generator.randomNumber}</p> `
     }
 }
 
 
-class RndController implements ReactiveController {
+class Generator implements ReactiveController {
     host: ReactiveControllerHost
-    rnd = 0
+    randomNumber = 0
     private intervalId?: number
 
     constructor(host: ReactiveControllerHost) {
@@ -28,11 +28,11 @@ class RndController implements ReactiveController {
         // @ts-ignore
         this.intervalId = setInterval(
             () => {
-                this.rnd = Math.floor(Math.random() * 1000)
-                console.log('magic:' + this.rnd)
+                this.randomNumber = Math.floor(Math.random() * 1000)
+                console.log('magic:' + this.randomNumber)
                 this.host.requestUpdate()
             }
-            , 1000)
+            , 2000)
     }
 
     hostDisconnected(): void {
