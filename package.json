@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@astrojs/deno": "^4.0.2",
-    "astro": "^2.0.17"
+    "@astrojs/lit": "^1.2.1",
+    "@webcomponents/template-shadowroot": "^0.1.0",
+    "astro": "^2.0.17",
+    "lit": "^2.6.1"
   }
 }
