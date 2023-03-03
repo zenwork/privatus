@@ -1,14 +1,13 @@
-import {LitElement, html, ReactiveController, ReactiveControllerHost} from 'lit'
-import {customElement, property, state}                               from 'lit/decorators.js'
+import {html, LitElement, ReactiveController, ReactiveControllerHost} from 'lit'
+import {customElement, property}                                      from 'lit/decorators.js'
 
 const tagName = 'my-element'
 
 @customElement(tagName)
 export class MyElement extends LitElement {
-    private ctlr = new RndController(this);
-
     @property()
     name = ''
+    private ctlr = new RndController(this)
 
     render() {
         return html` <p>Hello ${this.name} ! magic number is: ${this.ctlr.rnd}</p> `
@@ -18,8 +17,8 @@ export class MyElement extends LitElement {
 
 class RndController implements ReactiveController {
     host: ReactiveControllerHost
-    private intervalId?: number
     rnd = 0
+    private intervalId?: number
 
     constructor(host: ReactiveControllerHost) {
         (this.host = host).addController(this)
@@ -31,7 +30,7 @@ class RndController implements ReactiveController {
             () => {
                 this.rnd = Math.floor(Math.random() * 1000)
                 console.log('magic:' + this.rnd)
-                this.host.requestUpdate();
+                this.host.requestUpdate()
             }
             , 1000)
     }
