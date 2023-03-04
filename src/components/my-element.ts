@@ -1,5 +1,5 @@
-import {html, LitElement, ReactiveController, ReactiveControllerHost} from 'lit'
-import {customElement, property}                                      from 'lit/decorators.js'
+import {html, LitElement, ReactiveController} from 'lit'
+import {customElement, property}              from 'lit/decorators.js'
 
 const tagName = 'my-element'
 
@@ -7,32 +7,40 @@ const tagName = 'my-element'
 export class MyElement extends LitElement {
     @property()
     name = ''
+
+    @property({type: Number})
+    refresh = 1000
+
     private generator = new Generator(this)
 
+    previousNumbers:number[] =[]
+
     render() {
-        return html` <p>Hello ${this.name} ! magic number is: ${this.generator.randomNumber}</p> `
+        this.previousNumbers.push(this.generator.randomNumber)
+        return html` <p>Hello ${this.name} ! magic numbers are: ${this.previousNumbers.join(', ')}</p> `
     }
 }
 
 
 class Generator implements ReactiveController {
-    host: ReactiveControllerHost
+    host: MyElement
     randomNumber = 0
     private intervalId?: number
 
-    constructor(host: ReactiveControllerHost) {
+    constructor(host: MyElement) {
         (this.host = host).addController(this)
     }
 
-    hostConnected(): void {
-        // @ts-ignore
-        this.intervalId = setInterval(
-            () => {
-                this.randomNumber = Math.floor(Math.random() * 1000)
-                console.log('magic:' + this.randomNumber)
-                this.host.requestUpdate()
-            }
-            , 2000)
+    hostUpdated(): void {
+        if (!this.intervalId) {
+            // @ts-ignore
+            this.intervalId = setInterval(
+                () => {
+                    this.randomNumber = Math.floor(Math.random() * 1000)
+                    this.host.requestUpdate()
+                }
+                , this.host.refresh)
+        }
     }
 
     hostDisconnected(): void {
