@@ -13,7 +13,7 @@ export class MyElement extends LitElement {
 
     private generator = new Generator(this)
 
-    previousNumbers:number[] =[]
+    previousNumbers: number[] = []
 
     render() {
         this.previousNumbers.push(this.generator.randomNumber)
