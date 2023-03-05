@@ -1,14 +1,11 @@
-import { defineConfig } from 'astro/config';
-import deno from '@astrojs/deno';
+import deno           from '@astrojs/deno'
+import lit            from '@astrojs/lit'
+import {defineConfig} from 'astro/config'
 
-// https://astro.build/config
-
-// https://astro.build/config
-import lit from "@astrojs/lit";
-
-// https://astro.build/config
-export default defineConfig({
-  output: 'server',
-  adapter: deno(),
-  integrations: [lit()]
-});
+export default defineConfig(
+    {
+        output:'server',
+        adapter:deno(),
+        integrations:[lit()]
+    }
+)
