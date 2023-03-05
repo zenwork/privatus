@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.ts",
+  "devDependencies": {},
+  "scripts": {
+    "start": "deno run --watch main.ts",
+    "test": "deno test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zenwork/privatus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zenwork/privatus/issues"
+  },
+  "homepage": "https://github.com/zenwork/privatus#readme"
+}

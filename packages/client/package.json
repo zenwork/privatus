@@ -1,5 +1,5 @@
 {
-  "name": "privatus-client",
+  "name": "client",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -17,5 +17,18 @@
     "astro": "^2.0.17",
     "lit": "^2.6.1",
     "@lit-labs/context": "^0.2.0"
-  }
+  },
+  "description": "``` npm create astro@latest -- --template basics ```",
+  "main": "dist/index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zenwork/privatus.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zenwork/privatus/issues"
+  },
+  "homepage": "https://github.com/zenwork/privatus#readme"
 }
