@@ -1,9 +1,9 @@
 import {Context, ContextProvider} from '@lit-labs/context'
 import {css, html, LitElement}    from 'lit'
-import {customElement, state} from 'lit/decorators.js'
-import {key, Registry}        from './prism'
+import {customElement, state}     from 'lit/decorators.js'
+import {key, Registry}            from './prism'
 // noinspection ES6UnusedImports
-import {PrismParticipant}     from './prism-participant'
+import {PrismParticipant}         from './prism-participant'
 
 
 @customElement('prism-ctx')
