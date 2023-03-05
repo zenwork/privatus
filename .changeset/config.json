@@ -3,7 +3,7 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
-  "linked": [],
+  "linked": [["client", "server"]],
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
