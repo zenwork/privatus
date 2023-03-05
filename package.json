@@ -2,20 +2,11 @@
   "name": "privatus",
   "type": "module",
   "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "_preview": "astro preview",
-    "astro": "astro",
-    "preview": "deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs"
-  },
   "dependencies": {
-    "@astrojs/deno": "^4.0.2",
-    "@astrojs/lit": "^1.2.1",
-    "@webcomponents/template-shadowroot": "^0.1.0",
-    "astro": "^2.0.17",
-    "lit": "^2.6.1",
-    "@lit-labs/context": "^0.2.0"
-  }
+    "@changesets/cli": "^2.26.0"
+  },
+  "workspaces": [
+    "packages/client",
+    "packages/server"
+  ]
 }

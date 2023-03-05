@@ -1,0 +1,34 @@
+{
+  "name": "client",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "../../node_modules/.bin/astro dev",
+    "start": "../../node_modules/.bin/astro dev",
+    "build": "../../node_modules/.bin/astro build",
+    "_preview": "../../node_modules/.bin/astro preview",
+    "astro": "../../node_modules/.bin/astro",
+    "preview": "deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs"
+  },
+  "dependencies": {
+    "@astrojs/deno": "^4.0.2",
+    "@astrojs/lit": "^1.2.1",
+    "@webcomponents/template-shadowroot": "^0.1.0",
+    "astro": "^2.0.17",
+    "lit": "^2.6.1",
+    "@lit-labs/context": "^0.2.0"
+  },
+  "description": "``` npm create astro@latest -- --template basics ```",
+  "main": "dist/index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zenwork/privatus.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zenwork/privatus/issues"
+  },
+  "homepage": "https://github.com/zenwork/privatus#readme"
+}
