@@ -3,11 +3,11 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "../../node_modules/.bin/astro dev",
-    "start": "../../node_modules/.bin/astro dev",
-    "build": "../../node_modules/.bin/astro build",
-    "_preview": "../../node_modules/.bin/astro preview",
-    "astro": "../../node_modules/.bin/astro",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "_preview": "astro preview",
+    "astro": "astro",
     "preview": "deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs"
   },
   "dependencies": {
