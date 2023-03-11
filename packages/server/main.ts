@@ -1,3 +1,4 @@
+import logger                from 'https://deno.land/x/oak_logger/mod.ts'
 import {Application, Router} from 'oak'
 import {routes2Html}         from './src/server/html.ts'
 
@@ -19,22 +20,11 @@ const app = new Application()
 app.use(router.routes())
 app.use(router.allowedMethods())
 
+app.use(logger.logger)
+app.use(logger.responseTime)
+
 // static content
 app.use(async (context, next) => {
-    // const root = `${Deno.cwd()}/dist`
-
-    // console.log(context.request.url.pathname)
-    // try {
-    //     let assetName: string = ''
-    //     if (!context.request.url.pathname || context.request.url.pathname.endsWith('/')) {
-    //         assetName = `/index.html`
-    //     }
-    //     let asset = root + assetName
-    //     console.log(asset)
-    //     await context.send({root: `${asset}`})
-    // } catch (e) {
-    //     next()
-    // }
 
     let pathname = context.request.url.pathname
     if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
@@ -43,8 +33,7 @@ app.use(async (context, next) => {
     let filepath = pathname === '/' ? '/index.html' : pathname
     let assetPath = `${Deno.cwd()}/dist${filepath}`
     console.log(assetPath)
-    let asset = Deno.readFileSync(assetPath)
-    context.response.body = asset
+    context.response.body = Deno.readFileSync(assetPath)
     let extension = assetPath.substring(assetPath.lastIndexOf('.') + 1)
     console.log(extension)
     switch (extension) {
@@ -65,9 +54,7 @@ app.use(async (context, next) => {
             break
         default:
             context.response.type = 'test/html'
-
     }
-
 
 })
 
