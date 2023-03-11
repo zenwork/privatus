@@ -29,12 +29,14 @@ app.use(async (context, next) => {
     let pathname = context.request.url.pathname
     if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
         next()
-    } else if (pathname !== '/debug.txt') {
+    }
+
+    if (pathname !== '/debug.txt') {
 
         let filepath = pathname === '/' ? '/index.html' : pathname
         let assetPath = `${Deno.cwd()}/dist${filepath}`
         // console.log(assetPath)
-        context.response.body = Deno.readFileSync(assetPath)
+        context.response.body = await Deno.readFile(assetPath)
         let extension = assetPath.substring(assetPath.lastIndexOf('.') + 1)
         // console.log(extension)
         switch (extension) {
@@ -56,9 +58,6 @@ app.use(async (context, next) => {
             default:
                 context.response.type = 'text/plain'
         }
-    } else {
-        context.response.body = 'DEBUG'
-        context.response.type = 'text/plain'
     }
 
 })
