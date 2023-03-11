@@ -17,11 +17,9 @@ await esbuild.build({
     chunkNames: 'chunks/[name]-[hash]',
 })
 
-console.log('copy')
-await Deno.copyFile('./templates/index.html', './dist/index.html')
-await Deno.copyFile('./templates/index.css', './dist/index.css')
-console.log('copy')
-await Deno.copyFile('./templates/favicon.ico', './dist/favicon.ico')
+await Deno.copyFile('./assets/index.html', './dist/index.html')
+await Deno.copyFile('./assets/index.css', './dist/index.css')
+await Deno.copyFile('./assets/favicon.ico', './dist/favicon.ico')
 
 console.log('done')
 Deno.exit(0)

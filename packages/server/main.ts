@@ -1,69 +1,9 @@
-import logger                from 'https://deno.land/x/oak_logger/mod.ts'
-import {Application, Router} from 'oak'
-import {routes2Html}         from './src/server/html.ts'
+import {initBackend}   from './src/server/initBackend.ts'
+import {initFrontend}  from './src/server/initFrontend.ts'
+import {create} from './src/server/server.ts'
 
-
-const router = new Router()
-
-
-router.get('api',
-    '/api', (ctx) => {
-        ctx.response.body = {status: 'OK'}
+await create((app) => {
+        initBackend(app)
+        initFrontend(app)
     })
-
-router.get('api docs', '/docs', (ctx) => {
-    routes2Html(router, ctx.response)
-})
-
-
-const app = new Application()
-
-app.use(logger.logger)
-app.use(logger.responseTime)
-app.use(router.routes())
-app.use(router.allowedMethods())
-
-// static content
-app.use(async (context, next) => {
-
-    let pathname = context.request.url.pathname
-    if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
-        next()
-    }
-
-    if (pathname !== '/debug.txt') {
-
-        let filepath = pathname === '/' ? '/index.html' : pathname
-        let assetPath = `${Deno.cwd()}/dist${filepath}`
-        // console.log(assetPath)
-        context.response.body = await Deno.readFile(assetPath)
-        let extension = assetPath.substring(assetPath.lastIndexOf('.') + 1)
-        // console.log(extension)
-        switch (extension) {
-            case 'html':
-                context.response.type = 'text/html'
-                break
-            case 'css':
-                context.response.type = 'text/css'
-                break
-            case 'js':
-                context.response.type = 'application/javascript'
-                break
-            case 'json':
-                context.response.type = 'application/json'
-                break
-            case 'ico':
-                context.response.type = 'image/x-icon'
-                break
-            default:
-                context.response.type = 'text/plain'
-        }
-    }
-
-})
-
-app.addEventListener(
-    'listen',
-    () => console.log('Listening on http://localhost:8080'),
-)
-await app.listen({port: 8080})
+    .start()
