@@ -71,7 +71,7 @@ export class PrismCtx extends LitElement {
                     <h2>Privatus</h2>
                     <h3>The identity and privacy game</h3>
                     <h4># of players: ${this.registry.p.length}</h4>
-                    <h4>session: <input type="text" ></h4>
+                    <h4>session: <input type="text"></h4>
                 </section>
                 <section>
                     <ul id="participants">

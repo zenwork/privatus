@@ -1,7 +1,7 @@
-import {Application,Router} from 'oak'
-import {routes2Html} from './html.ts'
+import {Application, Router} from 'oak'
+import {routes2Html}         from './html.ts'
 
-export function initBackend(app:Application) {
+export function initBackend(app: Application) {
     const router = new Router()
     router.get('api',
         '/api', (ctx) => {

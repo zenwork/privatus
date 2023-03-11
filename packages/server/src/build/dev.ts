@@ -13,7 +13,7 @@ const ctx = await esbuild.context({
     sourcemap: true,
     platform: 'neutral',
     plugins: [importMap.plugin()],
-    outfile:'./dist/index.js' ,
+    outfile: './dist/index.js',
     chunkNames: 'chunks/[name]-[hash]',
 })
 
@@ -22,7 +22,7 @@ await Deno.copyFile('./assets/index.css', './dist/index.css')
 await Deno.copyFile('./assets/favicon.ico', './dist/favicon.ico')
 
 console.log('watching')
-let { host, port } = await ctx.serve({
+let {host, port} = await ctx.serve({
     servedir: './dist',
 })
-console.log(host,port)
+console.log(host, port)
