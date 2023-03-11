@@ -14,6 +14,7 @@ await esbuild.build({
     platform: 'neutral',
     plugins: [importMap.plugin()],
     outdir: './dist',
+    chunkNames: 'chunks/[name]-[hash]',
 })
 
 console.log('copy')
