@@ -1,5 +1,5 @@
-import {Context, ContextProvider} from '@lit-labs/context'
 import {css, html, LitElement}    from 'lit'
+import {Context, ContextProvider} from 'lit-labs/context'
 import {customElement, state}     from 'lit/decorators.js'
 import {key, Registry}            from './prism'
 // noinspection ES6UnusedImports
@@ -45,6 +45,8 @@ export class PrismCtx extends LitElement {
 
     @state()
     registry: Registry = {p: []}
+    @state()
+    server = 'UNKNOWN'
 
     private provider?: ContextProvider<Context<'prism-registry', Registry>>
 
@@ -59,6 +61,7 @@ export class PrismCtx extends LitElement {
     connectedCallback() {
         super.connectedCallback()
         this.provider = new ContextProvider(this, key, this.registry)
+        fetch('/api').then(r => r.json()).then(s => this.server = s.status)
     }
 
     protected render(): unknown {
@@ -84,8 +87,9 @@ export class PrismCtx extends LitElement {
                             <prism-participant pid="p4" ptype="PROFESSIONAL"></prism-participant>
                         </li>
                     </ul>
-
-
+                </section>
+                <section>
+                    status: ${this.server}
                 </section>
             </article>`
     }

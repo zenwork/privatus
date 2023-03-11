@@ -13,11 +13,17 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
 
+      - name: Build client
+        uses: maximousblk/setup-deno@v2
+
+      - run: cd packages/server && deno task build && ls dist
+
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus
-          entrypoint: "./packages/server/main.ts"
+          entrypoint: "main.ts"
+          root: "./packages/server"
 
 
 #jobs:
