@@ -14,9 +14,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build client
-        uses: denolib/deno-action@0.20.0
-        with:
-          args: run task build
+        uses: maximousblk/setup-deno@v2 # Installs latest version
+
+      - run: deno task build
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
