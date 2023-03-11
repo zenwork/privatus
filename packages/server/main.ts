@@ -1,6 +1,5 @@
-import {Application, Router}     from 'oak'
-import {html, page, routes2Html} from './src/server/html.ts'
-import {serve}                   from 'https://deno.land/x/esbuild_serve/mod.ts'
+import {Application, Router} from 'oak'
+import {routes2Html}         from './src/server/html.ts'
 
 
 const router = new Router()
@@ -24,16 +23,16 @@ app.use(router.allowedMethods())
 app.use(async (context, next) => {
     const root = `${Deno.cwd()}/dist`
 
-        console.log(context.request.url.pathname)
+    console.log(context.request.url.pathname)
     try {
-        let assetName:string = ''
+        let assetName: string = ''
         if (!context.request.url.pathname || context.request.url.pathname.endsWith('/')) {
             assetName = `/index.html`
         }
         let asset = root + assetName
         console.log(asset)
         await context.send({root: `${asset}`})
-    } catch(e) {
+    } catch (e) {
         next()
     }
 })

@@ -1,1 +1,1 @@
-import "./components/index.ts"
+import './components/index.ts'

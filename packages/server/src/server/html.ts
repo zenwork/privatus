@@ -1,4 +1,4 @@
-import {Router, Route} from 'oak'
+import {Route, Router} from 'oak'
 
 export function page(response, header: {}, body: string) {
     response.headers.set('content-type', 'text/html')

@@ -1,5 +1,5 @@
-import {Context, ContextProvider} from 'lit-labs/context'
 import {css, html, LitElement}    from 'lit'
+import {Context, ContextProvider} from 'lit-labs/context'
 import {customElement, state}     from 'lit/decorators.js'
 import {key, Registry}            from './prism'
 // noinspection ES6UnusedImports
