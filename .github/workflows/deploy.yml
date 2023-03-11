@@ -22,7 +22,8 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus
-          entrypoint: "./packages/server/main.ts"
+          entrypoint: "main.ts"
+          root: "./packages/server"
 
 
 #jobs:
