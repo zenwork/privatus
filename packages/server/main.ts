@@ -17,11 +17,11 @@ router.get('api docs', '/docs', (ctx) => {
 
 
 const app = new Application()
-app.use(router.routes())
-app.use(router.allowedMethods())
 
 app.use(logger.logger)
 app.use(logger.responseTime)
+app.use(router.routes())
+app.use(router.allowedMethods())
 
 // static content
 app.use(async (context, next) => {
@@ -32,10 +32,10 @@ app.use(async (context, next) => {
     }
     let filepath = pathname === '/' ? '/index.html' : pathname
     let assetPath = `${Deno.cwd()}/dist${filepath}`
-    console.log(assetPath)
+    // console.log(assetPath)
     context.response.body = Deno.readFileSync(assetPath)
     let extension = assetPath.substring(assetPath.lastIndexOf('.') + 1)
-    console.log(extension)
+    // console.log(extension)
     switch (extension) {
         case 'html':
             context.response.type = 'text/html'
