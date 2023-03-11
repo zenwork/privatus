@@ -34,7 +34,7 @@ app.use(async (context, next) => {
         let filepath = pathname === '/' ? '/index.html' : pathname
         let assetPath = `${Deno.cwd()}/dist${filepath}`
         // console.log(assetPath)
-        context.response.body = Deno.readFileSync(assetPath)
+        context.response.body = await Deno.readFile(assetPath)
         let extension = assetPath.substring(assetPath.lastIndexOf('.') + 1)
         // console.log(extension)
         switch (extension) {
