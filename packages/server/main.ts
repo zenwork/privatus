@@ -29,7 +29,9 @@ app.use(async (context, next) => {
     let pathname = context.request.url.pathname
     if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
         next()
-    } else if (pathname !== '/debug.txt') {
+    }
+
+    if (pathname !== '/debug.txt') {
 
         let filepath = pathname === '/' ? '/index.html' : pathname
         let assetPath = `${Deno.cwd()}/dist${filepath}`
@@ -56,9 +58,6 @@ app.use(async (context, next) => {
             default:
                 context.response.type = 'text/plain'
         }
-    } else {
-        context.response.body = 'DEBUG'
-        context.response.type = 'text/plain'
     }
 
 })
