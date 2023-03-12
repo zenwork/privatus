@@ -21,11 +21,11 @@ export function initFrontend(app: Application) {
     })
 }
 
-function getAsset(pathname: string):{type:string,content:Promise<Uint8Array>} {
+function getAsset(pathname: string): { type: string, content: Promise<Uint8Array> } {
     const filepath = pathname === '/' ? '/index.html' : pathname
     const assetPath = `${Deno.cwd()}/dist${filepath}`
 
-    const content =  Deno.readFile(assetPath)
+    const content = Deno.readFile(assetPath)
 
     let type = getType(assetPath)
     return {type, content}
@@ -34,23 +34,17 @@ function getAsset(pathname: string):{type:string,content:Promise<Uint8Array>} {
 function getType(assetPath: string) {
     const extension = assetPath.substring(assetPath.lastIndexOf('.') + 1)
 
-    let type = 'text/plain'
     switch (extension) {
         case 'html':
             return 'text/html'
-            break
         case 'css':
             return 'text/css'
-            break
         case 'js':
             return 'application/javascript'
-            break
         case 'json':
             return 'application/json'
-            break
         case 'ico':
             return 'image/x-icon'
-            break
         default:
             return 'text/plain'
     }
