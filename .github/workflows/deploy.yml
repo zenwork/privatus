@@ -9,17 +9,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: formatting check
+      - name: checks
         uses: maximousblk/setup-deno@v2
-        run: deno fmt --check
 
-      - name: linting check
-        uses: maximousblk/setup-deno@v2
-        run: deno lint --check
-
-      - name: tests
-        uses: maximousblk/setup-deno@v2
-        run: deno task test
+      - run: deno fmt --check
+      - run: deno lint --check
+      - run: deno task test
 
   check:
     name: Check
