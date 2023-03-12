@@ -1,5 +1,11 @@
 # server
 
+## 0.2.0
+
+### Minor Changes
+
+- ae78504: added player registration and heartbeat with simple SSE implementation
+
 ## 0.1.0
 
 ### Minor Changes
