@@ -2,8 +2,6 @@ import {css, html, LitElement}    from 'lit'
 import {Context, ContextProvider} from 'lit-labs/context'
 import {customElement, state}     from 'lit/decorators.js'
 import {key, Registry}            from './prism'
-// noinspection ES6UnusedImports
-import {PrismParticipant}         from './prism-participant'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
@@ -97,10 +95,10 @@ export class PrismCtx extends LitElement {
 }
 
 function makeid(length) {
-    var result = ''
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    var charactersLength = characters.length
-    for (var i = 0; i < length; i++) {
+    let result = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const charactersLength = characters.length
+    for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength))
     }
     return result

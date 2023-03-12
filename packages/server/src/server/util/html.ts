@@ -14,7 +14,7 @@ export function page(response: Response, header: { title: string }, body: string
 }
 
 export function html(strings: string[], ...args: any): string {
-    let output: any[] = []
+    const output: any[] = []
     strings.forEach((str, idx) => {
         output.push(str)
         if (args[idx]) output.push(String(args[idx]))
@@ -23,11 +23,11 @@ export function html(strings: string[], ...args: any): string {
 }
 
 export function routes2Html(router: Router, response: Response) {
-    let docs: string[] = []
+    const docs: string[] = []
     for (const route of router) {
-        let methods = route.methods.filter((m) => m !== 'HEAD').join(' ')
-        let path = route.path
-        let params = route.paramNames.length !== 0 ? '- [' + route.paramNames.join(',') + ']' : ''
+        const methods = route.methods.filter((m) => m !== 'HEAD').join(' ')
+        const path = route.path
+        const params = route.paramNames.length !== 0 ? `- [${route.paramNames.join(',')}]` : ''
         if (path !== '/api' && path !== '/docs') {
             docs.push(`
                 <ul>${route.name} - [${methods}] - ${path} ${params}</ul>`)

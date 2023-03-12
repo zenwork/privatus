@@ -11,14 +11,14 @@ Deno.test(
     async (t) => {
         let app: Application
 
-        await t.step('init', async () => {
+        await t.step('init', () => {
             app = create((app: Application<Record<string, any>>) => {
                 initFrontend(app)
             }).app
         })
 
         await t.step('check root', async () => {
-            let request = await superoak(app)
+            const request = await superoak(app)
             await request.get('/')
                 .expect(200)
                 .expect('Content-Type', 'text/html; charset=UTF-8')
@@ -48,14 +48,14 @@ Deno.test(
     async (t) => {
         let app: Application
 
-        await t.step('init', async () => {
+        await t.step('init', () => {
             app = create((app: Application<Record<string, any>>) => {
                 initBackend(app)
             }).app
         })
 
         await t.step('check api', async () => {
-            let request = await superoak(app)
+            const request = await superoak(app)
             await request.get('/api')
                 .expect(200)
                 .expect('Content-Type', 'application/json; charset=UTF-8')
@@ -63,7 +63,7 @@ Deno.test(
         })
 
         await t.step('check docs', async () => {
-            let request = await superoak(app)
+            const request = await superoak(app)
             await request.get('/api/docs')
                 .expect(200)
                 .expect('Content-Type', 'text/html')

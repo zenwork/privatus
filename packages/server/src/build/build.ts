@@ -7,6 +7,7 @@ console.log(`asset build starting: ${outdir}`)
 if (!existsSync(outdir)) await Deno.mkdir(outdir, {recursive: true})
 importMap.load('./import_map.json')
 
+// todo(@zenwork) - currently built with unbundled dependencies (esm). Maybe should be bundled together.
 await esbuild.build({
     entryPoints: ['./src/client/index.ts'],
     bundle: true,

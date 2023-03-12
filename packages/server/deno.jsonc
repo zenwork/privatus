@@ -16,7 +16,7 @@
       "rules": {
         "tags": ["recommended"],
         "include": ["ban-untagged-todo"],
-        "exclude": ["no-explicit-any"]
+        "exclude": ["no-explicit-any","no-inferrable-types"]
       }
     },
     "fmt": {

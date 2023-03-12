@@ -7,12 +7,12 @@ import {Application} from 'oak'
 export function initFrontend(app: Application) {
     // static content
     app.use(async (context, next) => {
-        let pathname = context.request.url.pathname
+        const pathname = context.request.url.pathname
         if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
             next()
         }
 
-        let {type, content} = getAsset(pathname)
+        const {type, content} = getAsset(pathname)
         context.response.body = await content
         context.response.type = type
     })
@@ -24,7 +24,7 @@ function getAsset(pathname: string): { type: string; content: Promise<Uint8Array
 
     const content = Deno.readFile(assetPath)
 
-    let type = getType(assetPath)
+    const type = getType(assetPath)
     return {type, content}
 }
 

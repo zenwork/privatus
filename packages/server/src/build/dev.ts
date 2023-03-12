@@ -23,7 +23,4 @@ export async function esBuildWatch() {
     await Deno.copyFile('./assets/index.css', './dist/index.css')
     await Deno.copyFile('./assets/favicon.ico', './dist/favicon.ico')
 
-    // let { host, port } = await ctx.serve({
-    //     servedir: 'www',
-    // })
 }
