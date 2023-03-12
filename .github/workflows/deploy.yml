@@ -13,7 +13,7 @@ jobs:
         uses: maximousblk/setup-deno@v2
 
       - run: cd packages/server && deno fmt --check
-      - run: cd packages/server && deno lint --check
+      - run: cd packages/server && deno lint
       - run: cd packages/server && deno task test
 
   check:
