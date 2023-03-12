@@ -1,5 +1,11 @@
 # server
 
+## 0.2.3
+
+### Patch Changes
+
+- 4606732: improve deploy
+
 ## 0.2.2
 
 ### Patch Changes
