@@ -14,12 +14,12 @@ jobs:
       - name: Check Deployability
         uses: maximousblk/setup-deno@v2
       - id: early
-        name: Deployable Check
         run: ./tools/check.sh
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    if: needs.check.outputs.status == 'deploy' && !startsWith(github.ref, 'refs/tags')
+    if: needs.check.outputs.status == 'deploy'
     permissions:
       id-token: write
       contents: read
