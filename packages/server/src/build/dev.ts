@@ -1,9 +1,9 @@
-import {existsSync}   from 'deno/std/node/fs.ts'
-import * as esbuild   from 'esbuild'
+import { existsSync } from 'deno/std/node/fs.ts'
+import * as esbuild from 'esbuild'
 import * as importMap from 'npm:esbuild-plugin-import-map'
 
 export async function esBuildWatch() {
-    if (!existsSync('./dist')) await Deno.mkdir('./dist', {recursive: true})
+    if (!existsSync('./dist')) await Deno.mkdir('./dist', { recursive: true })
     importMap.load('./import_map.json')
 
     const ctx = await esbuild.context({

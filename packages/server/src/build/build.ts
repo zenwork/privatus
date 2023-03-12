@@ -1,10 +1,10 @@
-import {existsSync}   from 'deno/std/node/fs.ts'
-import * as esbuild   from 'esbuild'
+import { existsSync } from 'deno/std/node/fs.ts'
+import * as esbuild from 'esbuild'
 import * as importMap from 'npm:esbuild-plugin-import-map'
 
 const outdir = './dist'
 console.log(`asset build starting: ${outdir}`)
-if (!existsSync(outdir)) await Deno.mkdir(outdir, {recursive: true})
+if (!existsSync(outdir)) await Deno.mkdir(outdir, { recursive: true })
 importMap.load('./import_map.json')
 
 // todo(@zenwork) - currently built with unbundled dependencies (esm). Maybe should be bundled together.

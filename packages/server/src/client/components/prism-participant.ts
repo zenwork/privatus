@@ -1,7 +1,7 @@
-import {css, html, LitElement, state} from 'lit'
-import {consume}                      from 'lit-labs/context'
-import {customElement, property}      from 'lit/decorators.js'
-import {key, Registry}                from './prism'
+import { css, html, LitElement, state } from 'lit'
+import { consume } from 'lit-labs/context'
+import { customElement, property } from 'lit/decorators.js'
+import { key, Registry } from './prism'
 
 export enum PType {
     CITIZEN = 'CITIZEN',
@@ -32,7 +32,7 @@ export class PrismParticipant extends LitElement {
     ptype: PType = PType.UNDEFINED
     @property()
     gameid = ''
-    @consume({context: key, subscribe: true})
+    @consume({ context: key, subscribe: true })
     registry: Registry | undefined
     @state()
     connected = ''
@@ -41,7 +41,7 @@ export class PrismParticipant extends LitElement {
         super.connectedCallback()
         const event = new CustomEvent('prism-register', {
             detail: {
-                participant: {pid: this.pid, ptype: this.ptype},
+                participant: { pid: this.pid, ptype: this.ptype },
             },
             bubbles: true,
             composed: true,

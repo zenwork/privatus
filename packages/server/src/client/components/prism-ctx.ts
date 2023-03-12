@@ -1,7 +1,7 @@
-import {css, html, LitElement}    from 'lit'
-import {Context, ContextProvider} from 'lit-labs/context'
-import {customElement, state}     from 'lit/decorators.js'
-import {key, Registry}            from './prism'
+import { css, html, LitElement } from 'lit'
+import { Context, ContextProvider } from 'lit-labs/context'
+import { customElement, state } from 'lit/decorators.js'
+import { key, Registry } from './prism'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
@@ -40,7 +40,7 @@ export class PrismCtx extends LitElement {
     ]
 
     @state()
-    registry: Registry = {p: []}
+    registry: Registry = { p: [] }
     @state()
     gameId = makeid(5)
     @state()
@@ -52,7 +52,7 @@ export class PrismCtx extends LitElement {
         super()
         this.addEventListener('prism-register', (e: any) => {
             this.registry.p.push(e.detail)
-            this.registry = {p: this.registry.p}
+            this.registry = { p: this.registry.p }
         })
     }
 

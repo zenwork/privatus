@@ -1,4 +1,4 @@
-import {Response, Router} from 'oak'
+import { Response, Router } from 'oak'
 
 export function page(response: Response, header: { title: string }, body: string) {
     response.headers.set('content-type', 'text/html')
@@ -35,7 +35,7 @@ export function routes2Html(router: Router, response: Response) {
     }
     return page(
         response,
-        {title: 'privatus-api'},
+        { title: 'privatus-api' },
         `
             <h1>api</h1>
             <ol>

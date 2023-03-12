@@ -1,10 +1,10 @@
-import {Application}  from 'https://deno.land/x/oak@v12.1.0/application.ts'
-import {superoak}     from 'superoak'
+import { Application } from 'https://deno.land/x/oak@v12.1.0/application.ts'
+import { superoak } from 'superoak'
 
 import '../../src/build/build.ts'
-import {initBackend}  from '../../src/server/initBackend.ts'
-import {initFrontend} from '../../src/server/initFrontend.ts'
-import {create}       from '../../src/server/server.ts'
+import { initBackend } from '../../src/server/initBackend.ts'
+import { initFrontend } from '../../src/server/initFrontend.ts'
+import { create } from '../../src/server/server.ts'
 
 Deno.test(
     'health test frontend',
@@ -59,7 +59,7 @@ Deno.test(
             await request.get('/api')
                 .expect(200)
                 .expect('Content-Type', 'application/json; charset=UTF-8')
-                .expect({status: 'OK'})
+                .expect({ status: 'OK' })
         })
 
         await t.step('check docs', async () => {

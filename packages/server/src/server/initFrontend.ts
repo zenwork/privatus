@@ -1,4 +1,4 @@
-import {Application} from 'oak'
+import { Application } from 'oak'
 
 /**
  * Serving static assets under supported deno deploy mechanisms
@@ -12,7 +12,7 @@ export function initFrontend(app: Application) {
             next()
         }
 
-        const {type, content} = getAsset(pathname)
+        const { type, content } = getAsset(pathname)
         context.response.body = await content
         context.response.type = type
     })
@@ -25,7 +25,7 @@ function getAsset(pathname: string): { type: string; content: Promise<Uint8Array
     const content = Deno.readFile(assetPath)
 
     const type = getType(assetPath)
-    return {type, content}
+    return { type, content }
 }
 
 function getType(assetPath: string) {
