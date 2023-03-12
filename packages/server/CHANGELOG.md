@@ -1,5 +1,11 @@
 # server
 
+## 0.2.1
+
+### Patch Changes
+
+- 458fb58: change deployment condition to work with tags
+
 ## 0.2.0
 
 ### Minor Changes
