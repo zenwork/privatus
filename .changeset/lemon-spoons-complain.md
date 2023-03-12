@@ -1,5 +1,5 @@
 ---
-"client": patch
+"server": patch
 ---
 
 setting up changesets and adding first change
