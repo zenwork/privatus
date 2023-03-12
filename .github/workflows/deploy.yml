@@ -3,6 +3,8 @@ on: [push]
 
 jobs:
   check:
+    name: Check
+    runs-on: ubuntu-latest
     outputs:
       status: ${{ steps.early.outputs.status }}
     steps:
