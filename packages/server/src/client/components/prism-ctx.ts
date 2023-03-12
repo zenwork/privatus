@@ -46,6 +46,8 @@ export class PrismCtx extends LitElement {
     @state()
     registry: Registry = {p: []}
     @state()
+    gameId = makeid(5)
+    @state()
     server = 'UNKNOWN'
 
     private provider?: ContextProvider<Context<'prism-registry', Registry>>
@@ -71,21 +73,21 @@ export class PrismCtx extends LitElement {
                     <h2>Privatus</h2>
                     <h3>The identity and privacy game</h3>
                     <h4># of players: ${this.registry.p.length}</h4>
-                    <h4>session: <input type="text"></h4>
+                    <h4>session: ${this.gameId}</h4>
                 </section>
                 <section>
                     <ul id="participants">
                         <li class="participant">
-                            <prism-participant pid="p1" ptype="CITIZEN"></prism-participant>
+                            <prism-participant pid="p1" ptype="CITIZEN" gameid="${this.gameId}"></prism-participant>
                         </li>
                         <li class="participant">
-                            <prism-participant pid="p2" ptype="ISSUER"></prism-participant>
+                            <prism-participant pid="p2" ptype="ISSUER" gameid="${this.gameId}"></prism-participant>
                         </li>
                         <li class="participant">
-                            <prism-participant pid="p3" ptype="SERVICE_PROVIDER"></prism-participant>
+                            <prism-participant pid="p3" ptype="SERVICE_PROVIDER" gameid="${this.gameId}"></prism-participant>
                         </li>
                         <li class="participant">
-                            <prism-participant pid="p4" ptype="PROFESSIONAL"></prism-participant>
+                            <prism-participant pid="p4" ptype="PROFESSIONAL" gameid="${this.gameId}"></prism-participant>
                         </li>
                     </ul>
                 </section>
@@ -94,4 +96,14 @@ export class PrismCtx extends LitElement {
                 </section>
             </article>`
     }
+}
+
+function makeid(length) {
+    var result = ''
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var charactersLength = characters.length
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
 }

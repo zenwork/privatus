@@ -5,6 +5,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    if: (github.ref == 'refs/heads/main' && github.event_name == 'release' && github.event.action == 'created') || (github.ref != 'refs/heads/main')
     permissions:
       id-token: write
       contents: read
@@ -17,7 +18,7 @@ jobs:
         uses: maximousblk/setup-deno@v2
 
       #      - run: cd packages/server && deno task build && ls dist
-      - run: cd packages/server && deno task build && deno test -A --trace-ops tests/e2e && ls dist
+      - run: cd packages/server && deno task build && deno task test && ls dist
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
