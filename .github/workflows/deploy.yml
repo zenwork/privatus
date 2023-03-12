@@ -5,7 +5,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    if: (startsWith(github.ref, 'refs/tags/server@') && github.event_name == 'release' && github.event.action == 'created') || (github.ref != 'refs/heads/main')
     permissions:
       id-token: write
       contents: read
@@ -17,7 +16,7 @@ jobs:
       - name: Build client
         uses: maximousblk/setup-deno@v2
 
-      #      - run: cd packages/server && deno task build && ls dist
+      - run: deno task checkDeployable
       - run: cd packages/server && deno task build && deno task test && ls dist
 
       - name: Upload to Deno Deploy

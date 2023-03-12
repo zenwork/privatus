@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "checkDeployable": "deno run --allow-read --allow-run tools/isDeployable.ts",
+    },
+  "compilerOptions":{
+    "noImplicitReturns":false
+  }
+
+}
