@@ -17,7 +17,7 @@ Deno.test(
             }).app
         })
 
-        await t.step('check', async () => {
+        await t.step('check root', async () => {
                 let request = await superoak(app)
                 await request.get('/')
                     .expect(200)
