@@ -6,7 +6,7 @@
   ,
   "importMap": "./import_map.json",
   "compilerOptions":{
-    "noImplicitReturns":true
+    "noImplicitReturns":false
   }
 
 }

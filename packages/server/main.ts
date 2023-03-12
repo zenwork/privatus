@@ -6,4 +6,4 @@ import {create}       from './src/server/server.ts'
 await create((app: Application<Record<string, any>>) => {
     initBackend(app)
     initFrontend(app)
-}).start()
+}).startBlock()

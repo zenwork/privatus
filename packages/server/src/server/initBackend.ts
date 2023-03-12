@@ -8,7 +8,7 @@ export function initBackend(app: Application) {
             ctx.response.body = {status: 'OK'}
         })
 
-    router.get('api docs', '/docs', (ctx) => {
+    router.get('api docs', '/api/docs', (ctx) => {
         routes2Html(router, ctx.response)
     })
 
