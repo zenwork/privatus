@@ -25,7 +25,7 @@ export function html(strings: string[], ...args: any): string {
 export function routes2Html(router: Router, response: Response) {
     let docs: string[] = []
     for (const route of router) {
-        let methods = route.methods.filter(m => m !== 'HEAD').join(' ')
+        let methods = route.methods.filter((m) => m !== 'HEAD').join(' ')
         let path = route.path
         let params = route.paramNames.length !== 0 ? '- [' + route.paramNames.join(',') + ']' : ''
         if (path !== '/api' && path !== '/docs') {
@@ -40,6 +40,6 @@ export function routes2Html(router: Router, response: Response) {
             <h1>api</h1>
             <ol>
                 ${docs.join('\n')}
-            </ol>`
+            </ol>`,
     )
 }

@@ -1,6 +1,5 @@
 import {Application} from 'oak'
 
-
 /**
  * Serving static assets under supported deno deploy mechanisms
  * @param app
@@ -8,7 +7,6 @@ import {Application} from 'oak'
 export function initFrontend(app: Application) {
     // static content
     app.use(async (context, next) => {
-
         let pathname = context.request.url.pathname
         if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
             next()
@@ -17,11 +15,10 @@ export function initFrontend(app: Application) {
         let {type, content} = getAsset(pathname)
         context.response.body = await content
         context.response.type = type
-
     })
 }
 
-function getAsset(pathname: string): { type: string, content: Promise<Uint8Array> } {
+function getAsset(pathname: string): { type: string; content: Promise<Uint8Array> } {
     const filepath = pathname === '/' ? '/index.html' : pathname
     const assetPath = `${Deno.cwd()}/dist${filepath}`
 

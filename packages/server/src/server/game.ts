@@ -5,6 +5,5 @@ export function register(id: { game: any; role: any; player: any }, ctx: RouterC
     const target = ctx.sendEvents()
     setInterval(() => {
         target.dispatchEvent(new ServerSentEvent('ping', {hearbeat: Date.now(), id}))
-
     }, 700)
 }

@@ -18,33 +18,29 @@ Deno.test(
         })
 
         await t.step('check root', async () => {
-                let request = await superoak(app)
-                await request.get('/')
-                    .expect(200)
-                    .expect('Content-Type', 'text/html; charset=UTF-8')
-            }
-        )
+            let request = await superoak(app)
+            await request.get('/')
+                .expect(200)
+                .expect('Content-Type', 'text/html; charset=UTF-8')
+        })
 
         await t.step('check assets', async () => {
-                let request = await superoak(app)
-                await request.get('/index.html')
-                    .expect(200)
-                    .expect('Content-Type', 'text/html; charset=UTF-8')
+            let request = await superoak(app)
+            await request.get('/index.html')
+                .expect(200)
+                .expect('Content-Type', 'text/html; charset=UTF-8')
 
-                request = await superoak(app)
-                await request.get('/index.css')
-                    .expect(200)
-                    .expect('Content-Type', 'text/css; charset=UTF-8')
+            request = await superoak(app)
+            await request.get('/index.css')
+                .expect(200)
+                .expect('Content-Type', 'text/css; charset=UTF-8')
 
-                request = await superoak(app)
-                await request.get('/index.js')
-                    .expect(200)
-                    .expect('Content-Type', 'application/javascript; charset=UTF-8')
-            }
-        )
-
-
-    }
+            request = await superoak(app)
+            await request.get('/index.js')
+                .expect(200)
+                .expect('Content-Type', 'application/javascript; charset=UTF-8')
+        })
+    },
 )
 
 Deno.test(
@@ -59,22 +55,18 @@ Deno.test(
         })
 
         await t.step('check api', async () => {
-                let request = await superoak(app)
-                await request.get('/api')
-                    .expect(200)
-                    .expect('Content-Type', 'application/json; charset=UTF-8')
-                    .expect({status: 'OK'})
-            }
-        )
+            let request = await superoak(app)
+            await request.get('/api')
+                .expect(200)
+                .expect('Content-Type', 'application/json; charset=UTF-8')
+                .expect({status: 'OK'})
+        })
 
         await t.step('check docs', async () => {
-                let request = await superoak(app)
-                await request.get('/api/docs')
-                    .expect(200)
-                    .expect('Content-Type', 'text/html')
-            }
-        )
-
-
-    }
+            let request = await superoak(app)
+            await request.get('/api/docs')
+                .expect(200)
+                .expect('Content-Type', 'text/html')
+        })
+    },
 )

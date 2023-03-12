@@ -1,5 +1,5 @@
-import {existsSync}   from 'https://deno.land/std@0.177.0/node/fs.ts'
-import * as esbuild   from 'https://deno.land/x/esbuild@v0.17.11/mod.js'
+import {existsSync}   from 'deno/std/node/fs.ts'
+import * as esbuild   from 'esbuild'
 import * as importMap from 'npm:esbuild-plugin-import-map'
 
 const outdir = './dist'

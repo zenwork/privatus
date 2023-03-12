@@ -5,10 +5,8 @@ import {key, Registry}            from './prism'
 // noinspection ES6UnusedImports
 import {PrismParticipant}         from './prism-participant'
 
-
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
-
     static styles = [
         css`
             :host {
@@ -40,7 +38,7 @@ export class PrismCtx extends LitElement {
                 text-align: center;
                 flex-grow: 1;
             }
-        `
+        `,
     ]
 
     @state()
@@ -63,7 +61,7 @@ export class PrismCtx extends LitElement {
     connectedCallback() {
         super.connectedCallback()
         this.provider = new ContextProvider(this, key, this.registry)
-        fetch('/api').then(r => r.json()).then(s => this.server = s.status)
+        fetch('/api').then((r) => r.json()).then((s) => this.server = s.status)
     }
 
     protected render(): unknown {

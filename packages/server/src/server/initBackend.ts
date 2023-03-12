@@ -9,15 +9,17 @@ export function initBackend(app: Application) {
         '/api',
         (ctx) => {
             ctx.response.body = {status: 'OK'}
-        })
+        },
+    )
 
     router.get(
         'player status',
         '/api/status/:game/:player/:role',
-        ctx => {
+        (ctx) => {
             const id = {game: ctx.params.game, player: ctx.params.player, role: ctx.params.role}
             register(id, ctx)
-        })
+        },
+    )
 
     router.get('api docs', '/api/docs', (ctx) => {
         routes2Html(router, ctx.response)
