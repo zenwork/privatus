@@ -2,9 +2,19 @@ name: Deploy
 on: [push]
 
 jobs:
+  check:
+    outputs:
+      status: ${{ steps.early.outputs.status }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - id: early
+        name: Deployable Check
+        run: ./tools/check.sh
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    if: needs.check.outputs.status == 'deploy' && !startsWith(github.ref, 'refs/tags')
     permissions:
       id-token: write
       contents: read
@@ -25,30 +35,3 @@ jobs:
           project: zenwork-privatus
           entrypoint: "main.ts"
           root: "./packages/server"
-
-
-#jobs:
-#  deploy:
-#    name: Deploy
-#    runs-on: ubuntu-latest
-#    if: github.event_name == 'release' && github.event.action == 'created'
-#    permissions:
-#      id-token: write
-#      contents: read
-#
-#    steps:
-#      - name: Clone repository
-#        uses: actions/checkout@v3
-#
-#      - name: Install dependencies
-#        run: npm ci
-#
-#      - name: Build Astro
-#        run: npm run build
-#
-#      - name: Upload to Deno Deploy
-#        uses: denoland/deployctl@v1
-#        with:
-#          project: zenwork-privatus
-#          entrypoint: server/entry.mjs
-#          root: dist
