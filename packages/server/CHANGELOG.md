@@ -1,5 +1,11 @@
 # server
 
+## 0.2.2
+
+### Patch Changes
+
+- bd6fc34: move deployment check to run-step
+
 ## 0.2.1
 
 ### Patch Changes
