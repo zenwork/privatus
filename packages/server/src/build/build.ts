@@ -18,6 +18,8 @@ await esbuild.build({
     chunkNames: 'chunks/[name]-[hash]',
 })
 
+await esbuild.stop()
+
 await Deno.copyFile('./assets/index.html', './dist/index.html')
 await Deno.copyFile('./assets/index.css', './dist/index.css')
 await Deno.copyFile('./assets/favicon.ico', './dist/favicon.ico')
