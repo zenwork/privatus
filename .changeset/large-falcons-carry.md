@@ -1,5 +1,4 @@
 ---
-"client": minor
 "server": minor
 ---
 

@@ -1,9 +1,12 @@
 {
   "imports": {
+    "deno/std/": "https://deno.land/std@0.179.0/",
     "lit": "https://esm.sh/lit@2.6.1",
     "lit/decorators.js": "https://esm.sh/lit@2.6.1/decorators.js",
     "lit-labs/context": "https://esm.sh/@lit-labs/context@0.2.0",
     "oak": "https://deno.land/x/oak@v12.1.0/mod.ts",
+    "oak_logger": "https://deno.land/x/oak_logger/mod.ts",
+    "superoak": "https://deno.land/x/superoak@4.7.0/mod.ts",
     "./src/client/*": "./src/client",
     "/": "./src/",
     "./": "./"
