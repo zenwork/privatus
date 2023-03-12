@@ -17,7 +17,7 @@ jobs:
       - run: cd packages/server && deno task test
 
   check:
-    name: Check
+    name: Deployment Check
     needs: ci
     runs-on: ubuntu-latest
     outputs:
