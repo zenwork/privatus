@@ -12,9 +12,9 @@ jobs:
       - name: checks
         uses: maximousblk/setup-deno@v2
 
-      - run: deno fmt --check
-      - run: deno lint --check
-      - run: deno task test
+      - run: cd packages/server && deno fmt --check
+      - run: cd packages/server && deno lint --check
+      - run: cd packages/server && deno task test
 
   check:
     name: Check
