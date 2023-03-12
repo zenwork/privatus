@@ -2,7 +2,9 @@
   "tasks": {
     "dev": "deno run -A --watch main.ts",
     "build":"deno run -A src/build/build.ts",
-    "test":"deno test -A --trace-ops tests/e2e"
+    "test":"deno test -A --trace-ops tests/e2e",
+    "check":"deno fmt --check && deno lint",
+    "clean":"deno fmt && deno lint"
   }
   ,
   "importMap": "./import_map.json",

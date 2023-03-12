@@ -1,9 +1,29 @@
 name: Deploy
-on: [push]
+on: [ push ]
 
 jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: formatting check
+        uses: maximousblk/setup-deno@v2
+        run: deno fmt --check
+
+      - name: linting check
+        uses: maximousblk/setup-deno@v2
+        run: deno lint --check
+
+      - name: tests
+        uses: maximousblk/setup-deno@v2
+        run: deno task test
+
   check:
     name: Check
+    needs: ci
     runs-on: ubuntu-latest
     outputs:
       status: ${{ steps.early.outputs.status }}
@@ -32,7 +52,7 @@ jobs:
       - name: Build client
         uses: maximousblk/setup-deno@v2
 
-      - run: cd packages/server && deno task build && deno task test && ls dist
+      - run: cd packages/server && deno task build
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
