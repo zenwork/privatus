@@ -68,7 +68,7 @@ Deno.test(
         )
 
         await t.step('check docs', async () => {
-                request = await superoak(app)
+                let request = await superoak(app)
                 await request.get('/api/docs')
                     .expect(200)
                     .expect('Content-Type', 'text/html')

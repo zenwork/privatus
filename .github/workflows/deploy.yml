@@ -16,7 +16,7 @@ jobs:
       - name: Build client
         uses: maximousblk/setup-deno@v2
 
-#      - run: cd packages/server && deno task build && ls dist
+      #      - run: cd packages/server && deno task build && ls dist
       - run: cd packages/server && deno task build && deno test tests/e2e && ls dist
 
       - name: Upload to Deno Deploy
