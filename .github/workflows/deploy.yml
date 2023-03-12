@@ -5,7 +5,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    if: (github.ref == 'refs/heads/main' && github.event_name == 'release' && github.event.action == 'created') || (github.ref != 'refs/heads/main')
+    if: (startsWith(github.ref, 'refs/tags/server@') && github.event_name == 'release' && github.event.action == 'created') || (github.ref != 'refs/heads/main')
     permissions:
       id-token: write
       contents: read
