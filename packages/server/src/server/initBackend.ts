@@ -1,5 +1,5 @@
 import {Application, Router} from 'oak'
-import {routes2Html}         from './html.ts'
+import {routes2Html}         from './util/html.ts'
 
 export function initBackend(app: Application) {
     const router = new Router()

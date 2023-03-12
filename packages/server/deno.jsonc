@@ -4,6 +4,9 @@
     "build":"deno run -A src/build/build.ts"
   }
   ,
-  "importMap": "./import_map.json"
+  "importMap": "./import_map.json",
+  "compilerOptions":{
+    "noImplicitReturns":true
+  }
 
 }

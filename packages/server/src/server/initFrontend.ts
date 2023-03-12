@@ -14,18 +14,18 @@ export function initFrontend(app: Application) {
             next()
         }
 
-        let {type, content} = await getAsset(pathname)
-        context.response.body = content
+        let {type, content} = getAsset(pathname)
+        context.response.body = await content
         context.response.type = type
 
     })
 }
 
-async function getAsset(pathname: string) {
+function getAsset(pathname: string):{type:string,content:Promise<Uint8Array>} {
     const filepath = pathname === '/' ? '/index.html' : pathname
     const assetPath = `${Deno.cwd()}/dist${filepath}`
 
-    const content = await Deno.readFile(assetPath)
+    const content =  Deno.readFile(assetPath)
 
     let type = getType(assetPath)
     return {type, content}
@@ -37,19 +37,19 @@ function getType(assetPath: string) {
     let type = 'text/plain'
     switch (extension) {
         case 'html':
-            type = 'text/html'
+            return 'text/html'
             break
         case 'css':
-            type = 'text/css'
+            return 'text/css'
             break
         case 'js':
-            type = 'application/javascript'
+            return 'application/javascript'
             break
         case 'json':
-            type = 'application/json'
+            return 'application/json'
             break
         case 'ico':
-            type = 'image/x-icon'
+            return 'image/x-icon'
             break
         default:
             return 'text/plain'
