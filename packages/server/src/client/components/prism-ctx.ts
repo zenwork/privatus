@@ -1,10 +1,13 @@
 import { css, html, LitElement } from 'lit'
 import { Context, ContextProvider } from 'lit-labs/context'
 import { customElement, state } from 'lit/decorators.js'
+import { GameController } from '../GameController.ts'
 import { key, Registry } from './prism'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
+    private game = new GameController(this)
+
     static styles = [
         css`
             :host {
@@ -42,7 +45,7 @@ export class PrismCtx extends LitElement {
     @state()
     registry: Registry = { p: [] }
     @state()
-    gameId = makeid(5)
+    gameId = ''
     @state()
     server = 'UNKNOWN'
 
@@ -58,6 +61,7 @@ export class PrismCtx extends LitElement {
 
     connectedCallback() {
         super.connectedCallback()
+
         this.provider = new ContextProvider(this, key, this.registry)
         fetch('/api').then((r) => r.json()).then((s) => this.server = s.status)
     }
@@ -70,6 +74,7 @@ export class PrismCtx extends LitElement {
                     <h3>The identity and privacy game</h3>
                     <h4># of players: ${this.registry.p.length}</h4>
                     <h4>session: ${this.gameId}</h4>
+                    <button @click=${() => this.game.newGame()}>new game</button>
                 </section>
                 <section>
                     <ul id="participants">
@@ -92,14 +97,4 @@ export class PrismCtx extends LitElement {
                 </section>
             </article>`
     }
-}
-
-function makeid(length) {
-    let result = ''
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    const charactersLength = characters.length
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength))
-    }
-    return result
 }

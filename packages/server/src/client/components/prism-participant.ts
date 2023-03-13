@@ -30,12 +30,13 @@ export class PrismParticipant extends LitElement {
     pid = ''
     @property()
     ptype: PType = PType.UNDEFINED
-    @property()
+    @property({ reflect: true })
     gameid = ''
     @consume({ context: key, subscribe: true })
     registry: Registry | undefined
     @state()
-    connected = ''
+    connected = '...'
+    private source: EventSource
 
     connectedCallback() {
         super.connectedCallback()
@@ -48,9 +49,11 @@ export class PrismParticipant extends LitElement {
         })
 
         this.dispatchEvent(event)
+    }
 
-        const source = new EventSource(`/api/status/${this.gameid}/${this.pid}/${this.ptype}`)
-        source.addEventListener(
+    private start() {
+        this.source = new EventSource(`/api/status/${this.gameid}/${this.pid}/${this.ptype}`)
+        this.source.addEventListener(
             `ping`,
             () => {
                 switch (this.connected.indexOf('*')) {
@@ -71,11 +74,19 @@ export class PrismParticipant extends LitElement {
         )
     }
 
+    updated(changed: PropertyValues<this>) {
+        if (changed.has('gameid') && this.gameid) {
+            this.connected = '...'
+            if (this.source) this.source.close()
+            this.start()
+        }
+    }
+
     render(): unknown {
         return html`
             <div>
                 <h3>type:${this.ptype}</h3>
-                <h3>id:${this.pid}</h3>
+                <h3>id:${this.gameid}-${this.pid}</h3>
                 <pre>${this.connected}</pre>
 
             </div>
