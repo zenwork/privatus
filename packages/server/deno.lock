@@ -1,6 +1,15 @@
 {
   "version": "2",
   "remote": {
+    "https://cdn.skypack.dev/-/assertion-error@v1.1.0-kNvqltoxcdROsufUrL09/dist=es2019,mode=imports/optimized/assertion-error.js": "fb392c145699a7beacbabe94b21ee5d0219707929450fffbb18eb83b8318c818",
+    "https://cdn.skypack.dev/-/chai@v4.3.4-4LD1LjgHWVQjvyMFe7sm/dist=es2019,mode=imports/optimized/chai.js": "2d517f26a740a2c43a158c510ba0c97b1743f1825022583234f7f3b8ec6b7599",
+    "https://cdn.skypack.dev/-/chai@v4.3.4-4LD1LjgHWVQjvyMFe7sm/dist=es2019,mode=types/index.d.ts": "b6c73080490a06c472c0f05afba3b564b170f39bbaeca57d0b60a6bcd98a840c",
+    "https://cdn.skypack.dev/-/check-error@v1.0.2-pv7N1FcwI8awT920b4E0/dist=es2019,mode=imports/optimized/check-error.js": "c00358ede04680f37b081564d88b9457e9812bb3c5c7effc90acb090f3bd73f4",
+    "https://cdn.skypack.dev/-/deep-eql@v3.0.1-EVT6yn6LFH7vvQx4YnOu/dist=es2019,mode=imports/optimized/deep-eql.js": "e8a3877f0ee43db99f1b903a8b527c57827fe2753a0f0fd560563aa2e435a0d3",
+    "https://cdn.skypack.dev/-/get-func-name@v2.0.0-scW92yE6OFNJbvjxk2uF/dist=es2019,mode=imports/optimized/get-func-name.js": "8926a16a678d5ca12cae705fa8a5be600aaf5355e601d34575f1bd9af64a170c",
+    "https://cdn.skypack.dev/-/pathval@v1.1.1-4hf44tKt2vdiXpyywiwN/dist=es2019,mode=imports/optimized/pathval.js": "778f821f97d08e946a894e3b94635a63121d8bd5000aeb3d00785318d5ed32de",
+    "https://cdn.skypack.dev/-/type-detect@v4.0.8-3tmjjwwFw2jHiLYy7SbM/dist=es2019,mode=imports/optimized/type-detect.js": "eb7ac639d3de6a0b64aaf9032a5b01ab79afb7c768cc02c07956613ecbd0bd32",
+    "https://cdn.skypack.dev/chai@4.3.4?dts": "19489c45018b0bcfb63455624ade9adf84e2a3c99a08379160d90763ba7e3f41",
     "https://deno.land/std@0.129.0/async/abortable.ts": "a896ac6b0d4237bd2d2d248217cfa1f0d85ccda93cb25ebda55e33850e526be6",
     "https://deno.land/std@0.129.0/async/deadline.ts": "48ac998d7564969f3e6ec6b6f9bf0217ebd00239b1b2292feba61272d5dd58d0",
     "https://deno.land/std@0.129.0/async/debounce.ts": "564273ef242bcfcda19a439132f940db8694173abffc159ea34f07d18fc42620",
@@ -372,6 +381,7 @@
     "https://deno.land/std@0.179.0/path/separator.ts": "0fb679739d0d1d7bf45b68dacfb4ec7563597a902edbaf3c59b50d5bcadd93b1",
     "https://deno.land/std@0.179.0/path/win32.ts": "d186344e5583bcbf8b18af416d13d82b35a317116e6460a5a3953508c3de5bba",
     "https://deno.land/std@0.53.0/fmt/colors.ts": "ec9d653672a9a3c7b6eafe53c5bc797364a2db2dcf766ab649c1155fea7a80b2",
+    "https://deno.land/x/chai@v4.3.7/register-expect.js": "029a5bfa66a923dffb5e1e59eece97c243589949eb3fb18ce662a21202a2d202",
     "https://deno.land/x/denoflate@1.2.1/mod.ts": "f5628e44b80b3d80ed525afa2ba0f12408e3849db817d47a883b801f9ce69dd6",
     "https://deno.land/x/denoflate@1.2.1/pkg/denoflate.js": "b9f9ad9457d3f12f28b1fb35c555f57443427f74decb403113d67364e4f2caf4",
     "https://deno.land/x/denoflate@1.2.1/pkg/denoflate_bg.wasm.js": "d581956245407a2115a3d7e8d85a9641c032940a8e810acbd59ca86afd34d44d",
@@ -467,6 +477,10 @@
     "https://deno.land/x/superoak@4.7.0/mod.ts": "6d4ea8a5a48c9007f2e947934889c06259d3ebb5569515bcb0432036a22449cd",
     "https://deno.land/x/superoak@4.7.0/src/superoak.ts": "9c08a3211c4d1f7bb89e88fc3f242536fce654c157aa6db52d3c24f033bb3d28",
     "https://deno.land/x/superoak@4.7.0/version.ts": "7f24547dd88673cc8521f5aed9bf0e1634ba4170707a792ddb6f95d0e5ec8a8c",
+    "https://deno.land/x/test_suite@0.16.1/describe.ts": "c0c944d8e4fba4c54f168ba8799aca4ffabe7cdecfac28c5dbaf0d1f8b345df1",
+    "https://deno.land/x/test_suite@0.16.1/mod.ts": "16dd20330261d5de4a0b4f85676329eb77679649d01e6468898883e527c9e133",
+    "https://deno.land/x/test_suite@0.16.1/test_suite.ts": "7854f0ab37d920355fe2e1a2c386f104601449eb93fcf537dafe30d6915a32d4",
+    "https://esm.sh/chai@4.3.7": "e116300d4fddae498c51d0fa3a3a0f6d412d423429eb85b149bb29898761da09",
     "https://esm.sh/eta@2.0.1": "f3e706a989510265fcf619710bcc9e37eb532e1b1e148bd21617a0756e6c9835",
     "https://esm.sh/lit-html@2.6.1": "e841bcb2cb47138fba961b1acdfeebdf6caf531117bd442c2b1e363b96728319",
     "https://esm.sh/lit@2.6.1": "60ef10dab6db7c1c5a243ab44be2c9a1cf5879fc5ef8fbad553d13422c362b21",
@@ -485,8 +499,13 @@
     "https://esm.sh/v109/lit-html@2.6.1/deno/is-server.js": "8707ee3a9eb3dd45230570dc2891dc1a46ea3dd62a52c5de3125a75b5f883179",
     "https://esm.sh/v109/lit-html@2.6.1/deno/lit-html.js": "a33a3dea7aa5be8fdbd0a520dc0dbfa1a869aa87b4f13eecca24c11875554760",
     "https://esm.sh/v109/lit@2.6.1/deno/lit.js": "87b5d581041ff8eeeeaa2331026473677e2890177edc182e09feb375cea1f55b",
+    "https://esm.sh/v111/@types/chai@4.3.4/index.d.ts": "b9734142a4b241cfb505be4a2eb0261d211647df7c73043f817f4fdd8d96c846",
     "https://esm.sh/v111/@types/trusted-types@2.0.3/index.d.ts": "9c7d8ab047f09cc0679d0acc253d95885823e29e492cdb23b99da027c572f126",
     "https://esm.sh/v111/@types/trusted-types@2.0.3/lib/index.d.ts": "2fcd2d22b1f30555e785105597cd8f57ed50300e213c4f1bbca6ae149f782c38",
+    "https://esm.sh/v111/assertion-error@1.1.0/deno/assertion-error.js": "308822276bcc1b4e3fb254c933b53a3e0c4c49c05f2c163b861c12199f6addf2",
+    "https://esm.sh/v111/chai@4.3.7/deno/chai.js": "366d163d51948dc479e97f8acf7f364c8879a7d0b43b8c8b3598404405a34d06",
+    "https://esm.sh/v111/check-error@1.0.2/deno/check-error.js": "6f4276b0089f4b56009cc7e7478015e0d7a4e7e6f5f07bbfd0e0801df8e04120",
+    "https://esm.sh/v111/deep-eql@4.1.3/deno/deep-eql.js": "509372a66bc99ce159b056fcc25023e64c867fe394012e8cb5780bf1dc1a8c2f",
     "https://esm.sh/v111/eta@2.0.1/deno/eta.js": "bf68db5660cb47182560930acd5b473282c7b3cfd2b66ccbd39e46e2bc8c0b6d",
     "https://esm.sh/v111/eta@2.0.1/dist/types/compile-string.d.ts": "2ed658c0d462dd3a80faceb910d8fb2caaefd472d528d3b6f775672ec0a2fcfa",
     "https://esm.sh/v111/eta@2.0.1/dist/types/compile.d.ts": "f85ac0f38617ff420e4e6c969f8e295a77d733a7d41a89d68e8aa71ab2227543",
@@ -497,9 +516,13 @@
     "https://esm.sh/v111/eta@2.0.1/dist/types/parse.d.ts": "ed300bd395f3980ccb0e86ad7b2b34420018d3d6233febfaea2bffb7fa8fd1f3",
     "https://esm.sh/v111/eta@2.0.1/dist/types/render.d.ts": "6e710705d140673bf01bdbda92603a2a9240dc8193a73183dd380034c7da976b",
     "https://esm.sh/v111/eta@2.0.1/dist/types/storage.d.ts": "ca1de821a6ea2357b180e82752da15a3385e242812b0a4c2c484035f3424b83d",
+    "https://esm.sh/v111/get-func-name@2.0.0/deno/get-func-name.js": "add1de2959722467cecba4df38a19908e47f9e1b8947761ec19dcaad1dba9599",
     "https://esm.sh/v111/lit-html@2.6.1/deno/lit-html.js": "a33a3dea7aa5be8fdbd0a520dc0dbfa1a869aa87b4f13eecca24c11875554760",
     "https://esm.sh/v111/lit-html@2.6.1/development/directive.d.ts": "ad2f19cc360216474e5256da2cf4d969d477f2724e9f3652dbb24dd7b2a106ed",
     "https://esm.sh/v111/lit-html@2.6.1/development/lit-html.d.ts": "398b1279b19962c5c66b8daee1752a17fce171d9616c1d3c145e84857614c6b6",
+    "https://esm.sh/v111/loupe@2.3.6/deno/loupe.js": "a1cfd385f58b00a9f055e219f44784f5d7f45285c6615346e2c6297556acc644",
+    "https://esm.sh/v111/pathval@1.1.1/deno/pathval.js": "77193f9608eb49467c15c4eae4719fdd57ffe44f10786be50b0220adb8bb51c9",
+    "https://esm.sh/v111/type-detect@4.0.8/deno/type-detect.js": "c8b08215065cc0394b44eb404813b24cc0d168495a88374905dffc6f18903bf1",
     "https://jspm.dev/npm:call-bind@1.0.2!cjs": "24c188f9241fbc82c6ac2ae1b63bf3a0574885e3fa739ef09b3a476a3a571634",
     "https://jspm.dev/npm:call-bind@1.0.2/callBound!cjs": "a1586c35033398887376229b84f861c77cb686b034ea8a29d0be41bf46623071",
     "https://jspm.dev/npm:call-bind@1/callBound!cjs": "3ff4779595db6e915ae7d9926ba3338b8777ea7af06560bd254c84840faab169",
@@ -535,6 +558,7 @@
   },
   "npm": {
     "specifiers": {
+      "@types/chai": "@types/chai@4.3.4",
       "esbuild-plugin-import-map": "esbuild-plugin-import-map@2.1.0",
       "lit@2.6.1": "lit@2.6.1"
     },
@@ -548,6 +572,10 @@
         "dependencies": {
           "@lit-labs/ssr-dom-shim": "@lit-labs/ssr-dom-shim@1.0.0"
         }
+      },
+      "@types/chai@4.3.4": {
+        "integrity": "sha512-KnRanxnpfpjUTqTCXslZSEdLfXExwgNxYPdiO2WGUj8+HDjFi8R3k5RVKPeSCzLjCcshCAtVO2QBbVuAV4kTnw==",
+        "dependencies": {}
       },
       "@types/trusted-types@2.0.3": {
         "integrity": "sha512-NfQ4gyz38SL8sDNrSixxU2Os1a5xcdFxipAFxYEuLUlvU2uDwS4NUpsImcf1//SlWItCVMMLiylsxbmNMToV/g==",

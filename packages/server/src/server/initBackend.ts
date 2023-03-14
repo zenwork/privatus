@@ -1,5 +1,5 @@
 import { Application, Router } from 'oak'
-import { register } from './game.ts'
+import { register } from './game/game.ts'
 import { routes2Html } from './util/html.ts'
 
 export function initBackend(app: Application) {
