@@ -1,4 +1,4 @@
-import {html} from '/server/html.ts'
+import { html } from '/server/html.ts'
 
 export const appPage = html`
     <h1>APP</h1>

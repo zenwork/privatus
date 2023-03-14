@@ -1,14 +1,13 @@
-import logger        from 'https://deno.land/x/oak_logger/mod.ts'
-import {Application} from 'oak'
+import { Application } from 'oak'
+import logger from 'oak_logger'
 
 export type Privatus = {
     app: Application
-    start: (port: number) => Application,
+    start: (port: number) => Application
     startBlock: (port: number) => void
 }
 
 export function create(initFn: (app: Application<Record<string, any>>) => void): Privatus {
-
     const app: Application<Record<string, any>> = new Application()
     app.use(logger.logger)
     app.use(logger.responseTime)
@@ -25,7 +24,7 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
             runningPort = port
-            app.listen({port: runningPort})
+            app.listen({ port: runningPort })
             return app
         },
         startBlock: async (port: number = 8000) => {
@@ -34,8 +33,7 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
             runningPort = port
-            await app.listen({port: runningPort})
-
-        }
+            await app.listen({ port: runningPort })
+        },
     }
 }

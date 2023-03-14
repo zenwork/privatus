@@ -1,21 +1,18 @@
-import {state}                   from 'https://esm.sh/v109/@lit/reactive-element@1.6.1/deno/decorators/state.js'
-import {css, html, LitElement}   from 'lit'
-import {consume}                 from 'lit-labs/context'
-import {customElement, property} from 'lit/decorators.js'
-import {key, Registry}           from './prism'
-
+import { css, html, LitElement, state } from 'lit'
+import { consume } from 'lit-labs/context'
+import { customElement, property } from 'lit/decorators.js'
+import { key, Registry } from './prism'
 
 export enum PType {
     CITIZEN = 'CITIZEN',
     SERVICE_PROVIDER = 'SERVICE PROVIDER',
     PROFESSIONAL = 'PROFESSIONAL',
     ISSUER = 'ISSUER',
-    UNDEFINED = 'UNDEFINED'
+    UNDEFINED = 'UNDEFINED',
 }
 
 @customElement('prism-participant')
 export class PrismParticipant extends LitElement {
-
     static styles = [
         css`
             :host {
@@ -27,28 +24,36 @@ export class PrismParticipant extends LitElement {
                 /*margin: .2rem;*/
                 padding: .5rem;
             }
-        `
+        `,
     ]
-    @property() pid = ''
-    @property() ptype: PType = PType.UNDEFINED
-    @property() gameid = ''
-    @consume({context: key, subscribe: true}) registry: Registry | undefined
-    @state() connected = ''
+    @property()
+    pid = ''
+    @property()
+    ptype: PType = PType.UNDEFINED
+    @property({ reflect: true })
+    gameid = ''
+    @consume({ context: key, subscribe: true })
+    registry: Registry | undefined
+    @state()
+    connected = '...'
+    private source: EventSource
 
     connectedCallback() {
         super.connectedCallback()
         const event = new CustomEvent('prism-register', {
             detail: {
-                participant: {pid: this.pid, ptype: this.ptype}
+                participant: { pid: this.pid, ptype: this.ptype },
             },
             bubbles: true,
-            composed: true
+            composed: true,
         })
 
         this.dispatchEvent(event)
+    }
 
-        const source = new EventSource(`/api/status/${this.gameid}/${this.pid}/${this.ptype}`)
-        source.addEventListener(
+    private start() {
+        this.source = new EventSource(`/api/status/${this.gameid}/${this.pid}/${this.ptype}`)
+        this.source.addEventListener(
             `ping`,
             () => {
                 switch (this.connected.indexOf('*')) {
@@ -65,17 +70,23 @@ export class PrismParticipant extends LitElement {
                         this.connected = '*--'
                         break
                 }
+            },
+        )
+    }
 
-            })
-
-
+    updated(changed: PropertyValues<this>) {
+        if (changed.has('gameid') && this.gameid) {
+            this.connected = '...'
+            if (this.source) this.source.close()
+            this.start()
+        }
     }
 
     render(): unknown {
         return html`
             <div>
                 <h3>type:${this.ptype}</h3>
-                <h3>id:${this.pid}</h3>
+                <h3>id:${this.gameid}-${this.pid}</h3>
                 <pre>${this.connected}</pre>
 
             </div>
