@@ -37,6 +37,10 @@ export class PrismParticipant extends LitElement {
     @state()
     connected = '...'
     private source: EventSource
+    @state()
+    private lastMsg = ''
+    @state()
+    private lastMsgOrigin = ''
 
     connectedCallback() {
         super.connectedCallback()
@@ -53,10 +57,14 @@ export class PrismParticipant extends LitElement {
 
     private start() {
         fetch(`/api/game/${this.gameid}/${this.ptype}/${this.pid}`, { method: 'PUT' }).then(() => {
-            this.source = new EventSource(`/api/status/${this.gameid}/${this.pid}/${this.ptype}`)
+            this.source = new EventSource(`/api/game/${this.gameid}/channel/${this.ptype}/${this.pid}`)
+            this.source.onmessage = (event) => {
+                console.log(event)
+            }
             this.source.addEventListener(
                 'ping',
                 () => {
+                    // console.log('ping', e)
                     switch (this.connected.indexOf('*')) {
                         case -1:
                             this.connected = '*--'
@@ -71,6 +79,15 @@ export class PrismParticipant extends LitElement {
                             this.connected = '*--'
                             break
                     }
+                },
+            )
+
+            this.source.addEventListener(
+                'msg',
+                (msg) => {
+                    const data = JSON.parse(msg.data)
+                    this.lastMsg = data.body
+                    this.lastMsgOrigin = data.origin
                 },
             )
         })
@@ -90,8 +107,26 @@ export class PrismParticipant extends LitElement {
                 <h3>type:${this.ptype}</h3>
                 <h3>id:${this.gameid}-${this.pid}</h3>
                 <pre>${this.connected}</pre>
+                <pre>msg:${this.lastMsg}</pre>
+                <pre>msg origin:${this.lastMsgOrigin}</pre>
+                <button @click=${this.notify}>message all
+                </button>
 
             </div>
         `
+    }
+
+    private notify() {
+        if (!this.gameid) return
+
+        const body = 'hello! x ' + Math.floor(Math.random() * 10)
+
+        fetch(`/api/game/${this.gameid}/message/all`, {
+            method: 'POST',
+            body: JSON.stringify({ type: 'text', body, origin: this.ptype }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
     }
 }

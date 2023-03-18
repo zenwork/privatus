@@ -1,4 +1,4 @@
-import { RouterContext, ServerSentEvent } from 'oak'
+import { RouterContext, ServerSentEvent, ServerSentEventTarget } from 'oak'
 
 export function register(id: { game: string; role: string; player: string }, ctx: RouterContext<any, any, any>) {
     console.log(`setting up SSE for ${id.game} - ${id.player} (${id.role})`)
@@ -9,7 +9,12 @@ export function register(id: { game: string; role: string; player: string }, ctx
 }
 
 export type GameID = string
-export type Game = { key: GameID; players: Player[] }
+export type Game = {
+    key: GameID
+    players: Player[]
+    openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>) => void
+    notifyAll(msg: Message): boolean
+}
 export type PlayerID = { id: string; type: string }
 
 export enum MessageType {
@@ -19,7 +24,11 @@ export enum MessageType {
 
 export type Message = { type: MessageType; body: string }
 
-export type Player = { id: PlayerID; mailbox: Message[] }
+export type Player = {
+    id: PlayerID
+    mailbox: Message[]
+    channel: ServerSentEventTarget | null
+}
 
 export interface GameStore {
     createGame(): GameID
@@ -62,7 +71,7 @@ export class GameStoreImplementation implements GameStore {
         const game = this.games.get(id)
 
         if (game && !game.players.some((p) => p.id === pid)) {
-            game.players.push({ id: pid, mailbox: [] })
+            game.players.push({ id: pid, mailbox: [], channel: null })
             result.messages.push('player created')
             result.success = true
         }
@@ -93,11 +102,52 @@ function generateId(length = 5): string {
 }
 
 class GameImplementation implements Game {
+    key: GameID
+    players: Player[]
+
     constructor(id: GameID) {
         this.key = id
         this.players = []
     }
 
-    key: GameID
-    players: Player[]
+    openChannel(id: PlayerID, ctx: RouterContext<any, any, any>) {
+        const player = this.getPlayer(id)
+
+        if (player && !player.channel) {
+            try {
+                player.channel = ctx.sendEvents()
+                setInterval(() => {
+                    this.hearbeat(player, id)
+                    this.clearMailbox(player)
+                }, 1000)
+            } catch (e) {
+                console.error(`Unable to open channel for ${id} - ${e.message}}`)
+            }
+        }
+    }
+
+    private getPlayer(id: PlayerID) {
+        return this.players.find((p) => JSON.stringify(p.id) === JSON.stringify(id))
+    }
+
+    private hearbeat(player: Player, id: PlayerID) {
+        player.channel?.dispatchEvent(new ServerSentEvent('ping', { hearbeat: Date.now(), id }))
+    }
+
+    private clearMailbox(player: Player) {
+        if (player.mailbox.length > 0) {
+            while (player.mailbox.length > 0) {
+                const message = player.mailbox.splice(0, 1)[0]
+                player.channel?.dispatchEvent(new ServerSentEvent('msg', message))
+            }
+        }
+    }
+
+    notifyAll(msg: Message) {
+        this.players.forEach((p) => {
+            // console.log('push')
+            p.mailbox.push(msg)
+        })
+        return true
+    }
 }

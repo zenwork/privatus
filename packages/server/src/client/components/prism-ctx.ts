@@ -34,7 +34,7 @@ export class PrismCtx extends LitElement {
             .participant {
                 padding: 5px;
                 width: 200px;
-                height: 150px;
+                height: 200px;
                 margin-top: 10px;
                 text-align: center;
                 flex-grow: 1;

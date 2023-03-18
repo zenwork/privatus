@@ -1,8 +1,8 @@
 import { Application, Router, Status } from 'oak'
-import { GameStoreImplementation, register } from './game/game.ts'
+import { GameStore, GameStoreImplementation } from './game/game.ts'
 import { routes2Html } from './util/html.ts'
 
-export function initBackend(app: Application) {
+export function initBackend(app: Application): GameStore {
     const router = new Router()
     const store = new GameStoreImplementation()
     router.get(
@@ -57,10 +57,11 @@ export function initBackend(app: Application) {
 
     router.get(
         'player status',
-        '/api/status/:game/:player/:role',
+        '/api/game/:game/channel/:role/:player',
         (ctx) => {
-            const id = { game: ctx.params.game, player: ctx.params.player, role: ctx.params.role }
-            register(id, ctx)
+            store
+                .get(ctx.params.game)
+                ?.openChannel({ id: ctx.params.player, type: ctx.params.role }, ctx)
         },
     )
 
@@ -68,6 +69,19 @@ export function initBackend(app: Application) {
         routes2Html(router, ctx.response)
     })
 
+    router.post('send message', '/api/game/:game/message/all', async (ctx) => {
+        const text = await ctx.request.body().value
+        store
+            .get(ctx.params.game)
+            ?.notifyAll(text)
+
+        console.log(text)
+
+        ctx.response.status = Status.Created
+        ctx.response.body = { response: 'notified' }
+    })
+
     app.use(router.routes())
     app.use(router.allowedMethods())
+    return store
 }
