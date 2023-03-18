@@ -2,7 +2,7 @@
   "tasks": {
     "dev": "deno run -A --watch main.ts",
     "build":"deno run -A src/build/build.ts",
-    "test":"deno test -A --trace-ops tests/e2e",
+    "test":"deno test -A --trace-ops tests/unit && deno test -A --trace-ops tests/e2e",
     "check":"deno fmt --check && deno lint",
     "clean":"deno fmt && deno lint"
   }
@@ -17,7 +17,7 @@
       },
       "rules": {
         "tags": ["recommended"],
-        "include": ["ban-untagged-todo"],
+        "include": ["ban-untagged-todo","no-global-assign"],
         "exclude": ["no-explicit-any","no-inferrable-types"]
       }
     },
