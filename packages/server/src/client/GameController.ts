@@ -2,7 +2,7 @@ import { ReactiveController, ReactiveControllerHost } from 'lit/'
 
 export class GameController implements ReactiveController {
     host: ReactiveControllerHost
-    id: string = ''
+    id = ''
 
     constructor(host: ReactiveControllerHost) {
         this.host = host
@@ -10,18 +10,16 @@ export class GameController implements ReactiveController {
     }
 
     newGame() {
-        this.id = makeId(5)
-        this.host.gameId = this.id
-        this.host.requestUpdate()
+        return fetch('/api/game', { method: 'POST' })
+            .then((r) => r.json())
+            .then((j) => {
+                this.id = j.gameId
+                this.host.gameId = this.id
+                this.host.requestUpdate()
+                return true
+            }).catch((e) => {
+                console.log(e)
+                return false
+            })
     }
-}
-
-function makeId(length) {
-    let result = ''
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    const charactersLength = characters.length
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength))
-    }
-    return result
 }

@@ -52,26 +52,28 @@ export class PrismParticipant extends LitElement {
     }
 
     private start() {
-        this.source = new EventSource(`/api/status/${this.gameid}/${this.pid}/${this.ptype}`)
-        this.source.addEventListener(
-            `ping`,
-            () => {
-                switch (this.connected.indexOf('*')) {
-                    case -1:
-                        this.connected = '*--'
-                        break
-                    case 0:
-                        this.connected = '-*-'
-                        break
-                    case 1:
-                        this.connected = '--*'
-                        break
-                    case 2:
-                        this.connected = '*--'
-                        break
-                }
-            },
-        )
+        fetch(`/api/game/${this.gameid}/${this.ptype}/${this.pid}`, { method: 'PUT' }).then(() => {
+            this.source = new EventSource(`/api/status/${this.gameid}/${this.pid}/${this.ptype}`)
+            this.source.addEventListener(
+                'ping',
+                () => {
+                    switch (this.connected.indexOf('*')) {
+                        case -1:
+                            this.connected = '*--'
+                            break
+                        case 0:
+                            this.connected = '-*-'
+                            break
+                        case 1:
+                            this.connected = '--*'
+                            break
+                        case 2:
+                            this.connected = '*--'
+                            break
+                    }
+                },
+            )
+        })
     }
 
     updated(changed: PropertyValues<this>) {

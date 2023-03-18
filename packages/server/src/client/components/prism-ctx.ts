@@ -63,7 +63,9 @@ export class PrismCtx extends LitElement {
         super.connectedCallback()
 
         this.provider = new ContextProvider(this, key, this.registry)
-        fetch('/api').then((r) => r.json()).then((s) => this.server = s.status)
+        fetch('/api').then((r) => r.json()).then((s) => {
+            this.server = s.status
+        })
     }
 
     protected render(): unknown {
