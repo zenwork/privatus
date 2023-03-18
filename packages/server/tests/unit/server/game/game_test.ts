@@ -1,7 +1,6 @@
-import {beforeEach, describe, it,}          from 'https://deno.land/x/test_suite@0.16.1/mod.ts'
-import {GameStore, GameStoreImplementation} from '../../../../src/server/game/game.ts'
-import {expect}                             from 'https://esm.sh/chai@4.3.7'
-
+import { beforeEach, describe, it } from 'https://deno.land/x/test_suite@0.16.1/mod.ts'
+import { GameStore, GameStoreImplementation } from '../../../../src/server/game/game.ts'
+import { expect } from 'https://esm.sh/chai@4.3.7'
 
 describe('use game', () => {
     let store: GameStore
@@ -38,25 +37,20 @@ describe('use game', () => {
 
     it('should accept player creation', () => {
         const id = store.createGame()
-        const result = store.addPlayerToGame(id, {id: 'foo', type: 'bar'})
-        expect(result).to.be.eql({success: true, messages: ['player created']})
-
+        const result = store.addPlayerToGame(id, { id: 'foo', type: 'bar' })
+        expect(result).to.be.eql({ success: true, messages: ['player created'] })
     })
 
     it('should fail to add player when game does not exist', () => {
-        const result = store.addPlayerToGame('foobar', {id: 'foo', type: 'bar'})
-        expect(result).to.be.eql({success: false, messages: ['game does not exist']})
-
+        const result = store.addPlayerToGame('foobar', { id: 'foo', type: 'bar' })
+        expect(result).to.be.eql({ success: false, messages: ['game does not exist'] })
     })
 
     it('should allow finding a player', () => {
         const id = store.createGame()
-        const pid = {id: 'foo', type: 'bar'}
+        const pid = { id: 'foo', type: 'bar' }
         store.addPlayerToGame(id, pid)
         const player = store.findPlayer(pid)
         expect(player?.id).to.be.eql(pid)
-
     })
-
-
 })

@@ -1,6 +1,6 @@
-import {Application, Router, Status}       from 'oak'
-import {GameStoreImplementation, register} from './game/game.ts'
-import {routes2Html}                       from './util/html.ts'
+import { Application, Router, Status } from 'oak'
+import { GameStoreImplementation, register } from './game/game.ts'
+import { routes2Html } from './util/html.ts'
 
 export function initBackend(app: Application) {
     const router = new Router()
@@ -9,7 +9,7 @@ export function initBackend(app: Application) {
         'api',
         '/api',
         (ctx) => {
-            ctx.response.body = {status: 'OK'}
+            ctx.response.body = { status: 'OK' }
         },
     )
 
@@ -20,9 +20,8 @@ export function initBackend(app: Application) {
             const created = store.createGame()
             if (created) {
                 ctx.response.status = Status.Created
-                ctx.response.body = {gameId: created}
+                ctx.response.body = { gameId: created }
             }
-
         },
     )
 
@@ -33,10 +32,10 @@ export function initBackend(app: Application) {
             const ended = store.endGame(ctx.params.id)
             if (ended) {
                 ctx.response.status = Status.OK
-                ctx.response.body = {messages: ['game ended']}
+                ctx.response.body = { messages: ['game ended'] }
             } else {
                 ctx.response.status = Status.Accepted
-                ctx.response.body = {messages: ['game not ended']}
+                ctx.response.body = { messages: ['game not ended'] }
             }
         },
     )
@@ -45,7 +44,7 @@ export function initBackend(app: Application) {
         'register',
         '/api/game/:game/:role/:player',
         (ctx) => {
-            const result = store.addPlayerToGame(ctx.params.game, {id: ctx.params.player, type: ctx.params.role})
+            const result = store.addPlayerToGame(ctx.params.game, { id: ctx.params.player, type: ctx.params.role })
             if (result.success) {
                 ctx.response.status = Status.Created
                 ctx.response.body = result
@@ -53,7 +52,6 @@ export function initBackend(app: Application) {
                 ctx.response.status = Status.BadRequest
                 ctx.response.body = result
             }
-
         },
     )
 
@@ -61,7 +59,7 @@ export function initBackend(app: Application) {
         'player status',
         '/api/status/:game/:player/:role',
         (ctx) => {
-            const id = {game: ctx.params.game, player: ctx.params.player, role: ctx.params.role}
+            const id = { game: ctx.params.game, player: ctx.params.player, role: ctx.params.role }
             register(id, ctx)
         },
     )

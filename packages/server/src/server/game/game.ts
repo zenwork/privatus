@@ -1,22 +1,25 @@
-import {RouterContext, ServerSentEvent} from 'oak'
+import { RouterContext, ServerSentEvent } from 'oak'
 
 export function register(id: { game: string; role: string; player: string }, ctx: RouterContext<any, any, any>) {
     console.log(`setting up SSE for ${id.game} - ${id.player} (${id.role})`)
     const target = ctx.sendEvents()
     setInterval(() => {
-        target.dispatchEvent(new ServerSentEvent('ping', {hearbeat: Date.now(), id}))
+        target.dispatchEvent(new ServerSentEvent('ping', { hearbeat: Date.now(), id }))
     }, 700)
 }
 
 export type GameID = string
-export type Game = { key: GameID, players: Player[] }
-export type PlayerID = { id: string, type: string }
+export type Game = { key: GameID; players: Player[] }
+export type PlayerID = { id: string; type: string }
 
-export enum MessageType { TEXT = 'text', STATUS = 'satus'}
+export enum MessageType {
+    TEXT = 'text',
+    STATUS = 'satus',
+}
 
-export type Message = { type: MessageType, body: string }
+export type Message = { type: MessageType; body: string }
 
-export type Player = { id: PlayerID, mailbox: Message[] }
+export type Player = { id: PlayerID; mailbox: Message[] }
 
 export interface GameStore {
     createGame(): GameID
@@ -30,10 +33,9 @@ export interface GameStore {
     findPlayer(player: PlayerID): Player | undefined
 }
 
-export type Result = { success: boolean, messages: string[] }
+export type Result = { success: boolean; messages: string[] }
 
 export class GameStoreImplementation implements GameStore {
-
     private games: Map<GameID, Game> = new Map<GameID, Game>()
 
     createGame(): GameID {
@@ -52,16 +54,15 @@ export class GameStoreImplementation implements GameStore {
     }
 
     addPlayerToGame(id: GameID, pid: PlayerID): Result {
-        const result: Result = {success: false, messages: []}
+        const result: Result = { success: false, messages: [] }
         if (!this.games.has(id)) {
             result.messages.push('game does not exist')
-
         }
 
         const game = this.games.get(id)
 
-        if (game && !game.players.some(p => p.id === pid)) {
-            game.players.push({id: pid, mailbox: []})
+        if (game && !game.players.some((p) => p.id === pid)) {
+            game.players.push({ id: pid, mailbox: [] })
             result.messages.push('player created')
             result.success = true
         }
@@ -72,14 +73,13 @@ export class GameStoreImplementation implements GameStore {
     findPlayer(searchId: PlayerID): Player | undefined {
         let found: Player | undefined
         for (const gameId of this.games.keys()) {
-            found = this.games.get(gameId)?.players.find(p => p.id === searchId)
+            found = this.games.get(gameId)?.players.find((p) => p.id === searchId)
             if (found) {
                 break
             }
         }
         return found
     }
-
 }
 
 function generateId(length = 5): string {
