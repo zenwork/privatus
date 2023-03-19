@@ -2,12 +2,36 @@
   "tasks": {
     "dev": "deno run -A --watch main.ts",
     "build":"deno run -A src/build/build.ts",
-    "test":"deno test -A --trace-ops tests/e2e"
+    "test":"deno test -A --trace-ops tests/unit && deno test -A --trace-ops tests/e2e",
+    "check":"deno fmt --check && deno lint",
+    "clean":"deno fmt && deno lint"
   }
   ,
   "importMap": "./import_map.json",
   "compilerOptions":{
     "noImplicitReturns":false
-  }
+  },
+  "lint": {
+      "files": {
+        "include": ["src/","tests/"]
+      },
+      "rules": {
+        "tags": ["recommended"],
+        "include": ["ban-untagged-todo","no-global-assign"],
+        "exclude": ["no-explicit-any","no-inferrable-types"]
+      }
+    },
+    "fmt": {
+        "files": {
+          "include": ["src/","tests/"]
+        },
+        "options": {
+          "lineWidth": 140,
+          "indentWidth": 4,
+          "semiColons": false,
+          "singleQuote": true,
+          "proseWrap": "preserve"
+        }
+      },
 
 }
