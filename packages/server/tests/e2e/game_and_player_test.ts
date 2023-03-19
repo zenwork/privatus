@@ -1,14 +1,13 @@
-import {Application}                from 'oak'
-import {superoak}                   from 'superoak'
-import {initBackend}                from '../../src/server/initBackend.ts'
-import {create}                     from '../../src/server/server.ts'
-import {equalOrError, matchOrError} from './bodyAssertions.ts'
-import {describe, it}               from 'deno/std/testing/bdd.ts'
+import { Application } from 'oak'
+import { superoak } from 'superoak'
+import { initBackend } from '../../src/server/initBackend.ts'
+import { create } from '../../src/server/server.ts'
+import { equalOrError, matchOrError } from './bodyAssertions.ts'
+import { describe, it } from 'deno/std/testing/bdd.ts'
 
 describe({
     name: 'game and player',
     fn: () => {
-
         describe(
             'player not added because game does not exist ',
             () => {
@@ -25,7 +24,7 @@ describe({
                     await request.put('/api/game/12345/ISSUER/p1')
                         .expect(400)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
-                        .expect({success: false, messages: ['game does not exist']})
+                        .expect({ success: false, messages: ['game does not exist'] })
                 })
             },
         )
@@ -100,11 +99,10 @@ describe({
                     await request.put(`/api/game/${gameId}/ISSUER/p1`)
                         .expect(201)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
-                        .expect({success: true, messages: ['player created']})
+                        .expect({ success: true, messages: ['player created'] })
                 })
-            }
+            },
         )
-
     },
-    sanitizeOps: false
+    sanitizeOps: false,
 })

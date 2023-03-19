@@ -1,18 +1,17 @@
-import {delay}        from 'deno/std/async/delay.ts'
-import {Application}  from 'oak'
-import {superoak}     from 'superoak'
+import { delay } from 'deno/std/async/delay.ts'
+import { Application } from 'oak'
+import { superoak } from 'superoak'
 
 import '../../src/build/build.ts'
-import {initBackend}  from '../../src/server/initBackend.ts'
-import {initFrontend} from '../../src/server/initFrontend.ts'
-import {create}       from '../../src/server/server.ts'
+import { initBackend } from '../../src/server/initBackend.ts'
+import { initFrontend } from '../../src/server/initFrontend.ts'
+import { create } from '../../src/server/server.ts'
 
-import {describe, it} from 'deno/std/testing/bdd.ts'
+import { describe, it } from 'deno/std/testing/bdd.ts'
 
 describe({
     name: 'health',
     fn: () => {
-
         describe(
             'frontend',
             () => {
@@ -68,7 +67,7 @@ describe({
                     await request.get('/api')
                         .expect(200)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
-                        .expect({status: 'OK'})
+                        .expect({ status: 'OK' })
                 })
 
                 it('check docs', async () => {
@@ -80,5 +79,5 @@ describe({
             },
         )
     },
-    sanitizeOps: false
+    sanitizeOps: false,
 })
