@@ -4,21 +4,22 @@ import { superoak } from 'superoak'
 import { GameStore, MessageType } from '../../src/server/game/game.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
+import { describe, it } from 'deno/std/testing/bdd.ts'
 
-Deno.test(
+describe(
     'create and add player',
-    async (t) => {
+    () => {
         let app: Application
         let gameId = ''
         let store: GameStore
 
-        await t.step('init', () => {
+        it('init', () => {
             app = create((app: Application) => {
                 store = initBackend(app)
             }).app
         })
 
-        await t.step('create game and player', async () => {
+        it('create game and player', async () => {
             let request = await superoak(app)
 
             await request.post('/api/game')
@@ -32,7 +33,7 @@ Deno.test(
                 .expect(201)
         })
 
-        await t.step('send message', async () => {
+        it('send message', async () => {
             const request = await superoak(app)
             await request
                 .post(`/api/game/${gameId}/message/all`)
