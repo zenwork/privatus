@@ -1,31 +1,32 @@
-import { Application, Router, Status } from 'oak'
+import { Application, Router } from 'oak'
 import { GameStore, GameStoreImplementation } from './game/game.ts'
-import { routes2Html } from './util/html.ts'
+
+// import { routes2Html } from './util/html.ts'
 
 export function initBackend(app: Application): GameStore {
     const router = new Router()
     const store = new GameStoreImplementation()
-    router.get(
-        'api',
-        '/api',
-        (ctx) => {
-            ctx.response.body = { status: 'OK' }
-        },
-    )
+    /*router.get(
+     'api',
+     '/api',
+     (ctx) => {
+     ctx.response.body = { status: 'OK' }
+     },
+     )
 
-    router.post(
-        'register',
-        '/api/game',
-        (ctx) => {
-            const created = store.createGame()
-            if (created) {
-                ctx.response.status = Status.Created
-                ctx.response.body = { gameId: created }
-            }
-        },
-    )
+     router.post(
+     'register',
+     '/api/game',
+     (ctx) => {
+     const created = store.createGame()
+     if (created) {
+     ctx.response.status = Status.Created
+     ctx.response.body = { gameId: created }
+     }
+     },
+     )
 
-    router.post(
+     router.post(
         'register',
         '/api/game/:id/end',
         (ctx) => {
@@ -59,27 +60,27 @@ export function initBackend(app: Application): GameStore {
         'player status',
         '/api/game/:game/channel/:role/:player',
         (ctx) => {
-            store
-                .get(ctx.params.game)
-                ?.openChannel({ id: ctx.params.player, type: ctx.params.role }, ctx)
-        },
-    )
+     store
+     .get(ctx.params.game)
+     ?.openChannel({ id: ctx.params.player, type: ctx.params.role }, ctx)
+     },
+     )
 
-    router.get('api docs', '/api/docs', (ctx) => {
-        routes2Html(router, ctx.response)
-    })
+     router.get('api docs', '/api/docs', (ctx) => {
+     routes2Html(router, ctx.response)
+     })
 
-    router.post('send message', '/api/game/:game/message/all', async (ctx) => {
-        const text = await ctx.request.body().value
-        store
-            .get(ctx.params.game)
-            ?.notifyAll(text)
+     router.post('send message', '/api/game/:game/message/all', async (ctx) => {
+     const text = await ctx.request.body().value
+     store
+     .get(ctx.params.game)
+     ?.notifyAll(text)
 
-        console.log(text)
+     console.log(text)
 
-        ctx.response.status = Status.Created
-        ctx.response.body = { response: 'notified' }
-    })
+     ctx.response.status = Status.Created
+     ctx.response.body = { response: 'notified' }
+     })*/
 
     app.use(router.routes())
     app.use(router.allowedMethods())
