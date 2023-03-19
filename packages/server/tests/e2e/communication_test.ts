@@ -2,7 +2,7 @@
 import { Application } from 'oak'
 // import { superoak } from 'superoak'
 // import { GameStore } from '../../src/server/game/game.ts'
-import { initBackend } from '../../src/server/initBackend.ts'
+// import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
 
@@ -14,8 +14,8 @@ describe(
         // let store: GameStore
 
         it('init', () => {
-            create((app: Application) => {
-                initBackend(app)
+            create(() => {
+                // initBackend(app)
             }).app
         })
         //
