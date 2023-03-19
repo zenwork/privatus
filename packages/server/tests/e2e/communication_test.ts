@@ -1,8 +1,8 @@
 // import { assert, assertEquals } from 'deno/std/testing/asserts.ts'
 // import { Application } from 'oak'
 // import { superoak } from 'superoak'
-// import { GameStore, MessageType } from '../../src/server/game/game.ts'
-// import { initBackend } from '../../src/server/initBackend.ts'
+// import { GameStore } from '../../src/server/game/game.ts'
+import { initBackend } from '../../src/server/initBackend.ts'
 // import { create } from '../../src/server/server.ts'
 import { describe } from 'deno/std/testing/bdd.ts'
 
@@ -12,12 +12,12 @@ describe(
         // let app: Application
         // let gameId = ''
         // let store: GameStore
-        //
-        // it('init', () => {
-        //     app = create((app: Application) => {
-        //         store = initBackend(app)
-        //     }).app
-        // })
+
+        it('init', () => {
+            create((app: Application) => {
+                initBackend(app)
+            }).app
+        })
         //
         // it('create game and player', async () => {
         //     let request = await superoak(app)
