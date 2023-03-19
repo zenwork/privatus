@@ -24,7 +24,7 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
             runningPort = port
-            app.listen({port: runningPort})
+            app.listen({ port: runningPort })
             return app
         },
         startBlock: async (port = 8000) => {
@@ -33,7 +33,7 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
             runningPort = port
-            await app.listen({port: runningPort})
+            await app.listen({ port: runningPort })
         },
     }
 }

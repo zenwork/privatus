@@ -32,17 +32,17 @@ function getType(assetPath: string) {
     const extension = assetPath.substring(assetPath.lastIndexOf('.') + 1)
 
     switch (extension) {
-    case 'html':
-        return 'text/html'
-    case 'css':
-        return 'text/css'
-    case 'js':
-        return 'application/javascript'
-    case 'json':
-        return 'application/json'
-    case 'ico':
-        return 'image/x-icon'
-    default:
-        return 'text/plain'
+        case 'html':
+            return 'text/html'
+        case 'css':
+            return 'text/css'
+        case 'js':
+            return 'application/javascript'
+        case 'json':
+            return 'application/json'
+        case 'ico':
+            return 'image/x-icon'
+        default:
+            return 'text/plain'
     }
 }
