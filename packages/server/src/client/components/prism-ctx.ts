@@ -33,8 +33,8 @@ export class PrismCtx extends LitElement {
             /*noinspection ALL*/
             .participant {
                 padding: 5px;
-                width: 200px;
-                height: 200px;
+                width: 20rem;
+                min-width: 10rem;
                 margin-top: 10px;
                 text-align: center;
                 flex-grow: 1;
@@ -76,8 +76,8 @@ export class PrismCtx extends LitElement {
                     <h3>The identity and privacy game</h3>
                     <h4># of players: ${this.registry.p.length}</h4>
                     <h4>session: ${this.gameId}</h4>
-                    <button @click=${() => this.game.newGame()}>start</button>
-                    <button @click=${() => this.game.endGame()}>stop</button>
+                    <sl-button @click=${() => this.game.newGame()}>start</sl-button>
+                    <sl-button @click=${() => this.game.endGame()}>stop</sl-button>
                 </section>
                 <section>
                     <ul id="participants">

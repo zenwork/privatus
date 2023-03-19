@@ -10,6 +10,7 @@
     "lit-labs/context": "https://esm.sh/@lit-labs/context@0.2.0",
     "oak": "https://deno.land/x/oak@v12.1.0/mod.ts",
     "oak_logger": "https://deno.land/x/oak_logger/mod.ts",
+    "shoelace": "https://esm.sh/@shoelace-style/shoelace@2.3.0",
     "superoak": "https://deno.land/x/superoak@4.7.0/mod.ts"
   }
 }

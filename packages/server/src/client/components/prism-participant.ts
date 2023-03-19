@@ -96,12 +96,11 @@ export class PrismParticipant extends LitElement {
     updated(changed: PropertyValues<this>) {
         if (changed.has('gameid') && this.gameid) {
             this.connected = '...'
-            if (this.source) this.source.close()
             this.start()
         } else if (changed.has('gameid') && !this.gameid) {
             this.connected = '!!!'
-            if (this.source) this.source.close()
         }
+        if (this.source) this.source.close()
     }
 
     render(): unknown {
@@ -112,9 +111,7 @@ export class PrismParticipant extends LitElement {
                 <pre>${this.connected}</pre>
                 <pre>msg:${this.lastMsg}</pre>
                 <pre>msg origin:${this.lastMsgOrigin}</pre>
-                <button @click=${this.notify}>message all
-                </button>
-
+                <sl-button @click=${this.notify} ?disabled=${!this.gameid}>message all</sl-button>
             </div>
         `
     }
