@@ -94,13 +94,15 @@ export class PrismParticipant extends LitElement {
     }
 
     updated(changed: PropertyValues<this>) {
-        if (changed.has('gameid') && this.gameid) {
-            this.connected = '...'
-            this.start()
-        } else if (changed.has('gameid') && !this.gameid) {
-            this.connected = '!!!'
+        if (changed.has('gameid')) {
+            if (this.source) this.source.close()
+            if (this.gameid) {
+                this.connected = '...'
+                this.start()
+            } else {
+                this.connected = '!!!'
+            }
         }
-        if (this.source) this.source.close()
     }
 
     render(): unknown {
