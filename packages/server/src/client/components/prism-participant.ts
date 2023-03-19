@@ -98,6 +98,9 @@ export class PrismParticipant extends LitElement {
             this.connected = '...'
             if (this.source) this.source.close()
             this.start()
+        } else if (changed.has('gameid') && !this.gameid) {
+            this.connected = '!!!'
+            if (this.source) this.source.close()
         }
     }
 
@@ -119,7 +122,7 @@ export class PrismParticipant extends LitElement {
     private notify() {
         if (!this.gameid) return
 
-        const body = 'hello! x ' + Math.floor(Math.random() * 10)
+        const body = `hello! x ${Math.floor(Math.random() * 10)}`
 
         fetch(`/api/game/${this.gameid}/message/all`, {
             method: 'POST',

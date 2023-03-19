@@ -54,7 +54,7 @@ describe({
 
                 it('end game', async () => {
                     const request = await superoak(app)
-                    await request.post(`/api/game/${gameId}/end`)
+                    await request.delete(`/api/game/${gameId}`)
                         .expect(200)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
                         .expect((response) => {
@@ -64,7 +64,7 @@ describe({
 
                 it('end game again', async () => {
                     const request = await superoak(app)
-                    await request.post(`/api/game/${gameId}/end`)
+                    await request.delete(`/api/game/${gameId}`)
                         .expect(202)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
                         .expect((response) => {

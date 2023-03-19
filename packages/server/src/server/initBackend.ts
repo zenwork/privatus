@@ -15,7 +15,7 @@ export function initBackend(app: Application): GameStore {
     )
 
     router.post(
-        'register',
+        'create game',
         '/api/game',
         (ctx) => {
             const created = store.createGame()
@@ -26,9 +26,9 @@ export function initBackend(app: Application): GameStore {
         },
     )
 
-    router.post(
-        'register',
-        '/api/game/:id/end',
+    router.delete(
+        'delete game',
+        '/api/game/:id',
         (ctx) => {
             const ended = store.endGame(ctx.params.id)
             if (ended) {
@@ -42,7 +42,7 @@ export function initBackend(app: Application): GameStore {
     )
 
     router.put(
-        'register',
+        'register player',
         '/api/game/:game/:role/:player',
         (ctx) => {
             const result = store.addPlayerToGame(ctx.params.game, { id: ctx.params.player, type: ctx.params.role })
@@ -57,7 +57,7 @@ export function initBackend(app: Application): GameStore {
     )
 
     router.get(
-        'player status',
+        'player channel',
         '/api/game/:game/channel/:role/:player',
         (ctx) => {
             store

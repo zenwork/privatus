@@ -53,7 +53,7 @@ export class PrismCtx extends LitElement {
 
     constructor() {
         super()
-        this.addEventListener('prism-register', (e: any) => {
+        this.addEventListener('prism-register', (e) => {
             this.registry.p.push(e.detail)
             this.registry = { p: this.registry.p }
         })
@@ -76,7 +76,8 @@ export class PrismCtx extends LitElement {
                     <h3>The identity and privacy game</h3>
                     <h4># of players: ${this.registry.p.length}</h4>
                     <h4>session: ${this.gameId}</h4>
-                    <button @click=${() => this.game.newGame()}>new game</button>
+                    <button @click=${() => this.game.newGame()}>start</button>
+                    <button @click=${() => this.game.endGame()}>stop</button>
                 </section>
                 <section>
                     <ul id="participants">

@@ -14,6 +14,7 @@ export type Game = {
     players: Player[]
     openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>) => void
     notifyAll(msg: Message): boolean
+    close(): void
 }
 export type PlayerID = { id: string; type: string }
 
@@ -22,7 +23,7 @@ export enum MessageType {
     STATUS = 'satus',
 }
 
-export type Message = { type: MessageType; body: string }
+export type Message = { type: MessageType; body: string; origin: string }
 
 export type Player = {
     id: PlayerID
@@ -55,6 +56,7 @@ export class GameStoreImplementation implements GameStore {
     }
 
     endGame(id: GameID): boolean {
+        this.games.get(id)?.close()
         return this.games.delete(id)
     }
 
@@ -149,5 +151,13 @@ class GameImplementation implements Game {
             p.mailbox.push(msg)
         })
         return true
+    }
+
+    close(): void {
+        this.players.forEach(async (p) => {
+            p.mailbox.push({ type: MessageType.TEXT, body: 'ending game', origin: 'server' })
+            this.clearMailbox(p)
+            await p.channel?.close()
+        })
     }
 }
