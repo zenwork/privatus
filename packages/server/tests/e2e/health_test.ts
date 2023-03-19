@@ -48,7 +48,7 @@ Deno.test(
     async (t) => {
         let app: Application
 
-        await t.step('init', () => {
+        await t.step('init', async () => {
             app = create((app: Application) => {
                 initBackend(app)
             }).app
