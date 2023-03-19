@@ -1,7 +1,7 @@
-import {Application, Router, Status}        from 'oak'
-import {GameStore, GameStoreImplementation} from './game/game.ts'
+import { Application, Router, Status } from 'oak'
+import { GameStore, GameStoreImplementation } from './game/game.ts'
 
-import {routes2Html} from './util/html.ts'
+import { routes2Html } from './util/html.ts'
 
 export function initBackend(app: Application): GameStore {
     const router = new Router()
@@ -10,7 +10,7 @@ export function initBackend(app: Application): GameStore {
         'api',
         '/api',
         (ctx) => {
-            ctx.response.body = {status: 'OK'}
+            ctx.response.body = { status: 'OK' }
         },
     )
 
@@ -21,7 +21,7 @@ export function initBackend(app: Application): GameStore {
             const created = store.createGame()
             if (created) {
                 ctx.response.status = Status.Created
-                ctx.response.body = {gameId: created}
+                ctx.response.body = { gameId: created }
             }
         },
     )
@@ -33,10 +33,10 @@ export function initBackend(app: Application): GameStore {
             const ended = store.endGame(ctx.params.id)
             if (ended) {
                 ctx.response.status = Status.OK
-                ctx.response.body = {messages: ['game ended']}
+                ctx.response.body = { messages: ['game ended'] }
             } else {
                 ctx.response.status = Status.Accepted
-                ctx.response.body = {messages: ['game not ended']}
+                ctx.response.body = { messages: ['game not ended'] }
             }
         },
     )
@@ -62,7 +62,7 @@ export function initBackend(app: Application): GameStore {
         (ctx) => {
             store
                 .get(ctx.params.game)
-                ?.openChannel({id: ctx.params.player, type: ctx.params.role}, ctx)
+                ?.openChannel({ id: ctx.params.player, type: ctx.params.role }, ctx)
         },
     )
 
@@ -79,7 +79,7 @@ export function initBackend(app: Application): GameStore {
         console.log(text)
 
         ctx.response.status = Status.Created
-        ctx.response.body = {response: 'notified'}
+        ctx.response.body = { response: 'notified' }
     })
 
     app.use(router.routes())
