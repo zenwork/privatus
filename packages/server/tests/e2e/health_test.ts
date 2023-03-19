@@ -7,25 +7,27 @@ import { initBackend } from '../../src/server/initBackend.ts'
 import { initFrontend } from '../../src/server/initFrontend.ts'
 import { create } from '../../src/server/server.ts'
 
-Deno.test(
+import { describe, it } from 'deno/std/testing/bdd.ts'
+
+describe(
     'health test frontend',
-    async (t) => {
+    () => {
         let app: Application
 
-        await t.step('init', () => {
+        it('init', () => {
             app = create((app: Application) => {
                 initFrontend(app)
             }).app
         })
 
-        await t.step('check root', async () => {
+        it('check root', async () => {
             const request = await superoak(app)
             await request.get('/')
                 .expect(200)
                 .expect('Content-Type', 'text/html; charset=UTF-8')
         })
 
-        await t.step('check assets', async () => {
+        it('check assets', async () => {
             let request = await superoak(app)
             await request.get('/index.html')
                 .expect(200)
@@ -46,18 +48,18 @@ Deno.test(
     },
 )
 
-Deno.test(
+describe(
     'health test backend',
-    async (t) => {
+    () => {
         let app: Application
 
-        await t.step('init', () => {
+        it('init', () => {
             app = create((app: Application) => {
                 initBackend(app)
             }).app
         })
 
-        await t.step('check api', async () => {
+        it('check api', async () => {
             const request = await superoak(app)
             await request.get('/api')
                 .expect(200)
@@ -65,7 +67,7 @@ Deno.test(
                 .expect({ status: 'OK' })
         })
 
-        await t.step('check docs', async () => {
+        it('check docs', async () => {
             const request = await superoak(app)
             await request.get('/api/docs')
                 .expect(200)

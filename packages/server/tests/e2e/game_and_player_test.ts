@@ -3,19 +3,20 @@ import { superoak } from 'superoak'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
 import { equalOrError, matchOrError } from './bodyAssertions.ts'
+import { describe, it } from 'deno/std/testing/bdd.ts'
 
-Deno.test(
+describe(
     'player not added because game does not exist ',
-    async (t) => {
+    () => {
         let app: Application
 
-        await t.step('init', () => {
+        it('init', () => {
             app = create((app: Application) => {
                 initBackend(app)
             }).app
         })
 
-        await t.step('create player', async () => {
+        it('create player', async () => {
             const request = await superoak(app)
             await request.put('/api/game/12345/ISSUER/p1')
                 .expect(400)
@@ -25,19 +26,19 @@ Deno.test(
     },
 )
 
-Deno.test(
+describe(
     'create game',
-    async (t) => {
+    () => {
         let app: Application
         let gameId = ''
 
-        await t.step('init', () => {
+        it('init', () => {
             app = create((app: Application) => {
                 initBackend(app)
             }).app
         })
 
-        await t.step('create game', async () => {
+        it('create game', async () => {
             const request = await superoak(app)
             await request.post('/api/game')
                 .expect(201)
@@ -48,7 +49,7 @@ Deno.test(
                 })
         })
 
-        await t.step('end game', async () => {
+        it('end game', async () => {
             const request = await superoak(app)
             await request.post(`/api/game/${gameId}/end`)
                 .expect(200)
@@ -58,7 +59,7 @@ Deno.test(
                 })
         })
 
-        await t.step('end game again', async () => {
+        it('end game again', async () => {
             const request = await superoak(app)
             await request.post(`/api/game/${gameId}/end`)
                 .expect(202)
@@ -70,19 +71,19 @@ Deno.test(
     },
 )
 
-Deno.test(
+describe(
     'create and add player',
-    async (t) => {
+    () => {
         let app: Application
         let gameId = ''
 
-        await t.step('init', () => {
+        it('init', () => {
             app = create((app: Application) => {
                 initBackend(app)
             }).app
         })
 
-        await t.step('create game', async () => {
+        it('create game', async () => {
             const request = await superoak(app)
             await request.post('/api/game')
                 .expect((response) => {
@@ -90,7 +91,7 @@ Deno.test(
                 })
         })
         //
-        await t.step('create player', async () => {
+        it('create player', async () => {
             const request = await superoak(app)
             await request.put(`/api/game/${gameId}/ISSUER/p1`)
                 .expect(201)
