@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'https://deno.land/x/test_suite@0.16.1/mod.ts'
-import { GameStore, GameStoreImplementation } from '../../../../src/server/game/game.ts'
+import { GameStore, GameStoreImplementation } from '../../../../src/server/game/index.ts'
 import { expect } from 'https://esm.sh/chai@4.3.7'
 
 describe('use game', () => {

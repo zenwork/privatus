@@ -26,27 +26,27 @@ export class PrismParticipant extends LitElement {
             }
         `,
     ]
-    @property()
-    pid = ''
-    @property()
-    ptype: PType = PType.UNDEFINED
     @property({ reflect: true })
-    gameid = ''
+    gameId = ''
+    @property()
+    playerId = ''
+    @property()
+    playerType: PType = PType.UNDEFINED
     @consume({ context: key, subscribe: true })
     registry: Registry | undefined
     @state()
-    connected = '...'
+    hearbeatState = -1
+    @state()
+    private lastSseMessage = ''
+    @state()
+    private lastSseMessageOrigin = ''
     private source: EventSource
-    @state()
-    private lastMsg = ''
-    @state()
-    private lastMsgOrigin = ''
 
     connectedCallback() {
         super.connectedCallback()
         const event = new CustomEvent('prism-register', {
             detail: {
-                participant: { pid: this.pid, ptype: this.ptype },
+                participant: { pid: this.playerId, ptype: this.playerType },
             },
             bubbles: true,
             composed: true,
@@ -56,28 +56,20 @@ export class PrismParticipant extends LitElement {
     }
 
     private start() {
-        fetch(`/api/game/${this.gameid}/${this.ptype}/${this.pid}`, { method: 'PUT' }).then(() => {
-            this.source = new EventSource(`/api/game/${this.gameid}/channel/${this.ptype}/${this.pid}`)
+        fetch(`/api/game/${this.gameId}/${this.playerType}/${this.playerId}`, { method: 'PUT' }).then(() => {
+            this.source = new EventSource(`/api/game/${this.gameId}/channel/${this.playerType}/${this.playerId}`)
             this.source.onmessage = (event) => {
                 console.log(event)
             }
             this.source.addEventListener(
                 'ping',
                 () => {
-                    // console.log('ping', e)
-                    switch (this.connected.indexOf('*')) {
-                        case -1:
-                            this.connected = '*--'
-                            break
-                        case 0:
-                            this.connected = '-*-'
-                            break
-                        case 1:
-                            this.connected = '--*'
-                            break
-                        case 2:
-                            this.connected = '*--'
-                            break
+                    console.log(this.hearbeatState)
+                    if (this.hearbeatState === 2) {
+                        this.hearbeatState = 0
+                    } else {
+                        this.hearbeatState++
+                        console.log(this.hearbeatState)
                     }
                 },
             )
@@ -86,21 +78,21 @@ export class PrismParticipant extends LitElement {
                 'msg',
                 (msg) => {
                     const data = JSON.parse(msg.data)
-                    this.lastMsg = data.body
-                    this.lastMsgOrigin = data.origin
+                    this.lastSseMessage = data.body
+                    this.lastSseMessageOrigin = data.origin
                 },
             )
         })
     }
 
     updated(changed: PropertyValues<this>) {
-        if (changed.has('gameid')) {
+        if (changed.has('gameId')) {
             if (this.source) this.source.close()
-            if (this.gameid) {
-                this.connected = '...'
+            if (this.gameId) {
+                this.hearbeatState = -1
                 this.start()
             } else {
-                this.connected = '!!!'
+                this.hearbeatState = -1
             }
         }
     }
@@ -108,24 +100,24 @@ export class PrismParticipant extends LitElement {
     render(): unknown {
         return html`
             <div>
-                <h3>type:${this.ptype}</h3>
-                <h3>id:${this.gameid}-${this.pid}</h3>
-                <pre>${this.connected}</pre>
-                <pre>msg:${this.lastMsg}</pre>
-                <pre>msg origin:${this.lastMsgOrigin}</pre>
-                <sl-button @click=${this.notify} ?disabled=${!this.gameid}>message all</sl-button>
+                <h3>type:${this.playerType}</h3>
+                <h3>id:${this.gameId}-${this.playerId}</h3>
+                <prism-heartbeat status=${this.hearbeatState}></prism-heartbeat>
+                <pre>msg:${this.lastSseMessage}</pre>
+                <pre>msg origin:${this.lastSseMessageOrigin}</pre>
+                <sl-button @click=${this.notify} ?disabled=${!this.gameId}>message all</sl-button>
             </div>
         `
     }
 
     private notify() {
-        if (!this.gameid) return
+        if (!this.gameId) return
 
         const body = `hello! x ${Math.floor(Math.random() * 10)}`
 
-        fetch(`/api/game/${this.gameid}/message/all`, {
+        fetch(`/api/game/${this.gameId}/message/all`, {
             method: 'POST',
-            body: JSON.stringify({ type: 'text', body, origin: this.ptype }),
+            body: JSON.stringify({ type: 'text', body, origin: this.playerType }),
             headers: {
                 'Content-Type': 'application/json',
             },

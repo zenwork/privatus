@@ -82,16 +82,16 @@ export class PrismCtx extends LitElement {
                 <section>
                     <ul id="participants">
                         <li class="participant">
-                            <prism-participant pid="p1" ptype="CITIZEN" gameid="${this.gameId}"></prism-participant>
+                            <prism-participant playerid="p1" playertype="CITIZEN" gameid="${this.gameId}"></prism-participant>
                         </li>
                         <li class="participant">
-                            <prism-participant pid="p2" ptype="ISSUER" gameid="${this.gameId}"></prism-participant>
+                            <prism-participant playerid="p2" playertype="ISSUER" gameid="${this.gameId}"></prism-participant>
                         </li>
                         <li class="participant">
-                            <prism-participant pid="p3" ptype="SERVICE_PROVIDER" gameid="${this.gameId}"></prism-participant>
+                            <prism-participant playerid="p3" playertype="SERVICE_PROVIDER" gameid="${this.gameId}"></prism-participant>
                         </li>
                         <li class="participant">
-                            <prism-participant pid="p4" ptype="PROFESSIONAL" gameid="${this.gameId}"></prism-participant>
+                            <prism-participant playerid="p4" playertype="PROFESSIONAL" gameid="${this.gameId}"></prism-participant>
                         </li>
                     </ul>
                 </section>
