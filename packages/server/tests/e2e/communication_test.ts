@@ -4,7 +4,7 @@
 // import { GameStore, MessageType } from '../../src/server/game/game.ts'
 // import { initBackend } from '../../src/server/initBackend.ts'
 // import { create } from '../../src/server/server.ts'
-import {describe} from 'deno/std/testing/bdd.ts'
+import { describe } from 'deno/std/testing/bdd.ts'
 
 describe(
     'create and add player',
