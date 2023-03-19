@@ -18,22 +18,22 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
 
     return {
         app,
-        start: (port: number = 8000): Application => {
+        start: (port = 8000): Application => {
             app.addEventListener(
                 'listen',
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
             runningPort = port
-            app.listen({ port: runningPort })
+            app.listen({port: runningPort})
             return app
         },
-        startBlock: async (port: number = 8000) => {
+        startBlock: async (port = 8000) => {
             app.addEventListener(
                 'listen',
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
             runningPort = port
-            await app.listen({ port: runningPort })
+            await app.listen({port: runningPort})
         },
     }
 }
