@@ -35,8 +35,8 @@ Deno.test(
             request = await superoak(app)
             await request.get('/index.css')
                 .expect(200)
-                // .expect('Content-Type', 'text/css; charset=UTF-8')
-                // .end()
+            // .expect('Content-Type', 'text/css; charset=UTF-8')
+            // .end()
 
             request = await superoak(app)
             await request.get('/index.js')
