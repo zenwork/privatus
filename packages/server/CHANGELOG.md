@@ -1,5 +1,16 @@
 # server
 
+## 0.3.0
+
+### Minor Changes
+
+- 34133f0: added heartbeat component
+- 34133f0: introduced start/stop lifecycle
+
+### Patch Changes
+
+- 4c4a667: added formatting and linting checks during build
+
 ## 0.2.3
 
 ### Patch Changes
