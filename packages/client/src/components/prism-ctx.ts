@@ -1,29 +1,29 @@
-import { css, html, LitElement } from 'lit'
-import { Context, ContextProvider } from 'lit-labs/context'
-import { customElement, state } from 'lit/decorators.js'
-import { GameController } from '../GameController.ts'
-import { key, Registry } from './prism'
+import { css, html, LitElement }    from 'lit';
+import { Context, ContextProvider } from '@lit-labs/context';
+import { customElement, state }     from 'lit/decorators.js';
+import { GameController }           from '../GameController';
+import { key, Registry }            from './prism';
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
-    private game = new GameController(this)
+  private game = new GameController(this);
 
-    static styles = [
-        css`
-            :host {
-            }
+  static styles = [
+    css`
+        :host {
+        }
 
-            section {
-                border: solid .1rem #000000;
-                margin: .2rem;
-                padding: 1rem
-            }
+        section {
+            border: solid .1rem #000000;
+            margin: .2rem;
+            padding: 1rem
+        }
 
-            /*noinspection ALL*/
-            #participants {
-                display: flex;
-                flex-wrap: wrap;
-                flex-flow: row wrap;
+        /*noinspection ALL*/
+        #participants {
+            display: flex;
+            flex-wrap: wrap;
+            flex-flow: row wrap;
                 justify-content: space-evenly;
                 padding: 0;
                 margin: 0;
@@ -52,11 +52,11 @@ export class PrismCtx extends LitElement {
     private provider?: ContextProvider<Context<'prism-registry', Registry>>
 
     constructor() {
-        super()
-        this.addEventListener('prism-register', (e) => {
-            this.registry.p.push(e.detail)
-            this.registry = { p: this.registry.p }
-        })
+      super();
+      this.addEventListener('prism-register', (e: any) => {
+        this.registry.p.push(e.detail);
+        this.registry = { p: this.registry.p };
+      });
     }
 
     connectedCallback() {

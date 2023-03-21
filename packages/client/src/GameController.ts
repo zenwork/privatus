@@ -1,13 +1,14 @@
-import { ReactiveController, ReactiveControllerHost } from 'lit/'
+import { ReactiveController, ReactiveControllerHost } from 'lit';
+import { PrismCtx }                                   from './components/prism-ctx';
 
 export class GameController implements ReactiveController {
-    host: ReactiveControllerHost
-    id = ''
+  host: PrismCtx;
+  id = '';
 
-    constructor(host: ReactiveControllerHost) {
-        this.host = host
-        this.host.addController(this)
-    }
+  constructor(host: PrismCtx) {
+    this.host = host;
+    this.host.addController(this);
+  }
 
     newGame() {
         return fetch('/api/game', { method: 'POST' })
@@ -28,17 +29,30 @@ export class GameController implements ReactiveController {
             .then((r) => r.json())
             .then((j) => {
                 if (j.messages[0] === 'game ended') {
-                    this.id = null
-                    this.host.gameId = this.id
+                  this.id = '';
+                  this.host.gameId = this.id;
                     this.host.requestUpdate()
-                    return true
+                  return true;
                 } else {
-                    return false
+                  return false;
                 }
             })
-            .catch((e) => {
-                console.log(e)
-                return false
-            })
+          .catch((e) => {
+            console.log(e);
+            return false;
+          })
     }
+
+  hostConnected(): void {
+  }
+
+  hostDisconnected(): void {
+  }
+
+  hostUpdate(): void {
+  }
+
+  hostUpdated(): void {
+  }
+
 }

@@ -4,6 +4,6 @@ import {initFrontend} from './src/server/initFrontend.ts'
 import {create}       from './src/server/server.ts'
 
 await create((app: Application<Record<string, any>>) => {
-    initBackend(app)
-    initFrontend(app)
+  initBackend(app);
+  initFrontend(app, `${Deno.cwd()}/../client/dist`);
 }).startBlock()

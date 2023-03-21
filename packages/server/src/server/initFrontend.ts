@@ -4,7 +4,7 @@ import { Application } from 'oak'
  * Serving static assets under supported deno deploy mechanisms
  * @param app
  */
-export function initFrontend(app: Application) {
+export function initFrontend(app: Application, clientPath: string) {
     // static content
     app.use(async (context, next) => {
         const pathname = context.request.url.pathname
@@ -12,15 +12,15 @@ export function initFrontend(app: Application) {
             await next()
         }
 
-        const { type, content } = getAsset(pathname)
+        const { type, content } = getAsset(pathname, clientPath)
         context.response.body = await content
         context.response.type = type
     })
 }
 
-function getAsset(pathname: string): { type: string; content: Promise<Uint8Array> } {
+function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array> } {
     const filepath = pathname === '/' ? '/index.html' : pathname
-    const assetPath = `${Deno.cwd()}/dist${filepath}`
+    const assetPath = `${clientPath}${filepath}`
 
     const content = Deno.readFile(assetPath)
 
