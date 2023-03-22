@@ -7,7 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+      - name: client->build
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 19
+      - run: cd packages/client && npm i && npm run build
 
       - name: checks
         uses: maximousblk/setup-deno@v2
@@ -41,12 +47,17 @@ jobs:
       contents: read
 
     steps:
-      - name: Clone repository
+      - name: checkout
         uses: actions/checkout@v3
 
-      - name: Build client
-        uses: maximousblk/setup-deno@v2
+      - name: build->client
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+      - run: cd packages/client && npm i && npm run build
 
+      - name: build->server
+        uses: maximousblk/setup-deno@v2
       - run: cd packages/server && deno task build
 
       - name: Upload to Deno Deploy
