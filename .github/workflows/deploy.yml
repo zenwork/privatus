@@ -57,9 +57,6 @@ jobs:
       - name: Setup Node
         run: cd packages/client && npm i && npm run build
 
-      - name: Setup Node
-        run: cd packages/server && deno task build
-
       - name: Deploy
         uses: denoland/deployctl@v1
         with:
