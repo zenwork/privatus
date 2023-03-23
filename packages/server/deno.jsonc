@@ -1,7 +1,7 @@
 {
   "tasks": {
     "dev": "deno run -A --lock-write --watch main.ts",
-    "test":"deno test -A --trace-ops tests/unit && deno test -A --trace-ops tests/e2e",
+    "test":"deno test -A --lock-write --trace-ops tests/unit && deno test -A --lock-write --trace-ops tests/e2e",
     "check":"deno fmt --check && deno lint",
     "clean":"deno fmt && deno lint"
   }
