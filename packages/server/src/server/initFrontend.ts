@@ -6,8 +6,8 @@ import { Application } from 'oak'
  * @param clientPath
  */
 export function initFrontend(app: Application, clientPath: string) {
-    // static content
-    console.log(`serving frontend from ${clientPath}}`)
+    traceAssets(clientPath)
+
     app.use(async (context, next) => {
         const pathname = context.request.url.pathname
         if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
@@ -18,6 +18,17 @@ export function initFrontend(app: Application, clientPath: string) {
         context.response.body = await content
         context.response.type = type
     })
+}
+
+function traceAssets(clientPath: string) {
+    new Promise(async (resolve): Promise<void> => {
+        let out = `SERVING frontend from ${clientPath}`
+        for await (const file of Deno.readDir(clientPath)) {
+            out += `\n :: ${file.name}`
+        }
+
+        resolve(out)
+    }).then((o) => console.log(o))
 }
 
 function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array> } {

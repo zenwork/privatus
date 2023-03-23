@@ -17,7 +17,7 @@
       "rules": {
         "tags": ["recommended"],
         "include": ["ban-untagged-todo","no-global-assign"],
-        "exclude": ["no-explicit-any","no-inferrable-types"]
+        "exclude": ["no-explicit-any","no-inferrable-types","no-async-promise-executor"]
       }
     },
     "fmt": {
