@@ -11,8 +11,6 @@ jobs:
 
       - name: client->build
       - uses: actions/setup-node@v3
-        with:
-          node-version: 19
       - run: cd   packages/client && npm i && npm run build
 
       - name: checks
