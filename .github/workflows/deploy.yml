@@ -54,10 +54,10 @@ jobs:
       - uses: actions/setup-node@v3
       - uses: maximousblk/setup-deno@v2
 
-      - name: Setup Node
-        run: cd packages/client && npm i && npm run build
+      - name: build clien
+        run: cd packages/client && npm i && npm run build && ls dist
 
-      - name: Deploy
+      - name: deploy
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus

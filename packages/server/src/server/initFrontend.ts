@@ -6,6 +6,7 @@ import { Application } from 'oak'
  */
 export function initFrontend(app: Application, clientPath: string) {
     // static content
+    console.log(`serving frontend from ${clientPath}}`)
     app.use(async (context, next) => {
         const pathname = context.request.url.pathname
         if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
