@@ -8,7 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - uses: maximousblk/setup-deno@v2
+        with:
+          node-version: 19
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: "~1.32"
 
       - name: build
         run: cd packages/client && npm i && npm run build
@@ -28,7 +32,9 @@ jobs:
       status: ${{ steps.early.outputs.status }}
     steps:
       - uses: actions/checkout@v3
-      - uses: maximousblk/setup-deno@v2
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: "~1.32"
 
       - name: Run Script
         id: early
