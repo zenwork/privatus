@@ -1,6 +1,6 @@
+#file: noinspection YAMLSchemaValidation
 name: Deploy
 on: [ push ]
-
 jobs:
   ci:
     name: CI
@@ -13,11 +13,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 19
-      - run: cd packages/client && npm i && npm run build
+      - run: cd   packages/client && npm i && npm run build
 
       - name: checks
         uses: maximousblk/setup-deno@v2
-
       - run: cd packages/server && deno fmt --check
       - run: cd packages/server && deno lint
       - run: cd packages/server && deno task test
@@ -52,8 +51,6 @@ jobs:
 
       - name: build->client
         uses: actions/setup-node@v3
-        with:
-          node-version: 19
       - run: cd packages/client && npm i && npm run build
 
       - name: build->server
