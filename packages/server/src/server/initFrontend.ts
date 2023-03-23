@@ -3,6 +3,7 @@ import { Application } from 'oak'
 /**
  * Serving static assets under supported deno deploy mechanisms
  * @param app
+ * @param clientPath
  */
 export function initFrontend(app: Application, clientPath: string) {
     // static content
