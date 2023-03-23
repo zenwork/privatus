@@ -4,7 +4,7 @@ import { initFrontend } from './src/server/initFrontend.ts'
 import { create }       from './src/server/server.ts'
 
 console.log('STARTING')
-const clientDir = `${Deno.cwd()}/../client/dist`
+const clientDir = `${Deno.cwd()}/client`
 
 await create((app: Application<Record<string, any>>) => {
     initBackend(app)
