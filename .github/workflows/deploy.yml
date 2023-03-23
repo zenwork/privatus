@@ -6,15 +6,13 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: "client:build"
       - uses: actions/checkout@v3
-
-      - name: client->build
       - uses: actions/setup-node@v3
-      - run: cd   packages/client && npm i && npm run build
+      - run: cd packages/client && npm i && npm run build
 
       - name: checks
-        uses: maximousblk/setup-deno@v2
+      - uses: maximousblk/setup-deno@v2
       - run: cd packages/server && deno fmt --check
       - run: cd packages/server && deno lint
       - run: cd packages/server && deno task test
@@ -26,11 +24,9 @@ jobs:
     outputs:
       status: ${{ steps.early.outputs.status }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Check Deployability
-        uses: maximousblk/setup-deno@v2
+      - uses: actions/checkout@v3
+      - uses: maximousblk/setup-deno@v2
       - id: early
         run: ./tools/check.sh
 
@@ -44,18 +40,16 @@ jobs:
       contents: read
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
-
-      - name: build->client
-        uses: actions/setup-node@v3
+      - name: "build:client"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - run: cd packages/client && npm i && npm run build
 
-      - name: build->server
+      - name: "build:server"
         uses: maximousblk/setup-deno@v2
       - run: cd packages/server && deno task build
 
-      - name: Upload to Deno Deploy
+      - name: "Upload to Deno Deploy"
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus
