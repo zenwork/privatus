@@ -1,9 +1,9 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
-import { consume }                               from '@lit-labs/context';
-import { customElement, property, state }        from 'lit/decorators.js';
-import { key, Registry }                         from './prism';
+import { consume } from '@lit-labs/context';
+import { customElement, property, state } from 'lit/decorators.js';
+import { key, Registry } from './prism';
 
-export enum PType {
+export enum PlayerType {
   CITIZEN = 'CITIZEN',
   SERVICE_PROVIDER = 'SERVICE PROVIDER',
   PROFESSIONAL = 'PROFESSIONAL',
@@ -15,73 +15,80 @@ export enum PType {
 export class PrismParticipant extends LitElement {
   static styles = [
     css`
-        :host {
+      :host {
+      }
 
-        }
-
-        div {
-            border: solid .1rem #000000;
-            /*margin: .2rem;*/
-            padding: .5rem;
-        }
-    `
+      div {
+        border: solid 0.1rem #000000;
+        /*margin: .2rem;*/
+        padding: 0.5rem;
+      }
+    `,
   ];
+
   @property({ reflect: true })
   gameId = '';
+
   @property()
   playerId = '';
+
   @property()
-  playerType: PType = PType.UNDEFINED;
+  playerType: PlayerType = PlayerType.UNDEFINED;
+
   @consume({ context: key, subscribe: true })
   registry: Registry | undefined;
+
   @state()
   hearbeatState = -1;
+
   @state()
   private lastSseMessage = '';
+
   @state()
   private lastSseMessageOrigin = '';
+
   private source!: EventSource;
 
   connectedCallback() {
-    super.connectedCallback();
+    if (super.connectedCallback) {
+      super.connectedCallback();
+    }
     const event = new CustomEvent('prism-register', {
       detail: {
-        participant: { pid: this.playerId, ptype: this.playerType }
+        participant: { pid: this.playerId, ptype: this.playerType },
       },
       bubbles: true,
-      composed: true
+      composed: true,
     });
 
     this.dispatchEvent(event);
   }
 
   private start() {
-    fetch(`/api/game/${this.gameId}/${this.playerType}/${this.playerId}`, { method: 'PUT' }).then(() => {
-      this.source = new EventSource(`/api/game/${this.gameId}/channel/${this.playerType}/${this.playerId}`);
-      this.source.onmessage = (event) => {
-        console.log(event);
+    fetch(`/api/game/${this.gameId}/${this.playerType}/${this.playerId}`, {
+      method: 'PUT',
+    }).then(() => {
+      this.source = new EventSource(
+        `/api/game/${this.gameId}/channel/${this.playerType}/${this.playerId}`
+      );
+      this.source.onmessage = () => {
+        // console.log(event);
       };
-      this.source.addEventListener(
-        'ping',
-        () => {
-          console.log(this.hearbeatState);
-          if (this.hearbeatState === 2) {
-            this.hearbeatState = 0;
-          } else {
-            this.hearbeatState++;
-            console.log(this.hearbeatState);
-          }
+      this.source.addEventListener('ping', () => {
+        // console.log(this.hearbeatState);
+        if (this.hearbeatState === 2) {
+          this.hearbeatState = 0;
+        } else {
+          this.hearbeatState++;
+          // console.log(this.hearbeatState);
         }
-      );
+      });
 
-      this.source.addEventListener(
-        'msg',
-        (msg) => {
-          const data = JSON.parse(msg.data);
-          this.lastSseMessage = data.body;
-          this.lastSseMessageOrigin = data.origin;
-        }
-      );
+      this.source.addEventListener('msg', msg => {
+        const data = JSON.parse(msg.data);
+        this.lastSseMessage = data.body;
+        this.lastSseMessageOrigin = data.origin;
+      });
     });
   }
 
@@ -102,10 +109,12 @@ export class PrismParticipant extends LitElement {
       <div>
         <h3>type:${this.playerType}</h3>
         <h3>id:${this.gameId}-${this.playerId}</h3>
-        <prism-heartbeat status='${this.hearbeatState}'></prism-heartbeat>
+        <prism-heartbeat status="${this.hearbeatState}"></prism-heartbeat>
         <pre>msg:${this.lastSseMessage}</pre>
         <pre>msg origin:${this.lastSseMessageOrigin}</pre>
-        <sl-button @click='${this.notify}' ?disabled='${!this.gameId}'>message all</sl-button>
+        <sl-button @click="${this.notify}" ?disabled="${!this.gameId}"
+          >message all</sl-button
+        >
       </div>
     `;
   }
@@ -119,8 +128,8 @@ export class PrismParticipant extends LitElement {
       method: 'POST',
       body: JSON.stringify({ type: 'text', body, origin: this.playerType }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
   }
 }

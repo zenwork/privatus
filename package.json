@@ -6,7 +6,7 @@
     "@changesets/cli": "^2.26.0"
   },
   "workspaces": [
-    "_packages/client",
+    "packages/client",
     "packages/server"
   ]
 }

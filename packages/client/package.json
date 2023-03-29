@@ -67,12 +67,14 @@
       ],
       "import/no-unresolved": "off",
       "import/extensions": [
-        "error",
-        "always",
+        "off",
         {
           "ignorePackages": true
         }
-      ]
+      ],
+      "class-methods-use-this": "off",
+      "no-plusplus": "off",
+      "no-shadow": "off"
     }
   },
   "prettier": {

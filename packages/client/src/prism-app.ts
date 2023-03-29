@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 
-import './components/index.js'
+import './components/index.js';
 // const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
 
 @customElement('prism-app')
