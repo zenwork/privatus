@@ -14,26 +14,26 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
 
     initFn(app)
 
-    let runningPort = 8000
+    const runningPort = 8000
 
     return {
         app,
-        start: (port = 8000): Application => {
+        start: (port = runningPort): Application => {
             app.addEventListener(
                 'listen',
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
-            runningPort = port
-            app.listen({ port: runningPort })
+
+            app.listen({ port })
             return app
         },
-        startBlock: async (port = 8000) => {
+        startBlock: async (port = runningPort) => {
             app.addEventListener(
                 'listen',
                 () => console.log(`Listening on http://localhost:${port}}`),
             )
-            runningPort = port
-            await app.listen({ port: runningPort })
+
+            await app.listen({ port })
         },
     }
 }

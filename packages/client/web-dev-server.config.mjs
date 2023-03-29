@@ -6,18 +6,18 @@ import copy  from 'rollup-plugin-copy';
 const hmr = process.argv.includes('--hmr');
 
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
-  open: '/',
-  watch: !hmr,
+  open:'/',
+  watch:!hmr,
   /** Resolve bare module imports */
-  nodeResolve: {
-    exportConditions: ['browser', 'development'],
+  nodeResolve:{
+    exportConditions:['browser', 'development']
   },
 
   /** Compile JS for older browsers. Requires @web/dev-server-esbuild plugin */
   // esbuildTarget: 'auto'
 
   /** Set appIndex to enable SPA routing */
-  appIndex: './index.html',
+  appIndex:'./index.html',
 
   plugins:[
     /** Use Hot Module Replacement by uncommenting. Requires @open-wc/dev-server-hmr plugin */
@@ -30,9 +30,10 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   ],
 
   // See documentation for all available options
-  middleware: [
+  middleware:[
     proxy('/api', {
-      target: 'http://localhost:8000',
-    }),
-  ],
+      log:true,
+      target:'http://0.0.0.0:8000'
+    })
+  ]
 });
