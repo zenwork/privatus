@@ -75,7 +75,8 @@
       ],
       "class-methods-use-this": "off",
       "no-plusplus": "off",
-      "no-shadow": "off"
+      "no-shadow": "off",
+      "wc/guard-super-call": "off"
     }
   },
   "prettier": {

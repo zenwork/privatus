@@ -62,9 +62,7 @@ export class PrismCtx extends LitElement {
   }
 
   connectedCallback() {
-    if (super.connectedCallback) {
-      super.connectedCallback();
-    }
+    super.connectedCallback();
 
     this.provider = new ContextProvider(this, key, this.registry);
     fetch('/api')

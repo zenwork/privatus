@@ -50,9 +50,8 @@ export class PrismParticipant extends LitElement {
   private source!: EventSource;
 
   connectedCallback() {
-    if (super.connectedCallback) {
-      super.connectedCallback();
-    }
+    super.connectedCallback();
+
     const event = new CustomEvent('prism-register', {
       detail: {
         participant: { pid: this.playerId, ptype: this.playerType },
@@ -113,8 +112,8 @@ export class PrismParticipant extends LitElement {
         <pre>msg:${this.lastSseMessage}</pre>
         <pre>msg origin:${this.lastSseMessageOrigin}</pre>
         <sl-button @click="${this.notify}" ?disabled="${!this.gameId}"
-          >message all</sl-button
-        >
+          >message all
+        </sl-button>
       </div>
     `;
   }
