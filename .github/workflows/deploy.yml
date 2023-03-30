@@ -61,7 +61,7 @@ jobs:
       - uses: maximousblk/setup-deno@v2
 
       - name: build client
-        run: cd packages/client && npm i && npm run deploy && ls ../server/client-dist
+        run: cd packages/client && npm ci && npm run deploy
 
       - name: deploy
         uses: denoland/deployctl@v1
