@@ -3,24 +3,37 @@ import { Application } from 'oak'
 /**
  * Serving static assets under supported deno deploy mechanisms
  * @param app
+ * @param clientPath
  */
-export function initFrontend(app: Application) {
-    // static content
+export function initFrontend(app: Application, clientPath: string) {
+    traceAssets(clientPath)
+
     app.use(async (context, next) => {
         const pathname = context.request.url.pathname
         if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
             await next()
         }
 
-        const { type, content } = getAsset(pathname)
+        const { type, content } = getAsset(pathname, clientPath)
         context.response.body = await content
         context.response.type = type
     })
 }
 
-function getAsset(pathname: string): { type: string; content: Promise<Uint8Array> } {
+function traceAssets(clientPath: string) {
+    new Promise(async (resolve): Promise<void> => {
+        let out = `SERVING frontend from ${clientPath}`
+        for await (const file of Deno.readDir(clientPath)) {
+            out += `\n :: ${file.name}`
+        }
+
+        resolve(out)
+    }).then((o) => console.log(o))
+}
+
+function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array> } {
     const filepath = pathname === '/' ? '/index.html' : pathname
-    const assetPath = `${Deno.cwd()}/dist${filepath}`
+    const assetPath = `${clientPath}${filepath}`
 
     const content = Deno.readFile(assetPath)
 

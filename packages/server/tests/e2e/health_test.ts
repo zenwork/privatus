@@ -2,12 +2,14 @@ import { delay } from 'deno/std/async/delay.ts'
 import { Application } from 'oak'
 import { superoak } from 'superoak'
 
-import '../../src/build/build.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { initFrontend } from '../../src/server/initFrontend.ts'
 import { create } from '../../src/server/server.ts'
 
 import { describe, it } from 'deno/std/testing/bdd.ts'
+import { getFirstFileName } from './find.ts'
+
+const clientDistDir = `${Deno.cwd()}/../client/dist`
 
 describe({
     name: 'health',
@@ -19,7 +21,7 @@ describe({
 
                 it('init', () => {
                     app = create((app: Application) => {
-                        initFrontend(app)
+                        initFrontend(app, clientDistDir)
                     }).app
                 })
 
@@ -37,12 +39,15 @@ describe({
                         .expect('Content-Type', 'text/html; charset=UTF-8')
 
                     request = await superoak(app)
-                    await request.get('/index.css')
+                    const cssFile = await getFirstFileName(clientDistDir, { extension: 'css' })
+                    await request.get(cssFile)
                         .expect(200)
                         .expect('Content-Type', 'text/css; charset=UTF-8')
 
                     request = await superoak(app)
-                    await request.get('/index.js')
+                    const jsFile = await getFirstFileName(clientDistDir, { extension: 'js' })
+
+                    await request.get(jsFile)
                         .expect(200)
                         .expect('Content-Type', 'application/javascript; charset=UTF-8')
 
