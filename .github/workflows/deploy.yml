@@ -15,7 +15,7 @@ jobs:
           deno-version: "~1.32"
 
       - name: install
-        run: cd packages/client && npm ci
+        run: cd packages/client && npm install
 
       - name: check:server:format
         run: cd packages/server && deno fmt --check
@@ -61,7 +61,7 @@ jobs:
       - uses: maximousblk/setup-deno@v2
 
       - name: build client
-        run: cd packages/client && npm ci && npm run deploy
+        run: cd packages/client && npm install && npm run deploy
 
       - name: deploy
         uses: denoland/deployctl@v1
