@@ -17,10 +17,12 @@ jobs:
       - name: build
         run: cd packages/client && npm i && npm run build
 
-      - name: check:format
+      - name: check:server:format
         run: cd packages/server && deno fmt --check
-      - name: check:lint
+      - name: check:server:lint
         run: cd packages/server && deno lint
+      - name: check:client:lint
+        run: cd packages/client && npm run check
       - name: test:client
         run: cd packages/client && npm run test
       - name: check:tests
