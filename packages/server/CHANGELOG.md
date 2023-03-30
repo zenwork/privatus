@@ -1,5 +1,11 @@
 # server
 
+## 0.4.0
+
+### Minor Changes
+
+- 42dc842: separated client into separate package to improve DX and technology support
+
 ## 0.3.0
 
 ### Minor Changes
