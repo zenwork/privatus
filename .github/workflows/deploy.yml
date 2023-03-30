@@ -14,15 +14,17 @@ jobs:
         with:
           deno-version: "~1.32"
 
+      - name: install
+        run: cd packages/client && npm ci
+
       - name: check:server:format
         run: cd packages/server && deno fmt --check
-
       - name: check:server:lint
         run: cd packages/server && deno lint
       - name: check:client:lint
         run: cd packages/client && npm run check
       - name: build
-        run: cd packages/client && npm i && npm run build
+        run: cd packages/client && npm run build
       - name: test:client
         run: cd packages/client && npm run test
       - name: test:server
