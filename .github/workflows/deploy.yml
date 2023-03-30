@@ -21,7 +21,7 @@ jobs:
         run: cd packages/server && deno fmt --check
       - name: check:server:lint
         run: cd packages/server && deno lint
-      - name: check:client:lint
+      - name: check:client:lint&format
         run: cd packages/client && npm run check
       - name: build
         run: cd packages/client && npm run build
