@@ -50,6 +50,7 @@ jobs:
     name: CD
     needs: check
     runs-on: ubuntu-latest
+    # deploy only if changesets have been released
     if: needs.check.outputs.status == 'deploy'
     permissions:
       id-token: write

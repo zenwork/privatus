@@ -27,7 +27,7 @@
         },
         "options": {
           "lineWidth": 140,
-          "indentWidth": 4,
+          "indentWidth": 2,
           "semiColons": false,
           "singleQuote": true,
           "proseWrap": "preserve"
