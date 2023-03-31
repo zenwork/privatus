@@ -11,8 +11,8 @@
     "check": "eslint --quiet --ext .ts,.html . --ignore-path .gitignore;  prettier --check \"**/*.ts\" --ignore-path .gitignore ",
     "test": "tsc && wtr --coverage",
     "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\"",
-    "build": "rimraf dist && tsc && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
-    "deploy": "npm run build && cp -R dist ../server && mv ../server/dist ../server/client-dist",
+    "build": "rimraf dist && tsc && rollup -c rollup.config.js && yarn run analyze -- --exclude dist",
+    "deploy": "yarn run build && cp -R dist ../server && mv ../server/dist ../server/client-dist",
     "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\""
@@ -40,6 +40,7 @@
     "babel-plugin-template-html-minifier": "^4.1.0",
     "concurrently": "^5.3.0",
     "deepmerge": "^4.2.2",
+    "esbuild": "^0.17.14",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-html": "^7.1.0",

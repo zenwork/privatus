@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: DerYeger/yarn-setup-action@master
         with:
           node-version: 19
       - uses: denoland/setup-deno@v1
@@ -15,18 +15,18 @@ jobs:
           deno-version: "~1.32"
 
       - name: install
-        run: cd packages/client && npm install
+        run: cd packages/client && yarn
 
       - name: check:server:format
         run: cd packages/server && deno fmt --check
       - name: check:server:lint
         run: cd packages/server && deno lint
       - name: check:client:lint&format
-        run: cd packages/client && npm run check
+        run: cd packages/client && yarn run check
       - name: build
-        run: cd packages/client && npm run build
+        run: cd packages/client && yarn run build
       - name: test:client
-        run: cd packages/client && npm run test
+        run: cd packages/client && yarn run test
       - name: test:server
         run: cd packages/server && deno task test
 
@@ -57,11 +57,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 19
       - uses: maximousblk/setup-deno@v2
 
       - name: build client
-        run: cd packages/client && npm install && npm run deploy
+        run: cd packages/client && yarn && yarn run deploy
 
       - name: deploy
         uses: denoland/deployctl@v1
