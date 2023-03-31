@@ -6,8 +6,10 @@
   "dependencies": {
     "@changesets/cli": "^2.26.0"
   },
-  "workspaces": [
-    "packages/client",
-    "packages/server"
-  ]
+  "workspaces": {
+    "packages": [
+      "packages/**/*"
+    ],
+    "nohoist": ["**/*"]
+  }
 }
