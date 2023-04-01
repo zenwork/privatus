@@ -84,12 +84,14 @@
       "class-methods-use-this": "off",
       "no-plusplus": "off",
       "no-shadow": "off",
-      "wc/guard-super-call": "off"
+      "wc/guard-super-call": "off",
+      "semi": ["error","never"]
     }
   },
   "prettier": {
     "singleQuote": true,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "semi": false
   },
   "husky": {
     "hooks": {

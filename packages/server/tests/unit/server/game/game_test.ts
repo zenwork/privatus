@@ -1,6 +1,7 @@
+import { PlayerID, PlayerRole } from 'common'
 import { assertEquals, assertNotEquals } from 'deno/std/testing/asserts.ts'
 import { beforeEach, describe, it } from 'deno/std/testing/bdd.ts'
-import { GameStore, GameStoreImplementation, PlayerType } from '../../../../src/server/game/index.ts'
+import { GameStore, GameStoreImplementation } from '../../../../src/server/game/index.ts'
 
 describe('use game', () => {
   let store: GameStore
@@ -38,23 +39,23 @@ describe('use game', () => {
   it('should accept player creation', () => {
     const id = store.createGame()
     const result = store.addPlayerToGame(id, {
-      id: 'foo',
-      type: PlayerType.ISSUER,
+      key: 'foo',
+      type: PlayerRole.ISSUER,
     })
     assertEquals(result, { success: true, messages: ['player created'] })
   })
 
   it('should fail to add player when game does not exist', () => {
     const result = store.addPlayerToGame('foobar', {
-      id: 'foo',
-      type: PlayerType.ISSUER,
+      key: 'foo',
+      type: PlayerRole.ISSUER,
     })
     assertEquals(result, { success: false, messages: ['game does not exist'] })
   })
 
   it('should allow finding a player', () => {
     const id = store.createGame()
-    const pid = { id: 'foo', type: PlayerType.ISSUER }
+    const pid: PlayerID = { key: 'foo', type: PlayerRole.ISSUER }
     store.addPlayerToGame(id, pid)
     const player = store.findPlayer(pid)
     assertEquals(player?.id, pid)

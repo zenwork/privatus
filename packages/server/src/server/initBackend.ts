@@ -1,5 +1,6 @@
 import { Application, Router, Status } from 'oak'
-import { GameStore, GameStoreImplementation, Message, PlayerType } from './game/index.ts'
+import { PlayerRole } from 'common'
+import { GameStore, GameStoreImplementation, Message } from './game/index.ts'
 import { toPlayerType } from './game/util.ts'
 
 import { routes2Html } from './util/html.ts'
@@ -33,7 +34,7 @@ export function initBackend(app: Application): GameStore {
 
   router.put('register player', '/api/game/:game/:role/:player', (ctx) => {
     const result = store.addPlayerToGame(ctx.params.game, {
-      id: ctx.params.player,
+      key: ctx.params.player,
       type: toPlayerType(ctx.params.role),
     })
     if (result.success) {
@@ -52,7 +53,7 @@ export function initBackend(app: Application): GameStore {
       store
         .get(ctx.params.game)
         ?.openChannel(
-          { id: ctx.params.player, type: toPlayerType(ctx.params.role) },
+          { key: ctx.params.player, type: toPlayerType(ctx.params.role) },
           ctx,
         )
     },
@@ -64,9 +65,7 @@ export function initBackend(app: Application): GameStore {
 
   router.post('send message', '/api/game/:game/message/all', async (ctx) => {
     const text: Message = (await ctx.request.body().value) as Message
-    store.get(ctx.params.game)?.notify({ ...text, destination: PlayerType.ALL })
-
-    console.log(text)
+    store.get(ctx.params.game)?.notify({ ...text, destination: PlayerRole.ALL })
 
     ctx.response.status = Status.Created
     ctx.response.body = { response: 'notified' }

@@ -1,6 +1,7 @@
+import { GameID, Message, MessageType, PlayerID, PlayerRole } from 'common'
 import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
 import { ServerSentEvent } from 'https://deno.land/x/oak@v12.1.0/server_sent_event.ts'
-import { Game, GameID, Message, MessageType, Player, PlayerID, PlayerType } from './index.ts'
+import { Game, Player } from './index.ts'
 import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
 
 export class GameImplementation implements Game {
@@ -32,17 +33,9 @@ export class GameImplementation implements Game {
     }
   }
 
-  notifyAll(msg: Message) {
-    this.players.forEach((p) => {
-      // console.log('push')
-      p.mailbox.push(msg)
-    })
-    return true
-  }
-
   notify(msg: Message) {
     this.players.forEach((p) => {
-      if (msg.destination === PlayerType.ALL || msg.destination === p.id.type) {
+      if (msg.destination === PlayerRole.ALL || msg.destination === p.id.type) {
         p.mailbox.push(msg)
       }
     })
@@ -55,7 +48,7 @@ export class GameImplementation implements Game {
         type: MessageType.TEXT,
         body: 'ending game',
         origin: this.server.id,
-        destination: PlayerType.ALL,
+        destination: PlayerRole.ALL,
       })
       this.clearMailbox(p)
       await p.channel?.close()

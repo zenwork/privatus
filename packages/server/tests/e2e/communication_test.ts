@@ -1,10 +1,11 @@
 import { assert, assertEquals } from 'deno/std/testing/asserts.ts'
+import { describe, it } from 'deno/std/testing/bdd.ts'
 import { Application } from 'oak'
 import { superoak } from 'superoak'
-import { GameStore, MessageType } from '../../src/server/game/index.ts'
+import { MessageType } from 'common'
+import { GameStore } from '../../src/server/game/index.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
-import { describe, it } from 'deno/std/testing/bdd.ts'
 
 describe({
   name: 'create and add player',

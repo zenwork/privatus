@@ -1,13 +1,14 @@
-import { Player, PlayerType } from './index.ts'
+import { PlayerRole } from 'common'
+import { Player } from './index.ts'
 
 export const LedgerPlayerFactory = (): Player => ({
-  id: { id: 'LEDGER', type: PlayerType.LEDGER },
+  id: { key: 'LEDGER', type: PlayerRole.LEDGER },
   mailbox: [],
   channel: null,
 })
 
 export const ServerPlayerFactory = (): Player => ({
-  id: { id: 'LEDGER', type: PlayerType.LEDGER },
+  id: { key: 'LEDGER', type: PlayerRole.LEDGER },
   mailbox: [],
   channel: null,
 })
@@ -22,7 +23,7 @@ export function generateId(length = 5): string {
   return result
 }
 
-export function toPlayerType(role: string): PlayerType {
-  const ptype: PlayerType = PlayerType[role as keyof typeof PlayerType]
-  return ptype ? ptype : PlayerType.NONE
+export function toPlayerType(role: string): PlayerRole {
+  const ptype: PlayerRole = PlayerRole[role as keyof typeof PlayerRole]
+  return ptype ? ptype : PlayerRole.NONE
 }
