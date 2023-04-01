@@ -1,14 +1,19 @@
 import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
 import { ServerSentEvent } from 'https://deno.land/x/oak@v12.1.0/server_sent_event.ts'
 import { Game, GameID, Message, MessageType, Player, PlayerID, PlayerType } from './index.ts'
+import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
 
 export class GameImplementation implements Game {
   key: GameID
   players: Player[]
+  private server: Player
+  private ledger: Player
 
   constructor(id: GameID) {
+    this.server = ServerPlayerFactory()
+    this.ledger = LedgerPlayerFactory()
     this.key = id
-    this.players = []
+    this.players = [this.server, this.ledger]
   }
 
   openChannel(id: PlayerID, ctx: RouterContext<any, any, any>) {
@@ -37,7 +42,7 @@ export class GameImplementation implements Game {
 
   notify(msg: Message) {
     this.players.forEach((p) => {
-      if (msg.destination.type === PlayerType.ALL) {
+      if (msg.destination === PlayerType.ALL || msg.destination === p.id.type) {
         p.mailbox.push(msg)
       }
     })
@@ -49,7 +54,8 @@ export class GameImplementation implements Game {
       p.mailbox.push({
         type: MessageType.TEXT,
         body: 'ending game',
-        origin: 'server',
+        origin: this.server.id,
+        destination: PlayerType.ALL,
       })
       this.clearMailbox(p)
       await p.channel?.close()

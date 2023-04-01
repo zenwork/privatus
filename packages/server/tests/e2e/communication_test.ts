@@ -37,9 +37,10 @@ describe({
       const request = await superoak(app)
       await request
         .post(`/api/game/${gameId}/message/all`)
-        .send({ type: MessageType.TEXT, body: 'hello players' })
+        .send({ type: MessageType.TEXT, body: 'hello players', origin: { id: 'foo', type: 1 } })
         .expect(201)
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const game = store.get(gameId)!
       const players = game.players
       assert(players.length > 0)

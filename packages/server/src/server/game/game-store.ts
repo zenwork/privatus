@@ -1,5 +1,6 @@
 import { GameImplementation } from './game.ts'
 import { Game, GameID, GameStore, Player, PlayerID, Result } from './index.ts'
+import { generateId } from './util.ts'
 
 export class GameStoreImplementation implements GameStore {
   private games: Map<GameID, Game> = new Map<GameID, Game>()
@@ -47,14 +48,4 @@ export class GameStoreImplementation implements GameStore {
     }
     return found
   }
-}
-
-function generateId(length = 5): string {
-  let result = ''
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
 }

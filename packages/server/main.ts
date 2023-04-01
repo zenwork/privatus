@@ -7,6 +7,6 @@ console.log('STARTING')
 const clientDir = `${Deno.cwd()}/client-dist`
 
 await create((app: Application<Record<string, any>>) => {
-    initBackend(app)
-    initFrontend(app, clientDir)
+  initBackend(app)
+  initFrontend(app, clientDir)
 }).startBlock()

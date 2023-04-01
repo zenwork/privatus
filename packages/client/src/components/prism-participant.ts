@@ -125,7 +125,7 @@ export class PrismParticipant extends LitElement {
 
     fetch(`/api/game/${this.gameId}/message/all`, {
       method: 'POST',
-      body: JSON.stringify({ type: 'text', body, origin: this.playerType }),
+      body: JSON.stringify({ type: 'text', body, origin: {id:this.id,type:this.playerType}, destination:'all' }),
       headers: {
         'Content-Type': 'application/json',
       },
