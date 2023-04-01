@@ -1,6 +1,6 @@
 import { Application, Router, Status } from 'oak'
-import { PlayerRole } from 'common'
-import { GameStore, GameStoreImplementation, Message } from './game/index.ts'
+import { Message, PlayerRole } from 'common'
+import { GameStore, GameStoreImplementation } from './game/index.ts'
 import { toPlayerType } from './game/util.ts'
 
 import { routes2Html } from './util/html.ts'
