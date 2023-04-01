@@ -16,5 +16,5 @@
 
     "incremental": true
   },
-  "include": ["**/*.ts","../common/src/**/*"]
+  "include": ["**/*.ts","../common/src/**/*"],
 }
