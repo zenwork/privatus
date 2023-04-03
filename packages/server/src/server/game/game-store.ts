@@ -1,4 +1,4 @@
-import { GameID, PlayerID } from 'common'
+import { GameID, PlayerID } from 'common/src/index.ts'
 import { GameImplementation } from './game.ts'
 import { Game, GameStore, Player, Result } from './index.ts'
 import { generateId } from './util.ts'

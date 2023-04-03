@@ -1,4 +1,4 @@
-import { PlayerRole } from 'common'
+import { PlayerRole } from 'common/src/index.ts'
 import { Player } from './index.ts'
 
 export const LedgerPlayerFactory = (): Player => ({

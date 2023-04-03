@@ -1,4 +1,4 @@
-import { PlayerID, PlayerRole } from 'common'
+import { PlayerID, PlayerRole } from 'common/src/index.ts'
 import { assertEquals, assertNotEquals } from 'deno/std/testing/asserts.ts'
 import { beforeEach, describe, it } from 'deno/std/testing/bdd.ts'
 import { GameStore, GameStoreImplementation } from '../../../../src/server/game/index.ts'

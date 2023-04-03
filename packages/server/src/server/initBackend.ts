@@ -1,9 +1,11 @@
+import { Message, PlayerRole } from 'common/src/index.ts'
 import { Application, Router, Status } from 'oak'
-import { Message, PlayerRole } from 'common'
 import { GameStore, GameStoreImplementation } from './game/index.ts'
 import { toPlayerType } from './game/util.ts'
 
 import { routes2Html } from './util/html.ts'
+
+type PlayerParams = { game: string; role: string; player: string }
 
 export function initBackend(app: Application): GameStore {
   const router = new Router()
@@ -33,9 +35,10 @@ export function initBackend(app: Application): GameStore {
   })
 
   router.put('register player', '/api/game/:game/:role/:player', (ctx) => {
-    const result = store.addPlayerToGame(ctx.params.game, {
-      key: ctx.params.player,
-      type: toPlayerType(ctx.params.role),
+    const params = ctx.params as PlayerParams
+    const result = store.addPlayerToGame(params.game, {
+      key: params.player,
+      type: toPlayerType(params.role),
     })
     if (result.success) {
       ctx.response.status = Status.Created
@@ -50,10 +53,11 @@ export function initBackend(app: Application): GameStore {
     'player channel',
     '/api/game/:game/channel/:role/:player',
     (ctx) => {
+      const params = ctx.params as PlayerParams
       store
-        .get(ctx.params.game)
+        .get(params.game)
         ?.openChannel(
-          { key: ctx.params.player, type: toPlayerType(ctx.params.role) },
+          { key: params.player, type: toPlayerType(params.role) },
           ctx,
         )
     },

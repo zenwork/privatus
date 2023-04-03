@@ -1,15 +1,16 @@
+import { MessageType } from 'common/src/index.ts'
 import { assert, assertEquals } from 'deno/std/testing/asserts.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
 import { Application } from 'oak'
 import { superoak } from 'superoak'
-import { MessageType } from 'common'
 import { GameStore } from '../../src/server/game/index.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
 
-describe({
-  name: 'create and add player',
-  fn: () => {
+describe(
+  'create and add player',
+  { sanitizeOps: false },
+  () => {
     let app: Application
     let gameId = ''
     let store: GameStore
@@ -50,5 +51,4 @@ describe({
       })
     })
   },
-  sanitizeOps: false,
-})
+)

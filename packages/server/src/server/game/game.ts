@@ -1,6 +1,5 @@
-import { GameID, Message, MessageType, PlayerID, PlayerRole } from 'common'
-import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
-import { ServerSentEvent } from 'https://deno.land/x/oak@v12.1.0/server_sent_event.ts'
+import { GameID, Message, MessageType, PlayerID, PlayerRole } from 'common/src/index.ts'
+import { RouterContext, ServerSentEvent } from 'oak'
 import { Game, Player } from './index.ts'
 import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
 
@@ -62,9 +61,16 @@ export class GameImplementation implements Game {
   }
 
   private hearbeat(player: Player, id: PlayerID) {
-    player.channel?.dispatchEvent(
-      new ServerSentEvent('ping', { hearbeat: Date.now(), id }),
-    )
+    const message: Message = {
+      type: MessageType.STATUS,
+      body: Date.now().toString(),
+      origin: this.server.id,
+      destination: id.type,
+    }
+    player.channel
+      ?.dispatchEvent(
+        new ServerSentEvent('ping', message),
+      )
   }
 
   private clearMailbox(player: Player) {
