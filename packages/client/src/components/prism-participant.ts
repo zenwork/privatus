@@ -8,7 +8,7 @@ import {
   PlayerID,
   PlayerRole,
 } from '../../../common/src'
-import { key, Registry } from './prism'
+import { key, messageKey, Registry } from './prism'
 
 @customElement('prism-participant')
 export class PrismParticipant extends LitElement {
@@ -40,8 +40,9 @@ export class PrismParticipant extends LitElement {
   @state()
   hearbeatState = -1
 
+  @consume({ context: messageKey, subscribe: true })
   @state()
-  private lastSseMessage = ''
+  lastSseMessage: Message | undefined
 
   @state()
   private lastSseMessageOrigin = ''
@@ -72,32 +73,6 @@ export class PrismParticipant extends LitElement {
     })
 
     this.dispatchEvent(event)
-
-    fetch(`/api/game/${this.gameId}/${this.playerType}/${this.playerId}`, {
-      method: 'PUT',
-    }).then(() => {
-      this.source = new EventSource(
-        `/api/game/${this.gameId}/channel/${this.playerType}/${this.playerId}`
-      )
-      this.source.onmessage = () => {
-        // console.log(event);
-      }
-      this.source.addEventListener('ping', () => {
-        // console.log(this.hearbeatState);
-        if (this.hearbeatState === 2) {
-          this.hearbeatState = 0
-        } else {
-          this.hearbeatState++
-          // console.log(this.hearbeatState);
-        }
-      })
-
-      this.source.addEventListener('msg', msg => {
-        const data = JSON.parse(msg.data)
-        this.lastSseMessage = data.body
-        this.lastSseMessageOrigin = data.origin
-      })
-    })
   }
 
   private createStartMessage(): Message {

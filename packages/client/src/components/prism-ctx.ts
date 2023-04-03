@@ -1,9 +1,9 @@
-import { Context, ContextProvider } from '@lit-labs/context'
+import { Context, ContextProvider, provide } from '@lit-labs/context'
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { PlayerRole } from '../../../common/src'
+import { Message, PlayerRole } from '../../../common/src'
 import { GameController } from '../GameController'
-import { key, Registry } from './prism'
+import { key, messageKey, Registry } from './prism'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
@@ -46,6 +46,10 @@ export class PrismCtx extends LitElement {
   @state()
   registry: Registry = { p: [] }
 
+  @provide({ context: messageKey })
+  @state()
+  message: Message | undefined
+
   @state()
   gameId = ''
 
@@ -63,7 +67,7 @@ export class PrismCtx extends LitElement {
     })
 
     this.addEventListener('prism-message', (e: any) => {
-      this.game.processMessage(e.detail.message)
+      this.game.sendMessage(e.detail.message)
     })
   }
 
@@ -82,7 +86,7 @@ export class PrismCtx extends LitElement {
     return html` <article>
       <section id="header">
         <h2>Privatus</h2>
-        <h3>The identity and privacy game</h3>
+        <h3>PRivacy & Identity SiMulator (PRISM)</h3>
         <h4># of players: ${this.registry.p.length}</h4>
         <h4>session: ${this.gameId}</h4>
         <sl-button @click="${() => this.game.newGame()}">start</sl-button>
