@@ -1,4 +1,4 @@
-import { GameID, PlayerID } from 'common/src/index.ts'
+import { GameID, PlayerID } from 'common'
 import { GameImplementation } from './game.ts'
 import { Game, GameStore, Player, Result } from './index.ts'
 import { generateId } from './util.ts'
@@ -6,15 +6,15 @@ import { generateId } from './util.ts'
 export class GameStoreImplementation implements GameStore {
   private games: Map<GameID, Game> = new Map<GameID, Game>()
 
-  createGame(): GameID {
+  create(): GameID {
     const id = generateId()
     this.games.set(id, new GameImplementation(id))
     console.log('new game created:', id)
     return id
   }
 
-  endGame(id: GameID): boolean {
-    this.games.get(id)?.close()
+  end(id: GameID): boolean {
+    this.games.get(id)?.closeChannel()
     return this.games.delete(id)
   }
 
@@ -39,7 +39,7 @@ export class GameStoreImplementation implements GameStore {
     return result
   }
 
-  findPlayer(searchId: PlayerID): Player | undefined {
+  findPlayerBy(searchId: PlayerID): Player | undefined {
     let found: Player | undefined
     for (const gameId of this.games.keys()) {
       found = this.games.get(gameId)?.players.find((p) => p.id === searchId)

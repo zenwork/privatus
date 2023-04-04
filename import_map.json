@@ -1,8 +1,7 @@
 {
   "imports": {
-    "./": "./",
-    "/": "./src/",
-    "common/": "../common/",
+    "common": "./packages/common/src/index.ts",
+    "common/": "./packages/common/src/",
     "deno/std/": "https://deno.land/std@0.182.0/",
     "oak": "https://deno.land/x/oak@v12.1.0/mod.ts",
     "oak_logger": "https://deno.land/x/oak_logger/mod.ts",

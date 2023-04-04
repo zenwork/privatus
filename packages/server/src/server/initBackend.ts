@@ -1,4 +1,4 @@
-import { Message, PlayerRole } from 'common/src/index.ts'
+import { Message, PlayerRole } from 'common'
 import { Application, Router, Status } from 'oak'
 import { GameStore, GameStoreImplementation } from './game/index.ts'
 import { toPlayerType } from './game/util.ts'
@@ -16,7 +16,7 @@ export function initBackend(app: Application): GameStore {
   })
 
   router.post('create game', '/api/game', (ctx) => {
-    const created = store.createGame()
+    const created = store.create()
     if (created) {
       ctx.response.status = Status.Created
       ctx.response.body = { gameId: created }
@@ -24,7 +24,7 @@ export function initBackend(app: Application): GameStore {
   })
 
   router.delete('delete game', '/api/game/:id', (ctx) => {
-    const ended = store.endGame(ctx.params.id)
+    const ended = store.end(ctx.params.id)
     if (ended) {
       ctx.response.status = Status.OK
       ctx.response.body = { messages: ['game ended'] }
@@ -69,7 +69,7 @@ export function initBackend(app: Application): GameStore {
 
   router.post('send message', '/api/game/:game/message/all', async (ctx) => {
     const text: Message = (await ctx.request.body().value) as Message
-    store.get(ctx.params.game)?.notify({ ...text, destination: PlayerRole.ALL })
+    store.get(ctx.params.game)?.forward({ ...text, destination: PlayerRole.ALL })
 
     ctx.response.status = Status.Created
     ctx.response.body = { response: 'notified' }

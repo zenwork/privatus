@@ -1,13 +1,13 @@
-import { GameID, Message, MessageType, PlayerID, PlayerRole } from 'common/src/index.ts'
 import { RouterContext, ServerSentEvent } from 'oak'
+import { GameID, Message, MessageType, PlayerID, PlayerRole } from 'common'
 import { Game, Player } from './index.ts'
 import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
 
 export class GameImplementation implements Game {
   key: GameID
   players: Player[]
-  private server: Player
-  private ledger: Player
+  private readonly server: Player
+  private readonly ledger: Player
 
   constructor(id: GameID) {
     this.server = ServerPlayerFactory()
@@ -16,8 +16,17 @@ export class GameImplementation implements Game {
     this.players = [this.server, this.ledger]
   }
 
+  forward(msg: Message) {
+    this.players.forEach((p) => {
+      if (msg.destination === PlayerRole.ALL || msg.destination === p.id.type) {
+        p.mailbox.push(msg)
+      }
+    })
+    return true
+  }
+
   openChannel(id: PlayerID, ctx: RouterContext<any, any, any>) {
-    const player = this.getPlayer(id)
+    const player = this.findBy(id)
 
     if (player && !player.channel) {
       try {
@@ -32,16 +41,7 @@ export class GameImplementation implements Game {
     }
   }
 
-  notify(msg: Message) {
-    this.players.forEach((p) => {
-      if (msg.destination === PlayerRole.ALL || msg.destination === p.id.type) {
-        p.mailbox.push(msg)
-      }
-    })
-    return true
-  }
-
-  close(): void {
+  closeChannel(): void {
     this.players.forEach(async (p) => {
       p.mailbox.push({
         type: MessageType.TEXT,
@@ -54,7 +54,16 @@ export class GameImplementation implements Game {
     })
   }
 
-  private getPlayer(id: PlayerID) {
+  private clearMailbox(player: Player) {
+    if (player.mailbox.length > 0) {
+      while (player.mailbox.length > 0) {
+        const message = player.mailbox.splice(0, 1)[0]
+        player.channel?.dispatchEvent(new ServerSentEvent('msg', message))
+      }
+    }
+  }
+
+  private findBy(id: PlayerID) {
     return this.players.find(
       (p) => JSON.stringify(p.id) === JSON.stringify(id),
     )
@@ -62,7 +71,7 @@ export class GameImplementation implements Game {
 
   private hearbeat(player: Player, id: PlayerID) {
     const message: Message = {
-      type: MessageType.STATUS,
+      type: MessageType.HEARTBEAT,
       body: Date.now().toString(),
       origin: this.server.id,
       destination: id.type,
@@ -71,14 +80,5 @@ export class GameImplementation implements Game {
       ?.dispatchEvent(
         new ServerSentEvent('ping', message),
       )
-  }
-
-  private clearMailbox(player: Player) {
-    if (player.mailbox.length > 0) {
-      while (player.mailbox.length > 0) {
-        const message = player.mailbox.splice(0, 1)[0]
-        player.channel?.dispatchEvent(new ServerSentEvent('msg', message))
-      }
-    }
   }
 }
