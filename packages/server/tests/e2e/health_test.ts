@@ -9,7 +9,7 @@ import { create } from '../../src/server/server.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
 import { getFirstFileName } from './find.ts'
 
-const clientDistDir = `${Deno.cwd()}/../client/dist`
+const clientDistDir = `${Deno.cwd()}/client/dist`
 
 describe({
   name: 'health',
