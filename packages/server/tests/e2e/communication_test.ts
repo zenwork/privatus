@@ -1,4 +1,4 @@
-import { MessageType } from 'common'
+import { MessageType } from '#/common/messages.ts'
 import { assert, assertEquals } from 'deno/std/testing/asserts.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
 import { Application } from 'oak'

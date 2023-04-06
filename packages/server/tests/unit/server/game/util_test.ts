@@ -1,6 +1,6 @@
 import { assertEquals } from 'deno/std/testing/asserts.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
-import { PlayerRole } from 'common'
+import { PlayerRole } from '#/common/players.ts'
 import { toPlayerType } from '../../../../src/server/game/util.ts'
 
 describe('use game', () => {

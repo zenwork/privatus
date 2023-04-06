@@ -1,4 +1,5 @@
-import { PlayerID, PlayerRole } from './players.ts';
+// @ts-ignore
+import { PlayerID, PlayerRole } from '#/common/players.ts'
 
 export enum MessageType {
   TEXT = 'text',

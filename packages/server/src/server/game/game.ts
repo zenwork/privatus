@@ -1,5 +1,6 @@
+import { Message, MessageType } from '#/common/messages.ts'
+import { GameID, PlayerID, PlayerRole } from '#/common/players.ts'
 import { RouterContext, ServerSentEvent } from 'oak'
-import { GameID, Message, MessageType, PlayerID, PlayerRole } from 'common'
 import { Game, Player } from './index.ts'
 import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
 

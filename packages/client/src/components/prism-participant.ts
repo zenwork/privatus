@@ -1,13 +1,10 @@
 import { consume } from '@lit-labs/context'
 import { css, html, LitElement, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import {
-  GameID,
-  Message,
-  MessageType,
-  PlayerID,
-  PlayerRole,
-} from '../../../common/src'
+// @ts-ignore
+import { Message, MessageType } from '../../../common/messages.ts'
+// @ts-ignore
+import { GameID, PlayerID, PlayerRole } from '../../../common/players.ts'
 import { key, messageKey, Registry } from './prism'
 
 @customElement('prism-participant')

@@ -1,4 +1,5 @@
-import { Message, PlayerRole } from 'common'
+import { Message } from '#/common/messages.ts'
+import { PlayerRole } from '#/common/players.ts'
 import { Application, Router, Status } from 'oak'
 import { GameStore, GameStoreImplementation } from './game/index.ts'
 import { toPlayerType } from './game/util.ts'
