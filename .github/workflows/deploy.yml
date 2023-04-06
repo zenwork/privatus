@@ -64,11 +64,11 @@ jobs:
       - uses: maximousblk/setup-deno@v2
 
       - name: build client
-        run: cd packages/client && yarn && yarn run deploy
+        run: cd packages/client && yarn && yarn run deploy && yarn run clean
 
       - name: deploy
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus
-          entrypoint: "main.ts"
-          root: "./packages/server"
+          entrypoint: "server/main.ts"
+          root: "./packages"
