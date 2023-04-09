@@ -1,9 +1,9 @@
 import { RouterContext, ServerSentEventTarget } from 'oak'
+import { GameID, Message, PlayerID, Result } from '../common/index.ts'
 
 export * from './game.ts'
 export * from './game-store.ts'
 
-export type GameID = string
 export type Game = {
     key: GameID
     players: Player[]
@@ -12,19 +12,11 @@ export type Game = {
     close(): void
 }
 
-export type PlayerID = { id: string; type: string }
 export type Player = {
     id: PlayerID
     mailbox: Message[]
     channel: ServerSentEventTarget | null
 }
-
-export enum MessageType {
-    TEXT = 'text',
-    STATUS = 'satus',
-}
-
-export type Message = { type: MessageType; body: string; origin: string }
 
 export interface GameStore {
     createGame(): GameID
@@ -37,5 +29,3 @@ export interface GameStore {
 
     findPlayer(player: PlayerID): Player | undefined
 }
-
-export type Result = { success: boolean; messages: string[] }

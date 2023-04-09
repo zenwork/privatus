@@ -1,5 +1,6 @@
+import { GameID, PlayerID, Result } from '../common/index.ts'
 import { GameImplementation } from './game.ts'
-import { Game, GameID, GameStore, Player, PlayerID, Result } from './index.ts'
+import { Game, GameStore, Player } from './index.ts'
 
 export class GameStoreImplementation implements GameStore {
     private games: Map<GameID, Game> = new Map<GameID, Game>()

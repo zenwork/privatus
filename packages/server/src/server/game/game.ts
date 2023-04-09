@@ -1,6 +1,7 @@
 import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
 import { ServerSentEvent } from 'https://deno.land/x/oak@v12.1.0/server_sent_event.ts'
-import { Game, GameID, Message, MessageType, Player, PlayerID } from './index.ts'
+import { GameID, Message, MessageType, PlayerID } from '../common/index.ts'
+import { Game, Player } from './index.ts'
 
 export class GameImplementation implements Game {
     key: GameID

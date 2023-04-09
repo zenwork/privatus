@@ -209,3 +209,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+/tools/.idea/.gitignore
+/tools/.idea/misc.xml
+/tools/.idea/modules.xml
+/tools/.idea/tools.iml
+/tools/.idea/vcs.xml
