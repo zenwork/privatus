@@ -26,7 +26,7 @@ describe({
 
             await request.post('/api/game')
                 .expect((response) => {
-                    gameId = response.body.gameId
+                    gameId = response.body.body.id
                 })
 
             request = await superoak(app)

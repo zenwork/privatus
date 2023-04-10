@@ -1,10 +1,10 @@
+import { describe, it } from 'deno/std/testing/bdd.ts'
 import { Application } from 'oak'
 import { superoak } from 'superoak'
+import { LifeCycle, Message, MessageType } from '../../src/server/common/messages.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
 import { equalOrError, matchOrError } from './bodyAssertions.ts'
-import { describe, it } from 'deno/std/testing/bdd.ts'
-import { LifeCycle, Message, MessageType } from '../../src/server/common/messages.ts'
 
 describe({
     name: 'game and player',
@@ -48,8 +48,9 @@ describe({
                         .expect(201)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
                         .expect((response) => {
-                            gameId = response.body.gameId
-                            matchOrError(gameId, /[a-zA-Z0-9]{5}/)
+                            const body: Record<string, any> = response.body.body
+                            gameId = body.id
+                            matchOrError(gameId, /GM-[a-zA-Z0-9]{5}/)
                         })
                 })
 
@@ -92,7 +93,8 @@ describe({
                     const request = await superoak(app)
                     await request.post('/api/game')
                         .expect((response) => {
-                            gameId = response.body.gameId
+                            const body: Record<string, any> = response.body.body
+                            gameId = body.id
                         })
                 })
                 //
