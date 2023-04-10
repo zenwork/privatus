@@ -1,6 +1,7 @@
 import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
 import { ServerSentEvent } from 'https://deno.land/x/oak@v12.1.0/server_sent_event.ts'
-import { GameID, Message, MessageType, PlayerID } from '../common/index.ts'
+import { GameID, PlayerID } from '../common/index.ts'
+import { ended, Message } from '../common/messages.ts'
 import { Game, Player } from './index.ts'
 
 export class GameImplementation implements Game {
@@ -38,18 +39,22 @@ export class GameImplementation implements Game {
 
     close(): void {
         this.players.forEach(async (p) => {
-            p.mailbox.push({ type: MessageType.TEXT, body: 'ending game', origin: 'server' })
+            p.mailbox.push(ended)
             this.clearMailbox(p)
             await p.channel?.close()
         })
     }
 
     private getPlayer(id: PlayerID) {
-        return this.players.find((p) => JSON.stringify(p.id) === JSON.stringify(id))
+        return this.players.find(
+            (p) => JSON.stringify(p.id) === JSON.stringify(id),
+        )
     }
 
     private hearbeat(player: Player, id: PlayerID) {
-        player.channel?.dispatchEvent(new ServerSentEvent('ping', { hearbeat: Date.now(), id }))
+        player.channel?.dispatchEvent(
+            new ServerSentEvent('ping', { hearbeat: Date.now(), id }),
+        )
     }
 
     private clearMailbox(player: Player) {

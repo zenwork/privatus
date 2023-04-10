@@ -1,14 +1,17 @@
 import { RouterContext, ServerSentEventTarget } from 'oak'
-import { GameID, Message, PlayerID, Result } from '../common/index.ts'
+import { GameID, PlayerID } from '../common/index.ts'
+import { Message } from '../common/messages.ts'
 
 export * from './game.ts'
 export * from './game-store.ts'
 
-export type Game = {
+export interface Game {
     key: GameID
     players: Player[]
     openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>) => void
+
     notifyAll(msg: Message): boolean
+
     close(): void
 }
 
@@ -21,11 +24,11 @@ export type Player = {
 export interface GameStore {
     createGame(): GameID
 
-    endGame(id: GameID): boolean
+    endGame(id: GameID): Message
 
     get(id: GameID): Game | undefined
 
-    addPlayerToGame(id: GameID, p: PlayerID): Result
+    addPlayerToGame(id: GameID, p: PlayerID): Message
 
     findPlayer(player: PlayerID): Player | undefined
 }

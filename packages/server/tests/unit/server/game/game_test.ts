@@ -1,5 +1,6 @@
 import { assertEquals, assertNotEquals } from 'deno/std/testing/asserts.ts'
 import { beforeEach, describe, it } from 'https://deno.land/x/test_suite@0.16.1/mod.ts'
+import { ended } from '../../../../src/server/common/messages.ts'
 import { GameStore, GameStoreImplementation } from '../../../../src/server/game/index.ts'
 
 describe('use game', () => {
@@ -30,7 +31,7 @@ describe('use game', () => {
     it('should remove game', () => {
         const id = store.createGame()
         const result = store.endGame(id)
-        assertEquals(result, true)
+        assertEquals(result, ended)
         const game = store.get(id)
         assertEquals(game, undefined)
     })
@@ -38,12 +39,12 @@ describe('use game', () => {
     it('should accept player creation', () => {
         const id = store.createGame()
         const result = store.addPlayerToGame(id, { id: 'foo', type: 'bar' })
-        assertEquals(result, { success: true, messages: ['player created'] })
+        assertEquals(result.body, 'player created')
     })
 
     it('should fail to add player when game does not exist', () => {
         const result = store.addPlayerToGame('foobar', { id: 'foo', type: 'bar' })
-        assertEquals(result, { success: false, messages: ['game does not exist'] })
+        assertEquals(result.body, 'game does not exist')
     })
 
     it('should allow finding a player', () => {

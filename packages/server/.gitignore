@@ -1,1 +1,8 @@
 client-dist/
+!/.idea/
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/deno.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml

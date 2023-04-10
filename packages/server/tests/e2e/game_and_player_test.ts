@@ -4,6 +4,7 @@ import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
 import { equalOrError, matchOrError } from './bodyAssertions.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
+import { LifeCycle, Message, MessageType } from '../../src/server/common/messages.ts'
 
 describe({
     name: 'game and player',
@@ -24,7 +25,7 @@ describe({
                     await request.put('/api/game/12345/ISSUER/p1')
                         .expect(400)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
-                        .expect({ success: false, messages: ['game does not exist'] })
+                        .expect((msg: Message) => msg.type === MessageType.ERROR)
                 })
             },
         )
@@ -58,7 +59,7 @@ describe({
                         .expect(200)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
                         .expect((response) => {
-                            equalOrError(response.body.messages[0], 'game ended')
+                            equalOrError(response.body.body, 'game ended')
                         })
                 })
 
@@ -68,7 +69,8 @@ describe({
                         .expect(202)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
                         .expect((response) => {
-                            equalOrError(response.body.messages[0], 'game not ended')
+                            const message: Message = response.body
+                            equalOrError(message.body, LifeCycle.UNCHANGED)
                         })
                 })
             },
@@ -99,7 +101,7 @@ describe({
                     await request.put(`/api/game/${gameId}/ISSUER/p1`)
                         .expect(201)
                         .expect('Content-Type', 'application/json; charset=UTF-8')
-                        .expect({ success: true, messages: ['player created'] })
+                        .expect((msg: Message) => msg.type === MessageType.INFO && msg.body === 'player created')
                 })
             },
         )
