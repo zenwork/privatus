@@ -1,6 +1,7 @@
 import { RouterContext, ServerSentEventTarget } from 'oak'
-import { GameID, PlayerID } from '../common/index.ts'
+import { GameID } from '../common/game.ts'
 import { Message } from '../common/messages.ts'
+import { PlayerID } from '../common/players.ts'
 
 export * from './game.ts'
 export * from './game-store.ts'

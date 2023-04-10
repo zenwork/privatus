@@ -1,11 +1,12 @@
 import { assert, assertEquals } from 'deno/std/testing/asserts.ts'
+import { describe, it } from 'deno/std/testing/bdd.ts'
 import { Application } from 'oak'
 import { superoak } from 'superoak'
-import { MessageType } from '../../src/server/common/index.ts'
+import { Message, MessageType } from '../../src/server/common/messages.ts'
+import { Role } from '../../src/server/common/players.ts'
 import { GameStore } from '../../src/server/game/index.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
-import { describe, it } from 'deno/std/testing/bdd.ts'
 
 describe({
     name: 'create and add player',
@@ -36,9 +37,10 @@ describe({
 
         it('send message', async () => {
             const request = await superoak(app)
+            const message: Message = new Message(MessageType.INFO, 'hello players', Role.TECHNICAL, Role.ANY)
             await request
                 .post(`/api/game/${gameId}/message/all`)
-                .send({ type: MessageType.TEXT, body: 'hello players' })
+                .send(message)
                 .expect(201)
 
             const game = store.get(gameId)!

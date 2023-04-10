@@ -14,8 +14,8 @@ export class GameController implements ReactiveController {
   newGame() {
     return fetch('/api/game', { method: 'POST' })
       .then(r => r.json())
-      .then(j => {
-        this.id = j.gameId;
+      .then(message => {
+        this.id = message.body.id;
         this.host.gameId = this.id;
         this.host.requestUpdate();
         return true;

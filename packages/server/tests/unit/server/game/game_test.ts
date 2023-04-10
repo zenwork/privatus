@@ -1,6 +1,7 @@
 import { assertEquals, assertNotEquals } from 'deno/std/testing/asserts.ts'
 import { beforeEach, describe, it } from 'https://deno.land/x/test_suite@0.16.1/mod.ts'
 import { ended } from '../../../../src/server/common/messages.ts'
+import { Role } from '../../../../src/server/common/players.ts'
 import { GameStore, GameStoreImplementation } from '../../../../src/server/game/index.ts'
 
 describe('use game', () => {
@@ -13,8 +14,8 @@ describe('use game', () => {
         const id1 = store.createGame()
         const id2 = store.createGame()
         assertNotEquals(id1, id2)
-        assertEquals(id1.length, 5)
-        assertEquals(id2.length, 5)
+        assertEquals(id1.length, 8)
+        assertEquals(id2.length, 8)
     })
 
     it('should fail to find game with invalid ID', () => {
@@ -38,18 +39,18 @@ describe('use game', () => {
 
     it('should accept player creation', () => {
         const id = store.createGame()
-        const result = store.addPlayerToGame(id, { id: 'foo', type: 'bar' })
+        const result = store.addPlayerToGame(id, { key: 'foo', role: Role.CITIZEN })
         assertEquals(result.body, 'player created')
     })
 
     it('should fail to add player when game does not exist', () => {
-        const result = store.addPlayerToGame('foobar', { id: 'foo', type: 'bar' })
+        const result = store.addPlayerToGame('foobar', { key: 'foo', role: Role.CITIZEN })
         assertEquals(result.body, 'game does not exist')
     })
 
     it('should allow finding a player', () => {
         const id = store.createGame()
-        const pid = { id: 'foo', type: 'bar' }
+        const pid = { key: 'foo', role: Role.CITIZEN }
         store.addPlayerToGame(id, pid)
         const player = store.findPlayer(pid)
         assertEquals(player?.id, pid)

@@ -1,6 +1,6 @@
-import { GameID, PlayerID, Result } from '../common/index.ts'
+import { GameID, GameKey } from '../common/game.ts'
 import { ended, Message, MessageType, notEnded } from '../common/messages.ts'
-import { Role } from '../common/players.ts'
+import { PlayerID, Role } from '../common/players.ts'
 import { GameImplementation } from './game.ts'
 import { Game, GameStore, Player } from './index.ts'
 
@@ -8,7 +8,7 @@ export class GameStoreImplementation implements GameStore {
     private games: Map<GameID, Game> = new Map<GameID, Game>()
 
     createGame(): GameID {
-        const id = generateId()
+        const id = new GameKey().toString()
         this.games.set(id, new GameImplementation(id))
         console.log('new game created:', id)
         return id
@@ -30,19 +30,19 @@ export class GameStoreImplementation implements GameStore {
 
     addPlayerToGame(id: GameID, pid: PlayerID): Message {
         let type = MessageType.ERROR
-        const result: Result = { success: false, messages: [] }
+        const result = []
         if (!this.games.has(id)) {
-            result.messages.push('game does not exist')
+            result.push('game does not exist')
         }
 
         const game = this.games.get(id)
 
         if (game && !game.players.some((p) => p.id === pid)) {
             game.players.push({ id: pid, mailbox: [], channel: null })
-            result.messages.push('player created')
+            result.push('player created')
             type = MessageType.INFO
         }
-        return new Message(type, result.messages.join(','), Role.TECHNICAL, Role.ANY)
+        return new Message(type, result.join(','), Role.TECHNICAL, Role.ANY)
     }
 
     findPlayer(searchId: PlayerID): Player | undefined {
@@ -55,14 +55,4 @@ export class GameStoreImplementation implements GameStore {
         }
         return found
     }
-}
-
-function generateId(length = 5): string {
-    let result = ''
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    const charactersLength = characters.length
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength))
-    }
-    return result
 }

@@ -6,6 +6,15 @@ export enum Role {
     PROFESSIONAL,
     TECHNICAL,
     LEDGER,
+    UNKNOWN,
+}
+
+export function parseRole(val: string): Role {
+    if (!val) {
+        return Role.UNKNOWN
+    }
+
+    return Role[val as keyof typeof Role]
 }
 
 export class PlayerID {

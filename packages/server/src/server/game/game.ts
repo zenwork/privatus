@@ -1,7 +1,8 @@
 import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
 import { ServerSentEvent } from 'https://deno.land/x/oak@v12.1.0/server_sent_event.ts'
-import { GameID, PlayerID } from '../common/index.ts'
-import { ended, Message } from '../common/messages.ts'
+import { GameID } from '../common/game.ts'
+import { ended, heartbeat, Message } from '../common/messages.ts'
+import { PlayerID } from '../common/players.ts'
 import { Game, Player } from './index.ts'
 
 export class GameImplementation implements Game {
@@ -53,7 +54,7 @@ export class GameImplementation implements Game {
 
     private hearbeat(player: Player, id: PlayerID) {
         player.channel?.dispatchEvent(
-            new ServerSentEvent('ping', { hearbeat: Date.now(), id }),
+            new ServerSentEvent('ping', heartbeat(id.role)),
         )
     }
 

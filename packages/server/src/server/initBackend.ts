@@ -1,5 +1,6 @@
 import { Application, Router, Status } from 'oak'
-import { LifeCycle, Message, MessageType, notEnded } from './common/messages.ts'
+import { failure, LifeCycle, Message, MessageType, notEnded, started } from './common/messages.ts'
+import { parseRole } from './common/players.ts'
 import { GameStore, GameStoreImplementation } from './game/index.ts'
 
 import { routes2Html } from './util/html.ts'
@@ -13,10 +14,13 @@ export function initBackend(app: Application): GameStore {
     })
 
     router.post('create game', '/api/game', (ctx) => {
-        const created = store.createGame()
-        if (created) {
+        const id = store.createGame()
+        if (id) {
             ctx.response.status = Status.Created
-            ctx.response.body = { gameId: created }
+            ctx.response.body = started(id)
+        } else {
+            ctx.response.status = Status.BadRequest
+            ctx.response.body = failure('unable to create game')
         }
     })
 
@@ -33,8 +37,8 @@ export function initBackend(app: Application): GameStore {
 
     router.put('register player', '/api/game/:game/:role/:player', (ctx) => {
         const result = store.addPlayerToGame(ctx.params.game, {
-            id: ctx.params.player,
-            type: ctx.params.role,
+            key: ctx.params.player,
+            role: parseRole(ctx.params.role),
         })
         if (result.type !== MessageType.ERROR) {
             ctx.response.status = Status.Created
@@ -51,7 +55,7 @@ export function initBackend(app: Application): GameStore {
         (ctx) => {
             store
                 .get(ctx.params.game)
-                ?.openChannel({ id: ctx.params.player, type: ctx.params.role }, ctx)
+                ?.openChannel({ key: ctx.params.player, role: parseRole(ctx.params.role) }, ctx)
         },
     )
 

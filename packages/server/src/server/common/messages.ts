@@ -32,19 +32,32 @@ export class Message {
     }
 }
 
-export const started = new Message(
-    MessageType.STATUS,
-    LifeCycle.STARTED,
-    Role.TECHNICAL,
-    Role.ANY,
-)
+export function started(id: string) {
+    return new Message(
+        MessageType.STATUS,
+        { id },
+        Role.TECHNICAL,
+        Role.ANY,
+    )
+}
 
-export const heartbeat = new Message(
-    MessageType.STATUS,
-    LifeCycle.HEARTBEAT,
-    Role.TECHNICAL,
-    Role.ANY,
-)
+export function failure(errorMessage: string) {
+    return new Message(
+        MessageType.ERROR,
+        { message: errorMessage },
+        Role.TECHNICAL,
+        Role.ANY,
+    )
+}
+
+export function heartbeat(destination: Role) {
+    return new Message(
+        MessageType.STATUS,
+        LifeCycle.HEARTBEAT,
+        Role.TECHNICAL,
+        destination,
+    )
+}
 
 export const ended = new Message(
     MessageType.STATUS,
