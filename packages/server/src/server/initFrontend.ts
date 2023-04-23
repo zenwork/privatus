@@ -1,8 +1,8 @@
-import { Application } from 'oak'
+import { Application, Context } from 'oak'
 
-function notFound<AS>(context: Context<AS, Record<string, any>>) {
-  context.response.body = "Not Found!";
-  context.response.status = 404;
+function notFound(context: Context<any, Record<string, any>>) {
+  context.response.body = 'Not Found!'
+  context.response.status = 404
 }
 
 /**
@@ -16,7 +16,7 @@ export function initFrontend(app: Application, clientPath: string) {
   app.use(async (context) => {
     const pathname = context.request.url.pathname
     if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
-      notFound(context);
+      notFound(context)
     }
 
     const { type, content } = getAsset(pathname, clientPath)
@@ -24,7 +24,7 @@ export function initFrontend(app: Application, clientPath: string) {
     if (type !== 'null') {
       context.response.body = await content
       context.response.type = type
-    } else{
+    } else {
       notFound(context)
     }
   })
@@ -41,7 +41,7 @@ function traceAssets(clientPath: string) {
   }).then((o) => console.log(o))
 }
 
-function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array|null> } {
+function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array | null> } {
   try {
     const filepath = pathname === '/' ? '/index.html' : pathname
     const assetPath = `${clientPath}${filepath}`
@@ -52,8 +52,8 @@ function getAsset(pathname: string, clientPath: string): { type: string; content
     const type = getType(assetPath)
     return { type, content }
   } catch (e) {
-    console.log('asset not found:',e.message)
-    return {type:'null', content: Promise.resolve(null)}
+    console.log('asset not found:', e.message)
+    return { type: 'null', content: Promise.resolve(null) }
   }
 }
 
