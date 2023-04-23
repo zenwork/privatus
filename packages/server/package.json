@@ -1,0 +1,10 @@
+{
+  "name": "server",
+  "version": "0.4.0",
+  "description": "Privatus edge server",
+  "scripts": {
+    "start": "deno run --watch main.ts",
+    "test": "deno test"
+  },
+  "license": "MIT"
+ }
