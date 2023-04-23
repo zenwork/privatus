@@ -1,41 +1,35 @@
+import { Message } from '#/common/messages.ts'
 import { RouterContext, ServerSentEventTarget } from 'oak'
+import { GameID, PlayerID } from '#/common/players.ts'
 
 export * from './game.ts'
 export * from './game-store.ts'
 
-export type GameID = string
 export type Game = {
-    key: GameID
-    players: Player[]
-    openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>) => void
-    notifyAll(msg: Message): boolean
-    close(): void
+  key: GameID
+  players: Player[]
+  openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>) => void
+  forward(msg: Message): boolean
+  closeChannel(): void
 }
 
-export type PlayerID = { id: string; type: string }
 export type Player = {
-    id: PlayerID
-    mailbox: Message[]
-    channel: ServerSentEventTarget | null
+  id: PlayerID
+  mailbox: Message[]
+  channel: ServerSentEventTarget | null
 }
-
-export enum MessageType {
-    TEXT = 'text',
-    STATUS = 'satus',
-}
-
-export type Message = { type: MessageType; body: string; origin: string }
 
 export interface GameStore {
-    createGame(): GameID
+  create(): GameID
 
-    endGame(id: GameID): boolean
+  get(id: GameID): Game | undefined
 
-    get(id: GameID): Game | undefined
+  end(id: GameID): boolean
 
-    addPlayerToGame(id: GameID, p: PlayerID): Result
+  addPlayerToGame(id: GameID, p: PlayerID): Result
 
-    findPlayer(player: PlayerID): Player | undefined
+  findPlayerBy(player: PlayerID): Player | undefined
 }
 
 export type Result = { success: boolean; messages: string[] }
+export { generateId } from './util.ts'

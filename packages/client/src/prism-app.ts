@@ -1,12 +1,12 @@
-import { LitElement, html, css } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
+import { LitElement, html, css } from 'lit'
+import { property, customElement } from 'lit/decorators.js'
 
-import './components/index.js';
+import './components/index.js'
 // const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
 
 @customElement('prism-app')
 export class PrismApp extends LitElement {
-  @property({ type: String }) header = 'My app';
+  @property({ type: String }) header = 'My app'
 
   static styles = css`
     :host {
@@ -49,7 +49,7 @@ export class PrismApp extends LitElement {
     .app-footer a {
       margin-left: 5px;
     }
-  `;
+  `
 
   render() {
     return html`
@@ -66,6 +66,6 @@ export class PrismApp extends LitElement {
           >open-wc</a
         >.
       </p>
-    `;
+    `
   }
 }

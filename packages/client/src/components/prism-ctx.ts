@@ -1,12 +1,14 @@
-import { css, html, LitElement } from 'lit';
-import { Context, ContextProvider } from '@lit-labs/context';
-import { customElement, state } from 'lit/decorators.js';
-import { GameController } from '../GameController';
-import { key, Registry } from './prism';
+import { Context, ContextProvider, provide } from '@lit-labs/context'
+import { css, html, LitElement } from 'lit'
+import { customElement, state } from 'lit/decorators.js'
+// @ts-ignore
+import { Message, PlayerRole } from '../../../common'
+import { GameController } from '../GameController'
+import { key, messageKey, Registry } from './prism'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
-  private game = new GameController(this);
+  private game = new GameController(this)
 
   static styles = [
     css`
@@ -40,43 +42,52 @@ export class PrismCtx extends LitElement {
         flex-grow: 1;
       }
     `,
-  ];
+  ]
 
   @state()
-  registry: Registry = { p: [] };
+  registry: Registry = { p: [] }
+
+  @provide({ context: messageKey })
+  @state()
+  message: Message | undefined
 
   @state()
-  gameId = '';
+  gameId = ''
 
   @state()
-  server = 'UNKNOWN';
+  server = 'UNKNOWN'
 
-  private provider?: ContextProvider<Context<'prism-registry', Registry>>;
+  private provider?: ContextProvider<Context<'prism-registry', Registry>>
 
   constructor() {
-    super();
+    super()
+
     this.addEventListener('prism-register', (e: any) => {
-      this.registry.p.push(e.detail);
-      this.registry = { p: this.registry.p };
-    });
+      this.registry.p.push(e.detail)
+      this.registry = { p: this.registry.p }
+    })
+
+    this.addEventListener('prism-message', (e: any) => {
+      this.game.sendMessage(e.detail.message)
+    })
   }
 
   connectedCallback() {
-    super.connectedCallback();
+    super.connectedCallback()
 
-    this.provider = new ContextProvider(this, key, this.registry);
+    this.provider = new ContextProvider(this, key, this.registry)
     fetch('/api')
       .then(r => r.json())
       .then(s => {
-        this.server = s.status;
-      });
+        this.server = s.status
+      })
   }
 
   protected render(): unknown {
     return html` <article>
       <section id="header">
         <h2>Privatus</h2>
-        <h3>The identity and privacy game</h3>
+        <h3>PRivacy & Identity SiMulator (PRISM)</h3>
         <h4># of players: ${this.registry.p.length}</h4>
         <h4>session: ${this.gameId}</h4>
         <sl-button @click="${() => this.game.newGame()}">start</sl-button>
@@ -87,34 +98,34 @@ export class PrismCtx extends LitElement {
           <li class="participant">
             <prism-participant
               playerid="p1"
-              playertype="CITIZEN"
+              playertype="${PlayerRole.CITIZEN}"
               gameid="${this.gameId}"
             ></prism-participant>
           </li>
           <li class="participant">
             <prism-participant
               playerid="p2"
-              playertype="ISSUER"
+              playertype="${PlayerRole.ISSUER}"
               gameid="${this.gameId}"
             ></prism-participant>
           </li>
           <li class="participant">
             <prism-participant
               playerid="p3"
-              playertype="SERVICE_PROVIDER"
+              playertype="${PlayerRole.PROVIDER}"
               gameid="${this.gameId}"
             ></prism-participant>
           </li>
           <li class="participant">
             <prism-participant
               playerid="p4"
-              playertype="PROFESSIONAL"
+              playertype="${PlayerRole.PROFESSIONAL}"
               gameid="${this.gameId}"
             ></prism-participant>
           </li>
         </ul>
       </section>
       <section>status: ${this.server}</section>
-    </article>`;
+    </article>`
   }
 }

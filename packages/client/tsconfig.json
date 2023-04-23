@@ -6,15 +6,16 @@
     "noEmitOnError": true,
     "lib": ["es2017", "dom"],
     "strict": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "outDir": "out-tsc",
     "sourceMap": true,
     "inlineSources": true,
-    "rootDir": "./",
-    "incremental": true
+    "incremental": true,
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts","../common/**/*"],
 }
