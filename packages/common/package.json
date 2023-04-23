@@ -1,6 +1,6 @@
 {
   "name": "common",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "description": "Privatus shared code",
   "main": "index.ts",
   "license": "MIT"

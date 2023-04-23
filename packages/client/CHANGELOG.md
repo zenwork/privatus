@@ -1,5 +1,11 @@
 # client
 
+## 0.5.0
+
+### Minor Changes
+
+- d92f5cf: improving messaging
+
 ## 0.1.1
 
 ### Patch Changes

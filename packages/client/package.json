@@ -3,7 +3,7 @@
   "description": "Webcomponent prism-app following open-wc recommendations",
   "license": "MIT",
   "author": "prism-app",
-  "version": "0.1.1",
+  "version": "0.5.0",
   "type": "module",
   "scripts": {
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
@@ -60,7 +60,6 @@
     "rollup-plugin-workbox": "^6.2.0",
     "tslib": "^2.3.1",
     "typescript": "^5.0.3"
-
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -87,7 +86,10 @@
       "no-plusplus": "off",
       "no-shadow": "off",
       "wc/guard-super-call": "off",
-      "semi": ["error","never"] ,
+      "semi": [
+        "error",
+        "never"
+      ],
       "import/no-relative-packages": "off"
     }
   },
