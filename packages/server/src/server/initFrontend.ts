@@ -1,6 +1,9 @@
 import { Application, Context } from 'oak'
 
-function notFound(context: Context<any, Record<string, any>>, errMsg: string = 'Not Found!') {
+function notFound(
+  context: Context<any, Record<string, any>>,
+  errMsg: string = 'Not Found!',
+) {
   context.response.body = errMsg
   context.response.status = 404
 }
@@ -19,13 +22,13 @@ export function initFrontend(app: Application, clientPath: string) {
       notFound(context)
     }
 
-    const { type, content } = getAsset(pathname, clientPath)
+    const { type, content } = await getAsset(pathname, clientPath)
 
-    if (type !== 'null') {
-      context.response.body = await content
+    if (type !== 'error') {
+      context.response.body = content
       context.response.type = type
     } else {
-      notFound(context, String(await content))
+      notFound(context, String(content))
     }
   })
 }
@@ -41,19 +44,22 @@ function traceAssets(clientPath: string) {
   }).then((o) => console.log(o))
 }
 
-function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array | string> } {
+async function getAsset(
+  pathname: string,
+  clientPath: string,
+): Promise<{ type: string; content: Uint8Array | string }> {
   try {
     const filepath = pathname === '/' || pathname === '' ? '/index.html' : pathname
     const assetPath = `${clientPath}${filepath}`
 
-    Deno.lstatSync(assetPath)
-    const content = Deno.readFile(assetPath)
+    await Deno.lstat(assetPath)
+    const content = await Deno.readFile(assetPath)
 
     const type = getType(assetPath)
     return { type, content }
   } catch (e) {
     console.log('asset not found:', e.message)
-    return { type: 'null', content: Promise.resolve(`[${pathname}] not found: ${e.message}`) }
+    return { type: 'error', content: `[${pathname}] not found: ${e.message}` }
   }
 }
 
