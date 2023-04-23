@@ -9,7 +9,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
-    name: Release
+    name: Create Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -28,6 +28,6 @@ jobs:
         with:
           publish: changeset tag
           commit: release
-          title: release
+          title: Release Candidate PR
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
