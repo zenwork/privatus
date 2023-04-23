@@ -1,7 +1,7 @@
 import { Application, Context } from 'oak'
 
-function notFound(context: Context<any, Record<string, any>>) {
-  context.response.body = 'Not Found!'
+function notFound(context: Context<any, Record<string, any>>, errMsg: string = 'Not Found!') {
+  context.response.body = errMsg
   context.response.status = 404
 }
 
@@ -25,7 +25,7 @@ export function initFrontend(app: Application, clientPath: string) {
       context.response.body = await content
       context.response.type = type
     } else {
-      notFound(context)
+      notFound(context, String(await content))
     }
   })
 }
@@ -41,9 +41,9 @@ function traceAssets(clientPath: string) {
   }).then((o) => console.log(o))
 }
 
-function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array | null> } {
+function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array | string> } {
   try {
-    const filepath = pathname === '/' ? '/index.html' : pathname
+    const filepath = pathname === '/' || pathname === '' ? '/index.html' : pathname
     const assetPath = `${clientPath}${filepath}`
 
     Deno.lstatSync(assetPath)
@@ -53,7 +53,7 @@ function getAsset(pathname: string, clientPath: string): { type: string; content
     return { type, content }
   } catch (e) {
     console.log('asset not found:', e.message)
-    return { type: 'null', content: Promise.resolve(null) }
+    return { type: 'null', content: Promise.resolve(`[${pathname}] not found: ${e.message}`) }
   }
 }
 
