@@ -1,5 +1,5 @@
 import { ReactiveController } from 'lit'
-import { Message } from '../../common/messages'
+import { Message }            from 'common'
 import { PrismCtx } from './components/prism-ctx'
 
 export class GameController implements ReactiveController {

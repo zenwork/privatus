@@ -1,8 +1,7 @@
 import { Context, ContextProvider, provide } from '@lit-labs/context'
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-// @ts-ignore
-import { Message, PlayerRole } from '../../../common'
+import { Message, PlayerRole } from 'common'
 import { GameController } from '../GameController'
 import { key, messageKey, Registry } from './prism'
 

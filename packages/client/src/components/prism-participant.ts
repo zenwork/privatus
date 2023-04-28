@@ -1,10 +1,7 @@
 import { consume } from '@lit-labs/context'
 import { css, html, LitElement, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-// @ts-ignore
-import { Message, MessageType } from '../../../common/messages.ts'
-// @ts-ignore
-import { GameID, PlayerID, PlayerRole } from '../../../common/players.ts'
+import { Message, MessageType,GameID, PlayerID, PlayerRole } from 'common'
 import { key, messageKey, Registry } from './prism'
 
 @customElement('prism-participant')
@@ -86,6 +83,7 @@ export class PrismParticipant extends LitElement {
   }
 
   updated(changed: PropertyValues<this>) {
+    console.log(changed)
     if (changed.has('gameId')) {
       if (this.source) this.source.close()
       if (this.gameId) {

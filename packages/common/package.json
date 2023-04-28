@@ -2,6 +2,14 @@
   "name": "common",
   "version": "0.5.0",
   "description": "Privatus shared code",
-  "main": "index.ts",
-  "license": "MIT"
+  "main": "dist/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "deno2node": "^1.8.1",
+    "typescript": "^5.0.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "deno2node"
+  }
 }

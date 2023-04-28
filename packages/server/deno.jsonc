@@ -1,0 +1,37 @@
+{
+  "tasks": {
+    "dev": "deno run -A --reload --lock-write --watch main-dev.ts",
+    "dev:offline": "deno run -A --watch main-dev.ts",
+    "prod": "deno run -A --lock-write --watch main.ts",
+    "test": "deno test -A --lock-write --trace-ops tests/unit && deno test -A --lock-write --trace-ops tests/e2e",
+    "test:watch": "deno test -A --lock-write --watch --trace-ops tests",
+    "check": "deno fmt --check . && deno lint .",
+    "clean": "deno fmt . && deno lint ."
+  },
+  "importMap": "./import_map.json",
+  "compilerOptions": {
+    "noImplicitReturns": false
+  },
+  "lint": {
+    "files": {
+      "include": ["server/src/", "server/tests/"]
+    },
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["ban-untagged-todo", "no-global-assign"],
+      "exclude": ["no-explicit-any", "no-inferrable-types", "no-async-promise-executor"]
+    }
+  },
+  "fmt": {
+    "files": {
+      "include": ["server/src/", "server/tests/"]
+    },
+    "options": {
+      "lineWidth": 140,
+      "indentWidth": 2,
+      "semiColons": false,
+      "singleQuote": true,
+      "proseWrap": "preserve"
+    }
+  }
+}
