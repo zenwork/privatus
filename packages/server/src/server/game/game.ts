@@ -1,7 +1,9 @@
-import { RouterContext, ServerSentEvent } from 'oak'
-import { GameID, Message, MessageType, PlayerID, PlayerRole } from '../../common/index.ts'
-import { Game, Player } from './index.ts'
-import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
+import {RouterContext, ServerSentEvent}                     from 'oak'
+import {GameID, Message, MessageType, PlayerID, PlayerRole} from '../../common/index.ts'
+import {Game, Player}                                       from './index.ts'
+import {LedgerPlayerFactory, ServerPlayerFactory}           from './util.ts'
+
+export const INFINITE = -1
 
 export class GameImplementation implements Game {
   key: GameID
@@ -25,33 +27,45 @@ export class GameImplementation implements Game {
     return true
   }
 
-  openChannel(id: PlayerID, ctx: RouterContext<any, any, any>) {
+  openChannel(id: PlayerID, ctx: RouterContext<any, any, any>, max= INFINITE) {
     const player = this.findBy(id)
 
-    if (player && !player.channel) {
-      try {
-        player.channel = ctx.sendEvents()
-        setInterval(() => {
-          this.hearbeat(player, id)
-          this.clearMailbox(player)
-        }, 1000)
-      } catch (e) {
-        console.error(`Unable to open channel for ${id} - ${e.message}}`)
+      if (player && !player.channel) {
+        try {
+          player.channel = ctx.sendEvents()
+          let cycle = 0
+          player.heartbeatId = setInterval(async () => {
+            if (max === INFINITE || cycle < max) {
+              this.hearbeat(player, id)
+              this.clearMailbox(player)
+              cycle++
+            } else {
+              await this.closeChannel(player)
+            }
+          }, 1000)
+        } catch (e) {
+          console.error(`Unable to open channel for ${id} - ${e.message}}`)
+        }
       }
-    }
+
   }
 
-  closeChannel(): void {
+  closeAllChannels(): void {
     this.players.forEach(async (p) => {
-      p.mailbox.push({
-        type: MessageType.TEXT,
-        body: 'ending game',
-        origin: this.server.id,
-        destination: PlayerRole.ALL,
-      })
-      this.clearMailbox(p)
-      await p.channel?.close()
+      await this.closeChannel(p)
     })
+  }
+
+  private async closeChannel(p: Player) {
+    p.mailbox.push({
+      type: MessageType.TEXT,
+      body: 'ending game',
+      origin: this.server.id,
+      destination: PlayerRole.ALL,
+    })
+    this.clearMailbox(p)
+    clearInterval(p.heartbeatId)
+    await p.channel?.close()
   }
 
   private clearMailbox(player: Player) {

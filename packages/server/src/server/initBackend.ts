@@ -1,11 +1,12 @@
-import { Application, Router, Status } from 'oak'
-import { Message, PlayerRole } from '../common/index.ts'
-import { GameStore, GameStoreImplementation } from './game/index.ts'
-import { toPlayerType } from './game/util.ts'
+import {Application, Router, Status}        from 'oak'
+import {Message, PlayerRole}                from '../common/index.ts'
+import {openChannelWith}                    from './backend/channel.ts'
+import {GameStore, GameStoreImplementation} from './game/index.ts'
+import {toPlayerType}                       from './game/util.ts'
 
-import { routes2Html } from './util/html.ts'
+import {routes2Html} from './util/html.ts'
 
-type PlayerParams = { game: string; role: string; player: string }
+export type PlayerParams = { game: string; role: string; player: string }
 
 export function initBackend(app: Application): GameStore {
   const router = new Router()
@@ -49,19 +50,9 @@ export function initBackend(app: Application): GameStore {
     }
   })
 
-  router.get(
-    'player channel',
-    '/api/game/:game/channel/:role/:player',
-    (ctx) => {
-      const params = ctx.params as PlayerParams
-      store
-        .get(params.game)
-        ?.openChannel(
-          { key: params.player, type: toPlayerType(params.role) },
-          ctx,
-        )
-    },
-  )
+
+
+  router.get('open player channel', '/api/game/:game/channel/:role/:player', openChannelWith(store))
 
   router.get('api docs', '/api/docs', (ctx) => {
     routes2Html(router, ctx.response)

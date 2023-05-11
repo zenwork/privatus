@@ -14,7 +14,7 @@ export class GameStoreImplementation implements GameStore {
   }
 
   end(id: GameID): boolean {
-    this.games.get(id)?.closeChannel()
+    this.games.get(id)?.closeAllChannels()
     return this.games.delete(id)
   }
 

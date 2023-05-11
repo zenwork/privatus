@@ -1,5 +1,5 @@
-import { RouterContext, ServerSentEventTarget } from 'oak'
-import { GameID, Message, PlayerID } from '../../common/index.ts'
+import {RouterContext, ServerSentEventTarget} from 'oak'
+import {GameID, Message, PlayerID}            from '../../common/index.ts'
 
 export * from './game.ts'
 export * from './game-store.ts'
@@ -7,13 +7,14 @@ export * from './game-store.ts'
 export type Game = {
   key: GameID
   players: Player[]
-  openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>) => void
+  openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>, max: number) => void
   forward(msg: Message): boolean
-  closeChannel(): void
+  closeAllChannels(): void
 }
 
 export type Player = {
   id: PlayerID
+  heartbeatId?: number
   mailbox: Message[]
   channel: ServerSentEventTarget | null
 }
