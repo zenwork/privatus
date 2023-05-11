@@ -41,7 +41,9 @@ function traceAssets(clientPath: string) {
     }
 
     resolve(out)
-  }).then((o) => console.log(o))
+  })
+    .then((o) => console.log(o))
+    .catch((e) => console.error(e))
 }
 
 async function getAsset(

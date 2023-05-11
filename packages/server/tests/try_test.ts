@@ -1,3 +1,3 @@
-import { PlayerRole } from '#/common/players.ts'
+import { PlayerRole } from '../src/common/players.ts'
 
 console.log(PlayerRole.SERVER)
