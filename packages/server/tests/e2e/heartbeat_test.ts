@@ -40,8 +40,9 @@ describe(
         .set(xKillAfterMaxHearbeats, '3')
         .expect(
           new RegExp(
-            '(event: ping\ndata: \{"type":"heartbeat","body":"[0-9]{13}","origin":\{"key":"LEDGER","type":5},"destination":2}\n\n){3}' +
-              'event: msg\ndata: \{"type":"text","body":"ending game","origin":\{"key":"LEDGER","type":5},"destination":99}\n\n',
+            '(event: ping\ndata:' +
+              ' \{"type":"heartbeat","body":"[0-9]{13}","origin":\{"key":"server","type":"SERVER"},"destination":"ISSUER"}\n\n){3}' +
+              'event: msg\ndata: \{"type":"text","body":"ending game","origin":\{"key":"server","type":"SERVER"},"destination":"ALL"}\n\n',
           ),
         )
     })

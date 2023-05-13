@@ -2,13 +2,13 @@ import { PlayerRole } from '../../../../common/src/players.ts'
 import { Player } from './index.ts'
 
 export const LedgerPlayerFactory = (): Player => ({
-  id: { key: 'LEDGER', type: PlayerRole.LEDGER },
+  id: { key: 'ledger', type: PlayerRole.LEDGER },
   mailbox: [],
   channel: null,
 })
 
 export const ServerPlayerFactory = (): Player => ({
-  id: { key: 'LEDGER', type: PlayerRole.LEDGER },
+  id: { key: 'server', type: PlayerRole.SERVER },
   mailbox: [],
   channel: null,
 })
