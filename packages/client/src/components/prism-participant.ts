@@ -90,7 +90,7 @@ export class PrismParticipant extends LitElement {
       body: JSON.stringify({
         type: 'text',
         body,
-        origin: { key: this.playerId, type: this.playerType },
+        origin: this.getPlayer(),
         destination: PlayerRole.ALL,
       } as Message),
       headers: {
