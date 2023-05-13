@@ -68,6 +68,9 @@ jobs:
           node-version: 19
       - uses: maximousblk/setup-deno@v2
 
+      - name: build common
+        run: cd packages/common && yarn
+
       - name: build client
         run: cd packages/client && yarn && yarn run deploy && yarn run clean
 
