@@ -18,9 +18,9 @@ jobs:
         run: cd packages/client && yarn
 
       - name: check:server:format
-        run: cd packages/server && deno fmt --check
+        run: cd packages/server && deno fmt --check .
       - name: check:server:lint
-        run: cd packages/server && deno lint
+        run: cd packages/server && deno lint .
       - name: check:client:lint&format
         run: cd packages/client && yarn run check
       - name: build
