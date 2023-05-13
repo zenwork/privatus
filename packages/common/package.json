@@ -6,10 +6,12 @@
   "license": "MIT",
   "devDependencies": {
     "deno2node": "^1.8.1",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "rimraf": "^3.0.2"
   },
   "scripts": {
     "build": "deno2node",
-    "prepare": "deno2node"
+    "prepare": "deno2node",
+    "clean": "rimraf node_modules"
   }
 }
