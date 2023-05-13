@@ -9,7 +9,7 @@
     "typescript": "^5.0.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "deno2node",
     "prepare": "deno2node"
   }
 }

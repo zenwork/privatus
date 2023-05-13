@@ -14,7 +14,10 @@ jobs:
         with:
           deno-version: "~1.32"
 
-      - name: install
+      - name: install:common
+        run: cd packages/common && yarn
+
+      - name: install:client
         run: cd packages/client && yarn
 
       - name: check:server:format
@@ -23,7 +26,9 @@ jobs:
         run: cd packages/server && deno lint .
       - name: check:client:lint&format
         run: cd packages/client && yarn run check
-      - name: build
+      - name: build:common
+        run: cd packages/common && yarn run build
+      - name: build:client
         run: cd packages/client && yarn run build
       - name: test:client
         run: cd packages/client && yarn run test
