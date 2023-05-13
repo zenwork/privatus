@@ -13,3 +13,5 @@ export type Message = {
   origin: PlayerID
   destination: PlayerRole
 }
+
+export type Result = { success: boolean; messages: string[] }

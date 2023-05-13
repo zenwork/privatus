@@ -1,7 +1,7 @@
-import {RouterContext, ServerSentEvent}                     from 'oak'
-import {GameID, Message, MessageType, PlayerID, PlayerRole} from '../../common/index.ts'
-import {Game, Player}                                       from './index.ts'
-import {LedgerPlayerFactory, ServerPlayerFactory}           from './util.ts'
+import { RouterContext, ServerSentEvent, Status } from 'oak'
+import { GameID, Message, MessageType, PlayerID, PlayerRole } from '../../../../common/src/index.ts'
+import { Game, Player } from './index.ts'
+import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
 
 export const INFINITE = -1
 
@@ -27,27 +27,29 @@ export class GameImplementation implements Game {
     return true
   }
 
-  openChannel(id: PlayerID, ctx: RouterContext<any, any, any>, max= INFINITE) {
+  openChannel(id: PlayerID, ctx: RouterContext<any, any, any>, max = INFINITE) {
     const player = this.findBy(id)
 
-      if (player && !player.channel) {
-        try {
-          player.channel = ctx.sendEvents()
-          let cycle = 0
-          player.heartbeatId = setInterval(async () => {
-            if (max === INFINITE || cycle < max) {
-              this.hearbeat(player, id)
-              this.clearMailbox(player)
-              cycle++
-            } else {
-              await this.closeChannel(player)
-            }
-          }, 1000)
-        } catch (e) {
-          console.error(`Unable to open channel for ${id} - ${e.message}}`)
-        }
+    if (player && !player.channel) {
+      try {
+        player.channel = ctx.sendEvents()
+        let cycle = 0
+        player.heartbeatId = setInterval(async () => {
+          if (max === INFINITE || cycle < max) {
+            this.hearbeat(player, id)
+            this.clearMailbox(player)
+            cycle++
+          } else {
+            await this.closeChannel(player)
+          }
+        }, 1000)
+      } catch (e) {
+        console.error(`Unable to open channel for ${id} - ${e.message}}`)
       }
-
+    } else {
+      ctx.response.status = Status.Forbidden
+      ctx.response.body = 'player not created'
+    }
   }
 
   closeAllChannels(): void {

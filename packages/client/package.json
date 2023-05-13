@@ -81,6 +81,7 @@
         "error"
       ],
       "import/no-unresolved": "off",
+      "import/named": "off",
       "import/extensions": [
         "off",
         {

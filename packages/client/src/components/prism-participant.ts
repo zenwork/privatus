@@ -1,11 +1,12 @@
-import { consume } from '@lit-labs/context'
+import { GameID, Message, PlayerID, PlayerRole } from 'common'
 import { css, html, LitElement, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { Message, MessageType,GameID, PlayerID, PlayerRole } from 'common'
-import { key, messageKey, Registry } from './prism'
+import { PlayerController } from '../PlayerController'
 
 @customElement('prism-participant')
 export class PrismParticipant extends LitElement {
+  private player: PlayerController | null = null
+
   static styles = [
     css`
       :host {
@@ -28,54 +29,21 @@ export class PrismParticipant extends LitElement {
   @property({ type: PlayerRole })
   playerType: PlayerRole = PlayerRole.NONE
 
-  @consume({ context: key, subscribe: true })
-  registry: Registry | undefined
-
   @state()
   hearbeatState = -1
 
-  @consume({ context: messageKey, subscribe: true })
   @state()
   lastSseMessage: Message | undefined
 
   @state()
-  private lastSseMessageOrigin = ''
-
-  private source!: EventSource
+  lastSseMessageOrigin: PlayerID | undefined
 
   connectedCallback() {
     super.connectedCallback()
-
-    const event = new CustomEvent('prism-register', {
-      detail: {
-        participant: { pid: this.playerId, ptype: this.playerType },
-      },
-      bubbles: true,
-      composed: true,
+    this.player = new PlayerController(this, {
+      type: this.playerType,
+      key: this.playerId,
     })
-
-    this.dispatchEvent(event)
-  }
-
-  private start() {
-    const event = new CustomEvent('prism-message', {
-      detail: {
-        message: this.createStartMessage(),
-      },
-      bubbles: true,
-      composed: true,
-    })
-
-    this.dispatchEvent(event)
-  }
-
-  private createStartMessage(): Message {
-    return {
-      type: MessageType.COMMAND,
-      body: 'start',
-      origin: this.getPlayer(),
-      destination: PlayerRole.SERVER,
-    }
   }
 
   private getPlayer(): PlayerID {
@@ -83,14 +51,16 @@ export class PrismParticipant extends LitElement {
   }
 
   updated(changed: PropertyValues<this>) {
-    console.log(changed)
-    if (changed.has('gameId')) {
-      if (this.source) this.source.close()
-      if (this.gameId) {
-        this.hearbeatState = -1
-        this.start()
-      } else {
-        this.hearbeatState = -1
+    if (changed.has('gameId') && this.gameId) {
+      if (this.player) {
+        this.player
+          .register(this.gameId)
+          .then(() => {
+            this.player!.openChannel(this.gameId)
+          })
+          .catch(() => {
+            console.error('registration failed') // eslint-disable-line no-console
+          })
       }
     }
   }
@@ -102,7 +72,7 @@ export class PrismParticipant extends LitElement {
         <h3>id:${this.gameId}-${this.playerId}</h3>
         <prism-heartbeat status="${this.hearbeatState}"></prism-heartbeat>
         <pre>msg:${this.lastSseMessage}</pre>
-        <pre>msg origin:${this.lastSseMessageOrigin}</pre>
+        <pre>msg from:${this.lastSseMessageOrigin?.type}</pre>
         <sl-button @click="${this.notify}" ?disabled="${!this.gameId}"
           >message all
         </sl-button>
@@ -120,9 +90,9 @@ export class PrismParticipant extends LitElement {
       body: JSON.stringify({
         type: 'text',
         body,
-        origin: { id: this.id, type: this.playerType },
-        destination: 'all',
-      }),
+        origin: { key: this.playerId, type: this.playerType },
+        destination: PlayerRole.ALL,
+      } as Message),
       headers: {
         'Content-Type': 'application/json',
       },

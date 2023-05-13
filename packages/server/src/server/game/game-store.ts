@@ -1,6 +1,7 @@
-import { GameID, PlayerID } from '../../common/players.ts'
+import { Result } from '../../../../common/src/messages.ts'
+import { GameID, PlayerID } from '../../../../common/src/players.ts'
 import { GameImplementation } from './game.ts'
-import { Game, GameStore, Player, Result } from './index.ts'
+import { Game, GameStore, Player } from './index.ts'
 import { generateId } from './util.ts'
 
 export class GameStoreImplementation implements GameStore {

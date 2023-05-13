@@ -1,10 +1,10 @@
-import {Application, Router, Status}        from 'oak'
-import {Message, PlayerRole}                from '../common/index.ts'
-import {openChannelWith}                    from './backend/channel.ts'
-import {GameStore, GameStoreImplementation} from './game/index.ts'
-import {toPlayerType}                       from './game/util.ts'
+import { Application, Router, Status } from 'oak'
+import { Message, PlayerRole } from '../../../common/src/index.ts'
+import { openChannelWith } from './backend/channel.ts'
+import { GameStore, GameStoreImplementation } from './game/index.ts'
+import { toPlayerType } from './game/util.ts'
 
-import {routes2Html} from './util/html.ts'
+import { routes2Html } from './util/html.ts'
 
 export type PlayerParams = { game: string; role: string; player: string }
 
@@ -49,8 +49,6 @@ export function initBackend(app: Application): GameStore {
       ctx.response.body = result
     }
   })
-
-
 
   router.get('open player channel', '/api/game/:game/channel/:role/:player', openChannelWith(store))
 

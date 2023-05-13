@@ -1,14 +1,14 @@
 export type GameID = string
 
 export enum PlayerRole {
-  NONE = 0,
-  CITIZEN = 1,
-  ISSUER = 2,
-  PROVIDER = 3,
-  PROFESSIONAL = 4,
-  LEDGER = 5,
-  SERVER = 6,
-  ALL = 99,
+  NONE = 'NONE',
+  CITIZEN = 'CITIZEN',
+  ISSUER = 'ISSUER',
+  PROVIDER = 'PROVIDED',
+  PROFESSIONAL = 'PROFESSIONAL',
+  LEDGER = 'LEDGER',
+  SERVER = 'SERVER',
+  ALL = 'ALL',
 }
 
 export type PlayerID = { key: string; type: PlayerRole }
