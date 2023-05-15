@@ -82,4 +82,4 @@ jobs:
         with:
           project: zenwork-privatus
           root: "./packages/server"
-          entrypoint: "main.bundle.js"
+          entrypoint: "main.ts"
