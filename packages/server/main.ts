@@ -6,7 +6,7 @@ import { create } from './src/server/server.ts'
 
 try {
   console.log('STARTING')
-  const clientDir = `${Deno.cwd()}/server/client-dist`
+  const clientDir = `${Deno.cwd()}/client-dist`
 
   await create((app: Application<Record<string, any>>) => {
     initBackend(app)

@@ -71,16 +71,15 @@ jobs:
       - name: build common
         run: cd packages/common && yarn && yarn run clean
 
-      - name: build client
+      - name: build and deploy client
         run: cd packages/client && yarn && yarn run deploy && yarn run clean
 
       - name: build server
-        run: cd packages/server && deno bundle main.ts main.bundle.js
+        run: cd packages/server && deno task bundle
 
       - name: deploy
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus
-          root: "./packages"
-          entrypoint: "server/main.bundle.js"
-          import-map: "server/import_map.json"
+          root: "./packages/server"
+          entrypoint: "main.bundle.js"
