@@ -1,5 +1,5 @@
-import { Application } from 'oak'
-import logger from 'oak_logger'
+import {Application, isHttpError} from 'oak'
+import logger                     from 'oak_logger'
 
 export type Privatus = {
   app: Application
@@ -11,6 +11,20 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
   const app: Application<Record<string, any>> = new Application()
   app.use(logger.logger)
   app.use(logger.responseTime)
+
+  app.use(async (context, next) => {
+    try {
+      await next();
+    } catch (err) {
+      if (isHttpError(err)) {
+        context.response.status = err.status;
+      } else {
+        context.response.status = 500;
+      }
+      context.response.body = { error: err.message };
+      context.response.type = "json";
+    }
+  });
 
   initFn(app)
 

@@ -17,18 +17,22 @@ export function initFrontend(app: Application, clientPath: string) {
   traceAssets(clientPath)
 
   app.use(async (context) => {
-    const pathname = context.request.url.pathname
-    if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
+    try {
+      const pathname = context.request.url.pathname
+      if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
+        notFound(context)
+      }
+
+      const {type, content} = await getAsset(pathname, clientPath)
+      console.log(pathname, type)
+      if (type !== 'error') {
+        context.response.body = content
+        context.response.type = type
+      } else {
+        notFound(context, String(content))
+      }
+    } catch (e) {
       notFound(context)
-    }
-
-    const { type, content } = await getAsset(pathname, clientPath)
-
-    if (type !== 'error') {
-      context.response.body = content
-      context.response.type = type
-    } else {
-      notFound(context, String(content))
     }
   })
 }
