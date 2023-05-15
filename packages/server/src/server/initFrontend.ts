@@ -23,7 +23,7 @@ export function initFrontend(app: Application, clientPath: string) {
         notFound(context)
       }
 
-      const {type, content} = await getAsset(pathname, clientPath)
+      const { type, content } = await getAsset(pathname, clientPath)
       console.log(pathname, type)
       if (type !== 'error') {
         context.response.body = content
@@ -32,7 +32,7 @@ export function initFrontend(app: Application, clientPath: string) {
         notFound(context, String(content))
       }
     } catch (e) {
-      notFound(context)
+      notFound(context, e.toString())
     }
   })
 }
