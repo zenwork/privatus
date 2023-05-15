@@ -1,5 +1,5 @@
 import { Application } from 'oak'
-import { fallback } from './src/server/fallback.ts'
+import { fallbackServer } from './src/server/fallbackServer.ts'
 import { initBackend } from './src/server/initBackend.ts'
 import { initFrontend } from './src/server/initFrontend.ts'
 import { create } from './src/server/server.ts'
@@ -13,5 +13,5 @@ try {
     initFrontend(app, clientDir)
   }).startBlock()
 } catch (e) {
-  await fallback({ error: e.toString() })
+  await fallbackServer({ error: e.toString() })
 }
