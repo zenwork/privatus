@@ -1,5 +1,5 @@
 export async function fallbackServer(reason: Record<string | symbol | number, string>) {
-    console.warn('SERVING FROM FALLBACK')
+  console.warn('SERVING FROM FALLBACK')
   const server = Deno.listen({ port: 8000 })
 
   for await (const conn of server) {
