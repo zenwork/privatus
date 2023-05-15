@@ -18,7 +18,7 @@ describe(
     it('init', () => {
       app = create((app: Application) => {
         store = initBackend(app)
-      }).app
+      }).getApp()
     })
 
     it('create game and player', async () => {

@@ -4,7 +4,7 @@ import logger from 'oak_logger'
 const defaultPort: number = 8000
 
 export type Privatus = {
-  app: Application
+  getApp: () => Application
   start: (port: number) => Application
   startBlock: (port?: number) => void
 }
@@ -37,7 +37,10 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
   }
 
   return {
-    app,
+    getApp: (): Application => {
+      initFn(app)
+      return app
+    },
     start: (port = defaultPort): Application => {
       start(port)
       app.listen({ port })

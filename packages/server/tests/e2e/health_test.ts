@@ -22,7 +22,7 @@ describe({
         it('init', () => {
           app = create((app: Application) => {
             initFrontend(app, clientDistDir)
-          }).app
+          }).getApp()
         })
 
         it('check root', async () => {
@@ -63,7 +63,7 @@ describe({
         it('init', () => {
           app = create((app: Application) => {
             initBackend(app)
-          }).app
+          }).getApp()
         })
 
         it('check api', async () => {

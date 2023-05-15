@@ -15,7 +15,7 @@ describe(
     it('init', () => {
       app = create((app: Application) => {
         initBackend(app)
-      }).app
+      }).getApp()
     })
 
     it('setup player', async () => {
