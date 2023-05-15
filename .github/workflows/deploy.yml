@@ -81,5 +81,6 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus
-          root: "./packages/server"
-          entrypoint: "main.ts"
+          root: "./packages/"
+          entrypoint: "server/main.ts"
+          import-map: "server/import_map.json"
