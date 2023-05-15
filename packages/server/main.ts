@@ -15,7 +15,7 @@ export async function start(clientDir: string) {
       initFrontend(app, clientDir)
     }).startBlock()
   } catch (e) {
-    await fallbackServer({ error: e.toString() })
+    await fallbackServer({ error: e.toString(), stacktrace: e.stack })
   }
 }
 
