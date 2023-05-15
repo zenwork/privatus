@@ -14,7 +14,13 @@ export async function fallbackServer(reason: Record<string | symbol | number, un
   async function serveHttp(conn: Deno.Conn) {
     const httpConn = Deno.serveHttp(conn)
     for await (const requestEvent of httpConn) {
-      const body = JSON.stringify(reason)
+      const body = JSON
+        .stringify(reason)
+        .replaceAll(/[{}]/g, '\n')
+        .replaceAll(/":"/g, '":\n"')
+        .replaceAll(/\\n/g, '\n')
+        .replaceAll(/","/g, '"\n\n"')
+        .replaceAll(/"/g, '')
       await requestEvent.respondWith(
         new Response(body, {
           status: 500,
@@ -25,6 +31,10 @@ export async function fallbackServer(reason: Record<string | symbol | number, un
 }
 
 export async function continueIfDir(path: string) {
-  const fileInfo = await Deno.stat(path)
-  if (!fileInfo.isDirectory) throw new Error(`[${path}] does not exist`)
+  try {
+    const fileInfo = await Deno.stat(path)
+    if (!fileInfo.isDirectory) throw new Error(`[${path}] is not a directory`)
+  } catch (e) {
+    throw new Error(`Can not continue with ${path} [cause: ${e.message}]`, { cause: e })
+  }
 }
