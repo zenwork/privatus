@@ -1,4 +1,4 @@
-export async function fallbackServer(reason: Record<string | symbol | number, string>) {
+export async function fallbackServer(reason: Record<string | symbol | number, unknown>) {
   console.warn('SERVING FROM FALLBACK')
   const server = Deno.listen({ port: 8000 })
 
