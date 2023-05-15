@@ -12,9 +12,14 @@ export async function fallbackServer(reason: Record<string | symbol | number, un
       const body = JSON.stringify(reason)
       await requestEvent.respondWith(
         new Response(body, {
-          status: 200,
+          status: 500,
         }),
       )
     }
   }
+}
+
+export async function continueIfDir(path: string) {
+  const fileInfo = await Deno.stat(path)
+  if (!fileInfo.isDirectory) throw new Error(`[${path}] does not exist`)
 }

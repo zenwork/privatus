@@ -24,7 +24,6 @@ export function initFrontend(app: Application, clientPath: string) {
       }
 
       const { type, content } = await getAsset(pathname, clientPath)
-      console.log(pathname, type)
       if (type !== 'error') {
         context.response.body = content
         context.response.type = type

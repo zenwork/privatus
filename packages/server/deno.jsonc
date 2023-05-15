@@ -1,7 +1,7 @@
 {
   "tasks": {
-    "dev": "deno run -A --reload --lock-write --watch main-dev.ts",
-    "dev:offline": "deno run -A --watch main-dev.ts",
+    "dev": "deno run -A --reload --lock-write --watch main.ts --dev",
+    "dev:offline": "deno run -A --watch main.ts --dev",
     "prod": "deno run -A --lock-write --watch main.ts",
     "test": "deno test -A --lock-write --trace-ops tests/unit && deno test -A --lock-write --trace-ops tests/e2e",
     "test:watch": "deno test -A --lock-write --watch --trace-ops tests",

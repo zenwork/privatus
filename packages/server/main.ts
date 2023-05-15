@@ -1,19 +1,26 @@
-// import { Application } from 'oak'
-import { fallbackServer } from './src/server/fallbackServer.ts'
-// import { initBackend } from './src/server/initBackend.ts'
-// import { initFrontend } from './src/server/initFrontend.ts'
+import { Application } from 'oak'
+import { continueIfDir, fallbackServer } from './src/server/fallbackServer.ts'
+import { initBackend } from './src/server/initBackend.ts'
+import { initFrontend } from './src/server/initFrontend.ts'
+import { create } from './src/server/server.ts'
 
-try {
-  console.log('STARTING')
-  const clientDir = `${Deno.cwd()}/client-dist`
-  const fileInfo = await Deno.stat(clientDir)
-  await fallbackServer({ servingFrom: fileInfo.isDirectory })
+export async function start(clientDir: string) {
+  try {
+    console.log('STARTING')
 
-  // import { create } from './src/server/server.ts'
-  //   await create((app: Application<Record<string, any>>) => {
-  //     initBackend(app)
-  //     initFrontend(app, clientDir)
-  //   }).startBlock()
-} catch (e) {
-  await fallbackServer({ error: e.toString() })
+    await continueIfDir(clientDir)
+
+    await create((app: Application<Record<string, any>>) => {
+      initBackend(app)
+      initFrontend(app, clientDir)
+    }).startBlock()
+  } catch (e) {
+    await fallbackServer({ error: e.toString() })
+  }
+}
+
+if (Deno.args.length > 0 && Deno.args[0] === '--dev') {
+  await start(`${Deno.cwd()}/../client/dist`)
+} else {
+  await start(`${Deno.cwd()}/client-dist`)
 }

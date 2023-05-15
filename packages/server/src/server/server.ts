@@ -1,6 +1,8 @@
 import { Application, isHttpError } from 'oak'
 import logger from 'oak_logger'
 
+const defaultPort: number = 8000
+
 export type Privatus = {
   app: Application
   start: (port: number) => Application
@@ -26,27 +28,23 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
     }
   })
 
-  initFn(app)
-
-  const runningPort = 8000
+  function start(port: number) {
+    initFn(app)
+    app.addEventListener(
+      'listen',
+      () => console.log(`Listening on http://localhost:${port}}`),
+    )
+  }
 
   return {
     app,
-    start: (port = runningPort): Application => {
-      app.addEventListener(
-        'listen',
-        () => console.log(`Listening on http://localhost:${port}}`),
-      )
-
+    start: (port = defaultPort): Application => {
+      start(port)
       app.listen({ port })
       return app
     },
-    startBlock: async (port = runningPort) => {
-      app.addEventListener(
-        'listen',
-        () => console.log(`Listening on http://localhost:${port}}`),
-      )
-
+    startBlock: async (port = defaultPort) => {
+      start(port)
       await app.listen({ port })
     },
   }
