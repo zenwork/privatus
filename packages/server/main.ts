@@ -22,6 +22,5 @@ export async function start(clientDir: string) {
 if (Deno.args.length > 0 && Deno.args[0] === '--dev') {
   await start(import.meta.resolve('../client/dist').replace('file://', ''))
 } else {
-  console.log(import.meta.resolve('../client-dist'))
-  await start(import.meta.resolve('../client/dist').replace('file://', ''))
+  await start(import.meta.resolve('../../client/dist').replace('file://', ''))
 }
