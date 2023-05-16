@@ -41,6 +41,7 @@ export class PrismParticipant extends LitElement {
   connectedCallback() {
     super.connectedCallback()
     this.player = new PlayerController(this, {
+      game: this.gameId,
       type: this.playerType,
       key: this.playerId,
     })
@@ -50,7 +51,7 @@ export class PrismParticipant extends LitElement {
   }
 
   private getPlayer(): PlayerID {
-    return { key: this.playerId, type: this.playerType }
+    return { game: this.gameId, key: this.playerId, type: this.playerType }
   }
 
   updated(changed: PropertyValues<this>) {
