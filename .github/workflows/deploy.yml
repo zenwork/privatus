@@ -72,7 +72,7 @@ jobs:
         run: cd packages/common && yarn && yarn run clean
 
       - name: build and deploy client
-        run: cd packages/client && yarn && yarn run deploy && yarn run clean
+        run: cd packages/client && yarn && yarn run clean
 
       - name: build server
         run: cd packages/server && deno task bundle
