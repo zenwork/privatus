@@ -71,11 +71,11 @@ jobs:
       - name: build common
         run: cd packages/common && yarn && yarn run clean
 
-      - name: build and deploy client
-        run: cd packages/client && yarn && yarn run clean
+      - name: build client
+        run: cd packages/client && yarn && yarn run build && yarn run clean
 
       - name: build server
-        run: cd packages/server && deno task bundle
+        run: cd packages/server
 
       - name: deploy
         uses: denoland/deployctl@v1
