@@ -15,7 +15,17 @@ export async function start(clientDir: string) {
       initFrontend(app, clientDir)
     }).startBlock()
   } catch (e) {
-    await fallbackServer({ path: clientDir, error: e.toString(), stacktrace: e.stack, cause: e.cause })
+    let ls = ''
+    for await (const dirEntry of Deno.readDir(Deno.cwd())) {
+      ls = `${ls} ${String(dirEntry.name)}`
+    }
+
+    let server = ''
+    for await (const dirEntry of Deno.readDir(Deno.cwd() + '/server')) {
+      server = `${server} ${String(dirEntry.name)}`
+    }
+
+    await fallbackServer({ path: clientDir, ls, server, error: e.toString(), stacktrace: e.stack, cause: e.cause })
   }
 }
 
