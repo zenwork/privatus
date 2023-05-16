@@ -16,16 +16,18 @@ export async function start(clientDir: string) {
     }).startBlock()
   } catch (e) {
     let ls = ''
-    for await (const dirEntry of Deno.readDir(Deno.cwd())) {
-      ls = `${ls} ${String(dirEntry.name)}`
+    for await (const entry of Deno.readDir(Deno.cwd())) {
+      ls = `${ls} ${String(entry.name)}\n`
+      if (entry.isDirectory) {
+        let sub = ''
+        for await (const subdirEntry of Deno.readDir(Deno.cwd() + '/' + entry.name)) {
+          sub = `${sub}    ${String(subdirEntry.name)}\n`
+        }
+        ls = ls + sub + '\n'
+      }
     }
 
-    let server = ''
-    for await (const dirEntry of Deno.readDir(Deno.cwd() + '/server')) {
-      server = `${server} ${String(dirEntry.name)}`
-    }
-
-    await fallbackServer({ path: clientDir, ls, server, error: e.toString(), stacktrace: e.stack, cause: e.cause })
+    await fallbackServer({ cwd: Deno.cwd(), path: clientDir, ls, error: e.toString(), stacktrace: e.stack, cause: e.cause })
   }
 }
 
