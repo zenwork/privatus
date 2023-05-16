@@ -8,6 +8,7 @@
     "check": "deno fmt --check . && deno lint .",
     "clean": "deno fmt . && deno lint .",
     "bundle": "deno bundle main.ts main.bundle.js"
+    "prod":"cd .. && deno run -c server/import_map.json -A server/main.ts"
   },
   "importMap": "./import_map.json",
   "compilerOptions": {

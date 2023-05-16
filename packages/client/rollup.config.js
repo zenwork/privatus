@@ -30,7 +30,7 @@ export default {
     esbuild({
       minify: true,
       target: ['chrome64', 'firefox67', 'safari11.1'],
-    }),    
+    }),
     /** Bundle assets references via import.meta.url */
     importMetaAssets(),
     /** Minify html and css tagged template literals */
@@ -56,7 +56,7 @@ export default {
     /** Create and inject a service worker */
     generateSW({
       globIgnores: ['polyfills/*.js', 'nomodule-*.js'],
-      navigateFallback: '/index.html',
+      // navigateFallback: '/index.html',
       // where to output the generated sw
       swDest: path.join('dist', 'sw.js'),
       // directory to match patterns against to be precached
