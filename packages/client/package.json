@@ -16,7 +16,7 @@
     "deploy": "yarn run build && cp -R dist ../server && mv ../server/dist ../server/client-dist",
     "start:build": "web-dev-server --root-dir src --app-index index.html --open",
     "analyze": "cem analyze --litelement",
-    "start": "concurrently -k -r \"wds --hmr\""
+    "start": "wds --watch"
   },
   "dependencies": {
     "@lit-labs/context": "^0.2.0",

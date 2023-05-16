@@ -1,5 +1,5 @@
 import { GameID, Message, PlayerID, PlayerRole } from 'common'
-import { css, html, LitElement, PropertyValues } from 'lit'
+import { css, html, LitElement, nothing, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { PlayerController } from '../PlayerController'
 
@@ -73,9 +73,24 @@ export class PrismParticipant extends LitElement {
         <prism-heartbeat status="${this.hearbeatState}"></prism-heartbeat>
         <pre>msg:${this.lastSseMessage}</pre>
         <pre>msg from:${this.lastSseMessageOrigin?.type}</pre>
+        <sl-select id="target" ?disabled="${!this.gameId}">
+          <sl-option value="ALL">all</sl-option>
+          ${this.playerType === PlayerRole.CITIZEN
+            ? nothing
+            : html` <sl-option value="CITIZEN">citizen</sl-option>`}
+          ${this.playerType === PlayerRole.ISSUER
+            ? nothing
+            : html` <sl-option value="ISSUER">issuer</sl-option>`}
+          ${this.playerType === PlayerRole.PROVIDER
+            ? nothing
+            : html` <sl-option value="PROVIDER">provider</sl-option>`}
+          ${this.playerType === PlayerRole.PROFESSIONAL
+            ? nothing
+            : html` <sl-option value="PROFESSIONAL">professional</sl-option>`}
+        </sl-select>
         <sl-button @click="${this.notify}" ?disabled="${!this.gameId}"
-          >message all
-        </sl-button>
+          >send</sl-button
+        >
       </div>
     `
   }
@@ -83,19 +98,25 @@ export class PrismParticipant extends LitElement {
   private notify() {
     if (!this.gameId) return
 
-    const body = `hello! x ${Math.floor(Math.random() * 10)}`
+    const element = this.shadowRoot?.querySelector('#target')
+    if (element) {
+      const target: PlayerRole = <PlayerRole>(
+        (element as HTMLSelectElement).value
+      )
+      const body = `hello ${target} [${Math.floor(Math.random() * 10)}]`
 
-    fetch(`/api/game/${this.gameId}/message/all`, {
-      method: 'POST',
-      body: JSON.stringify({
-        type: 'text',
-        body,
-        origin: this.getPlayer(),
-        destination: PlayerRole.ALL,
-      } as Message),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+      fetch(`/api/game/${this.gameId}/message`, {
+        method: 'POST',
+        body: JSON.stringify({
+          type: 'text',
+          body,
+          origin: this.getPlayer(),
+          destination: target,
+        } as Message),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    }
   }
 }

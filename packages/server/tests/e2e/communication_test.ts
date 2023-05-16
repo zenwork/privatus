@@ -1,8 +1,8 @@
-import { MessageType } from '../../../common/src/index.ts'
 import { assert, assertEquals } from 'deno/std/testing/asserts.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
 import { Application } from 'oak'
 import { superoak } from 'superoak'
+import { MessageType, PlayerRole } from '../../../common/src/index.ts'
 import { GameStore } from '../../src/server/game/index.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
@@ -38,8 +38,13 @@ describe(
     it('send message', async () => {
       const request = await superoak(app)
       await request
-        .post(`/api/game/${gameId}/message/all`)
-        .send({ type: MessageType.TEXT, body: 'hello players', origin: { id: 'foo', type: 1 } })
+        .post(`/api/game/${gameId}/message`)
+        .send({
+          type: MessageType.TEXT,
+          body: 'hello players',
+          origin: { id: 'foo', type: PlayerRole.CITIZEN },
+          destination: PlayerRole.ALL,
+        })
         .expect(201)
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
