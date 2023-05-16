@@ -44,6 +44,9 @@ export class PrismParticipant extends LitElement {
       type: this.playerType,
       key: this.playerId,
     })
+    if (this.gameId) {
+      this.player.openChannel(this.gameId)
+    }
   }
 
   private getPlayer(): PlayerID {
@@ -68,11 +71,11 @@ export class PrismParticipant extends LitElement {
   render(): unknown {
     return html`
       <div>
-        <h3>type:${this.playerType}</h3>
-        <h3>id:${this.gameId}-${this.playerId}</h3>
+        <h3>type: ${this.playerType}</h3>
+        <h3>id : ${this.playerId}</h3>
         <prism-heartbeat status="${this.hearbeatState}"></prism-heartbeat>
-        <pre>msg:${this.lastSseMessage}</pre>
-        <pre>msg from:${this.lastSseMessageOrigin?.type}</pre>
+        <pre>from:${this.lastSseMessageOrigin?.type}</pre>
+        <pre>msg :${this.lastSseMessage}</pre>
         <sl-select id="target" ?disabled="${!this.gameId}">
           <sl-option value="ALL">all</sl-option>
           ${this.playerType === PlayerRole.CITIZEN

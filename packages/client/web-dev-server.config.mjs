@@ -29,7 +29,7 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
     resolve(),
     importMapsPlugin(),
     /** Use Hot Module Replacement by uncommenting. Requires @open-wc/dev-server-hmr plugin */
-    // hmr && hmrPlugin({ exclude: ['**/*/node_modules/**/*'], presets: [presets.litElement] }),
+    hmr && hmrPlugin({ exclude: ['**/*/node_modules/**/*'], presets: [presets.litElement] }),
     copy({
            targets:[{ src:'assets/**/*', dest:'./dist' }],
            // set flatten to false to preserve folder structure

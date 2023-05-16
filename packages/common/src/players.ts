@@ -11,4 +11,4 @@ export enum PlayerRole {
   ALL = 'ALL',
 }
 
-export type PlayerID = { key: string; type: PlayerRole }
+export type PlayerID = { game: GameID, key: string; type: PlayerRole }

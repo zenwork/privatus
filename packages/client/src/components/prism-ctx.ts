@@ -1,7 +1,7 @@
 import { Context, ContextProvider, provide } from '@lit-labs/context'
+import { Message, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { Message, PlayerRole } from 'common'
 import { GameController } from '../GameController'
 import { key, messageKey, Registry } from './prism'
 
@@ -73,6 +73,12 @@ export class PrismCtx extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
+
+    const { searchParams } = new URL(window.location.toString())
+
+    if (searchParams.has('g')) {
+      this.gameId = searchParams.get('g')!
+    }
 
     this.provider = new ContextProvider(this, key, this.registry)
     fetch('/api')

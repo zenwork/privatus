@@ -23,13 +23,13 @@ export class GameStoreImplementation implements GameStore {
     return this.games.get(id)
   }
 
-  addPlayerToGame(id: GameID, pid: PlayerID): Result {
+  addPlayerToGame(pid: PlayerID): Result {
     const result: Result = { success: false, messages: [] }
-    if (!this.games.has(id)) {
+    if (!this.games.has(pid.game)) {
       result.messages.push('game does not exist')
     }
 
-    const game = this.games.get(id)
+    const game = this.games.get(pid.game)
 
     if (game && !game.players.some((p) => p.id === pid)) {
       game.players.push({ id: pid, mailbox: [], channel: null })

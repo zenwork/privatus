@@ -1,6 +1,6 @@
-import { PlayerID, PlayerRole } from '../../../../../common/src/players.ts'
 import { assertEquals, assertNotEquals } from 'deno/std/testing/asserts.ts'
 import { beforeEach, describe, it } from 'deno/std/testing/bdd.ts'
+import { PlayerID, PlayerRole } from '../../../../../common/src/players.ts'
 import { GameStore, GameStoreImplementation } from '../../../../src/server/game/index.ts'
 
 describe('use game', () => {
@@ -38,7 +38,8 @@ describe('use game', () => {
 
   it('should accept player creation', () => {
     const id = store.create()
-    const result = store.addPlayerToGame(id, {
+    const result = store.addPlayerToGame({
+      game: id,
       key: 'foo',
       type: PlayerRole.ISSUER,
     })
@@ -46,7 +47,8 @@ describe('use game', () => {
   })
 
   it('should fail to add player when game does not exist', () => {
-    const result = store.addPlayerToGame('foobar', {
+    const result = store.addPlayerToGame({
+      game: 'foobar',
       key: 'foo',
       type: PlayerRole.ISSUER,
     })
@@ -55,8 +57,8 @@ describe('use game', () => {
 
   it('should allow finding a player', () => {
     const id = store.create()
-    const pid: PlayerID = { key: 'foo', type: PlayerRole.ISSUER }
-    store.addPlayerToGame(id, pid)
+    const pid: PlayerID = { game: id, key: 'foo', type: PlayerRole.ISSUER }
+    store.addPlayerToGame(pid)
     const player = store.findPlayerBy(pid)
     assertEquals(player?.id, pid)
   })

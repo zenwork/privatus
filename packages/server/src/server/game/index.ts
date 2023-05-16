@@ -26,7 +26,7 @@ export interface GameStore {
 
   end(id: GameID): boolean
 
-  addPlayerToGame(id: GameID, p: PlayerID): Result
+  addPlayerToGame(p: PlayerID): Result
 
   findPlayerBy(player: PlayerID): Player | undefined
 }

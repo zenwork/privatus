@@ -11,7 +11,11 @@ export function openChannelWith(store: GameStore) {
     const game = store.get(params.game)
     if (game) {
       game.openChannel(
-        { key: params.player, type: toPlayerType(params.role) },
+        {
+          game: params.game,
+          key: params.player,
+          type: toPlayerType(params.role),
+        },
         ctx,
         ctx.request.headers.has(xKillAfterMaxHearbeats) ? Number(ctx.request.headers.get(xKillAfterMaxHearbeats)) : INFINITE,
       )

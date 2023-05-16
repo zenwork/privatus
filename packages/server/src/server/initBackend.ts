@@ -1,8 +1,9 @@
 import { Application, Router, Status } from 'oak'
 import { Message } from '../../../common/src/index.ts'
 import { openChannelWith } from './backend/channel.ts'
+import { createGame, deleteGame } from './backend/game.ts'
+import { createPlayer, getPlayer } from './backend/player.ts'
 import { GameStore, GameStoreImplementation } from './game/index.ts'
-import { toPlayerType } from './game/util.ts'
 
 import { routes2Html } from './util/html.ts'
 
@@ -12,45 +13,37 @@ export function initBackend(app: Application): GameStore {
   const router = new Router()
   const store = new GameStoreImplementation()
 
-  router.get('api', '/api', (ctx) => {
-    ctx.response.body = { status: 'OK' }
-  })
+  router.get(
+    'api',
+    '/api',
+    (ctx) => {
+      ctx.response.body = { status: 'OK' }
+    },
+  )
 
-  router.post('create game', '/api/game', (ctx) => {
-    const created = store.create()
-    if (created) {
-      ctx.response.status = Status.Created
-      ctx.response.body = { gameId: created }
-    }
-  })
+  router
+    .post(
+      '/api/game',
+      createGame(store),
+    )
+    .delete(
+      '/api/game/:id',
+      deleteGame(store),
+    )
 
-  router.delete('delete game', '/api/game/:id', (ctx) => {
-    const ended = store.end(ctx.params.id)
-    if (ended) {
-      ctx.response.status = Status.OK
-      ctx.response.body = { messages: ['game ended'] }
-    } else {
-      ctx.response.status = Status.Accepted
-      ctx.response.body = { messages: ['game not ended'] }
-    }
-  })
-
-  router.put('register player', '/api/game/:game/:role/:player', (ctx) => {
-    const params = ctx.params as PlayerParams
-    const result = store.addPlayerToGame(params.game, {
-      key: params.player,
-      type: toPlayerType(params.role),
-    })
-    if (result.success) {
-      ctx.response.status = Status.Created
-      ctx.response.body = result
-    } else {
-      ctx.response.status = Status.BadRequest
-      ctx.response.body = result
-    }
-  })
-
-  router.get('open player channel', '/api/game/:game/channel/:role/:player', openChannelWith(store))
+  router
+    .put(
+      '/api/game/:game/:role/:player',
+      createPlayer(store),
+    )
+    .get(
+      '/api/game/:game/:player',
+      getPlayer(store),
+    )
+    .get(
+      '/api/game/:game/channel/:role/:player',
+      openChannelWith(store),
+    )
 
   router.get('api docs', '/api/docs', (ctx) => {
     routes2Html(router, ctx.response)

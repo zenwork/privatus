@@ -41,8 +41,8 @@ describe(
         .expect(
           new RegExp(
             '(event: ping\ndata:' +
-              ' \{"type":"heartbeat","body":"[0-9]{13}","origin":\{"key":"server","type":"SERVER"},"destination":"ISSUER"}\n\n){3}' +
-              'event: msg\ndata: \{"type":"text","body":"ending game","origin":\{"key":"server","type":"SERVER"},"destination":"ALL"}\n\n',
+              ' \{"type":"heartbeat","body":"[0-9]{13}","origin":\{"game":"ALL","key":"server","type":"SERVER"},"destination":"ISSUER"}\n\n){3}' +
+              'event: msg\ndata: \{"type":"text","body":"ending game","origin":\{"game":"ALL","key":"server","type":"SERVER"},"destination":"ALL"}\n\n',
           ),
         )
     })

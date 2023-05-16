@@ -30,25 +30,35 @@ export class GameImplementation implements Game {
   openChannel(id: PlayerID, ctx: RouterContext<any, any, any>, max = INFINITE) {
     const player = this.findBy(id)
 
-    if (player && !player.channel) {
-      try {
-        player.channel = ctx.sendEvents()
-        let cycle = 0
-        player.heartbeatId = setInterval(async () => {
-          if (max === INFINITE || cycle < max) {
-            this.hearbeat(player, id)
-            this.clearMailbox(player)
-            cycle++
-          } else {
-            await this.closeChannel(player)
-          }
-        }, 1000)
-      } catch (e) {
-        console.error(`Unable to open channel for ${id} - ${e.message}}`)
-      }
-    } else {
+    if (!player) {
       ctx.response.status = Status.Forbidden
-      ctx.response.body = 'player not created'
+      ctx.response.body = 'player does not exist'
+      return
+    }
+
+    if (player && player.channel) {
+      // ctx.response.status = Status.Forbidden
+      // ctx.response.body = 'player channel already exists'
+      // return
+      this.closeChannel(player)
+    }
+
+    try {
+      player.channel = ctx.sendEvents()
+      let cycle = 0
+      player.heartbeatId = setInterval(async () => {
+        if (max === INFINITE || cycle < max) {
+          this.hearbeat(player, id)
+          this.clearMailbox(player)
+          cycle++
+        } else {
+          await this.closeChannel(player)
+        }
+      }, 1000)
+    } catch (e) {
+      console.error(`Unable to open channel for ${id} - ${e.message}}`)
+      ctx.response.status = Status.Forbidden
+      ctx.response.body = 'unable to open channel'
     }
   }
 
