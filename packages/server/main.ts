@@ -32,7 +32,7 @@ export async function start(clientDir: string) {
 }
 
 if (Deno.args.length > 0 && Deno.args[0] === '--dev') {
-  await start(Deno.cwd() + '../client/dist')
+  await start('../client/dist')
 } else {
-  await start(Deno.cwd() + '/client/dist')
+  await start('client/dist')
 }
