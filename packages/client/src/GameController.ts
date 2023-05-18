@@ -1,4 +1,3 @@
-import { Message } from 'common'
 import { ReactiveController } from 'lit'
 import { PrismCtx } from './components/prism-ctx'
 
@@ -46,9 +45,4 @@ export class GameController implements ReactiveController {
   hostUpdate(): void {}
 
   hostUpdated(): void {}
-
-  sendMessage(message: Message) {
-    // eslint-disable-next-line no-console
-    console.log(message)
-  }
 }

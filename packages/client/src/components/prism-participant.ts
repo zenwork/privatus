@@ -1,12 +1,10 @@
 import { GameID, Message, PlayerID, PlayerRole } from 'common'
 import { css, html, LitElement, nothing, PropertyValues } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
-import { PlayerController } from '../PlayerController'
+import { customElement, property, query, state } from 'lit/decorators.js'
+import { NONE, PlayerController } from '../PlayerController'
 
 @customElement('prism-participant')
 export class PrismParticipant extends LitElement {
-  private player: PlayerController | null = null
-
   static styles = [
     css`
       :host {
@@ -20,11 +18,11 @@ export class PrismParticipant extends LitElement {
     `,
   ]
 
-  @property({ reflect: true })
-  gameId: GameID = ''
+  @property({ reflect: true, converter: value => (!value ? NONE : value) })
+  gameId: GameID = NONE
 
   @property()
-  playerId = ''
+  playerId = NONE
 
   @property({ type: PlayerRole })
   playerType: PlayerRole = PlayerRole.NONE
@@ -38,35 +36,17 @@ export class PrismParticipant extends LitElement {
   @state()
   lastSseMessageOrigin: PlayerID | undefined
 
-  connectedCallback() {
-    super.connectedCallback()
-    this.player = new PlayerController(this, {
-      game: this.gameId,
-      type: this.playerType,
-      key: this.playerId,
-    })
-    if (this.gameId) {
-      this.player.openChannel(this.gameId)
-    }
-  }
+  player: PlayerController
 
-  private getPlayer(): PlayerID {
-    return { game: this.gameId, key: this.playerId, type: this.playerType }
-  }
+  @state()
+  pid: PlayerID = { game: NONE, key: NONE, type: PlayerRole.NONE }
 
-  updated(changed: PropertyValues<this>) {
-    if (changed.has('gameId') && this.gameId) {
-      if (this.player) {
-        this.player
-          .register(this.gameId)
-          .then(() => {
-            this.player!.openChannel(this.gameId)
-          })
-          .catch(() => {
-            console.error('registration failed') // eslint-disable-line no-console
-          })
-      }
-    }
+  @query('#target')
+  target: HTMLSelectElement | null | undefined
+
+  constructor() {
+    super()
+    this.player = new PlayerController(this)
   }
 
   render(): unknown {
@@ -92,35 +72,37 @@ export class PrismParticipant extends LitElement {
             ? nothing
             : html` <sl-option value="PROFESSIONAL">professional</sl-option>`}
         </sl-select>
-        <sl-button @click="${this.notify}" ?disabled="${!this.gameId}"
-          >send</sl-button
-        >
+        <sl-button
+          @click="${this.send}"
+          ?disabled="${this.gameId === NONE || this.target?.value === ''}"
+          >send
+        </sl-button>
       </div>
     `
   }
 
-  private notify() {
-    if (!this.gameId) return
-
-    const element = this.shadowRoot?.querySelector('#target')
-    if (element) {
-      const target: PlayerRole = <PlayerRole>(
-        (element as HTMLSelectElement).value
+  send() {
+    if (this.target) {
+      const target: PlayerRole = <PlayerRole>this.target.value
+      this.player.sendMessage(
+        `hello ${target} [${Math.floor(Math.random() * 10)}]`,
+        target
       )
-      const body = `hello ${target} [${Math.floor(Math.random() * 10)}]`
+    }
+  }
 
-      fetch(`/api/game/${this.gameId}/message`, {
-        method: 'POST',
-        body: JSON.stringify({
-          type: 'text',
-          body,
-          origin: this.getPlayer(),
-          destination: target,
-        } as Message),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+  protected updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties)
+    if (
+      changedProperties.has('gameId') ||
+      changedProperties.has('playerId') ||
+      changedProperties.has('playerType')
+    ) {
+      this.pid = {
+        game: this.gameId,
+        key: this.playerId,
+        type: this.playerType,
+      }
     }
   }
 }

@@ -40,7 +40,7 @@ export class GameImplementation implements Game {
       // ctx.response.status = Status.Forbidden
       // ctx.response.body = 'player channel already exists'
       // return
-      this.closeChannel(player)
+      // this.closeChannel(player)
     }
 
     try {
@@ -69,6 +69,7 @@ export class GameImplementation implements Game {
   }
 
   private async closeChannel(p: Player) {
+    console.log('close')
     p.mailbox.push({
       type: MessageType.TEXT,
       body: 'ending game',

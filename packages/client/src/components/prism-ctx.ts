@@ -65,10 +65,6 @@ export class PrismCtx extends LitElement {
       this.registry.p.push(e.detail)
       this.registry = { p: this.registry.p }
     })
-
-    this.addEventListener('prism-message', (e: any) => {
-      this.game.sendMessage(e.detail.message)
-    })
   }
 
   connectedCallback() {
