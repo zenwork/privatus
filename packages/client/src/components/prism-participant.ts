@@ -44,6 +44,9 @@ export class PrismParticipant extends LitElement {
   @query('#target')
   target: HTMLSelectElement | null | undefined
 
+  @state()
+  state: string = ''
+
   constructor() {
     super()
     this.player = new PlayerController(this)
@@ -54,7 +57,11 @@ export class PrismParticipant extends LitElement {
       <div>
         <h3>type: ${this.playerType}</h3>
         <h3>id : ${this.playerId}</h3>
-        <prism-heartbeat status="${this.hearbeatState}"></prism-heartbeat>
+
+        <prism-heartbeat
+          status="${this.hearbeatState}"
+          msg="${this.state}"
+        ></prism-heartbeat>
         <pre>from:${this.lastSseMessageOrigin?.type}</pre>
         <pre>msg :${this.lastSseMessage}</pre>
         <sl-select id="target" ?disabled="${!this.gameId}">

@@ -91,7 +91,11 @@ export class PrismCtx extends LitElement {
         <h3>PRivacy & Identity SiMulator (PRISM)</h3>
         <h4># of players: ${this.registry.p.length}</h4>
         <h4>session: ${this.gameId}</h4>
-        <sl-button @click="${() => this.game.newGame()}">start</sl-button>
+        <sl-button
+          @click="${() => this.game.newGame()}"
+          ?disabled=${this.gameId}
+          >start</sl-button
+        >
         <sl-button @click="${() => this.game.endGame()}">stop</sl-button>
       </section>
       <section>

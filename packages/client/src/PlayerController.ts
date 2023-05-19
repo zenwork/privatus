@@ -6,9 +6,9 @@ export const NONE = 'NONE'
 
 enum Lifecycle {
   STOPPED = 'STOPPED',
-  REGISTER = 'REGISTER',
+  REGISTERING = 'REGISTERING',
   REGISTERED = 'REGISTERED',
-  CONNECT = 'CONNECT',
+  CONNECTING = 'CONNECTING',
   CONNECTED = 'CONNECTED',
   DISCONNECTING = 'DISCONNECTING',
   DISCONNECTED = 'DISCONNECTED',
@@ -34,7 +34,7 @@ export class PlayerController implements ReactiveController {
     })
       .then(r => r.json())
       .then((j: Result) => {
-        this.state = Lifecycle.REGISTERED
+        this.setState(Lifecycle.REGISTERED)
         return j.success
       })
       .catch(() => false)
@@ -47,7 +47,7 @@ export class PlayerController implements ReactiveController {
 
     const { game, key, type } = this.host.pid
     this.closeChannel()
-    this.state = Lifecycle.CONNECT
+    this.setState(Lifecycle.CONNECTING)
     this.source = new EventSource(`/api/game/${game}/channel/${type}/${key}`)
 
     this.source.onmessage = event => {
@@ -55,13 +55,19 @@ export class PlayerController implements ReactiveController {
     }
 
     this.source.onopen = () => {
-      this.state = Lifecycle.CONNECTED
+      this.setState(Lifecycle.CONNECTED)
       this.host.requestUpdate()
     }
 
-    this.source.onerror = () => {
-      this.state = Lifecycle.DISCONNECTED
-      this.host.requestUpdate()
+    this.source.onerror = ev => {
+      if (
+        this.state === Lifecycle.CONNECTED ||
+        this.state === Lifecycle.DISCONNECTING
+      ) {
+        console.log('error', ev)
+        this.setState(Lifecycle.DISCONNECTED)
+        this.host.requestUpdate()
+      }
     }
 
     this.source.addEventListener('ping', () => {
@@ -77,8 +83,9 @@ export class PlayerController implements ReactiveController {
       const data = JSON.parse(msg.data)
 
       if (data.body === 'ending game') {
-        this.state = Lifecycle.DISCONNECTING
-        this.closeChannel()
+        this.host.pid = { ...this.host.pid, game: NONE }
+        this.source?.close()
+        this.setState(Lifecycle.DISCONNECTED)
       } else {
         this.host.lastSseMessage = data.body
         this.host.lastSseMessageOrigin = data.origin
@@ -115,6 +122,12 @@ export class PlayerController implements ReactiveController {
     })
   }
 
+  setState(state: Lifecycle) {
+    this.state = state
+    this.host.state = this.state
+    this.host.requestUpdate()
+  }
+
   hostConnected(): void {}
 
   hostDisconnected(): void {}
@@ -124,8 +137,13 @@ export class PlayerController implements ReactiveController {
   hostUpdate(): void {
     if (this.state === Lifecycle.STOPPED) {
       const { game, key, type } = this.host.pid
-      if (game !== NONE && key !== NONE && type !== PlayerRole.NONE) {
-        this.state = Lifecycle.REGISTER
+      if (
+        this.host.hearbeatState === -1 &&
+        game !== NONE &&
+        key !== NONE &&
+        type !== PlayerRole.NONE
+      ) {
+        this.setState(Lifecycle.REGISTERING)
         this.join()
           .then(() => {
             this.openChannel()
@@ -137,8 +155,9 @@ export class PlayerController implements ReactiveController {
     }
 
     if (this.state === Lifecycle.DISCONNECTED) {
-      this.state = Lifecycle.STOPPED
+      this.setState(Lifecycle.STOPPED)
       this.host.hearbeatState = -1
+      this.host.pid = { ...this.host.pid, game: NONE }
       this.host.requestUpdate()
     }
   }
