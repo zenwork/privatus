@@ -16,7 +16,7 @@ describe({
         it('init', () => {
           app = create((app: Application) => {
             initBackend(app)
-          }).app
+          }).getApp()
         })
 
         it('create player', async () => {
@@ -38,7 +38,7 @@ describe({
         it('init', () => {
           app = create((app: Application) => {
             initBackend(app)
-          }).app
+          }).getApp()
         })
 
         it('create game', async () => {
@@ -83,7 +83,7 @@ describe({
         it('init', () => {
           app = create((app: Application) => {
             initBackend(app)
-          }).app
+          }).getApp()
         })
 
         it('create game', async () => {

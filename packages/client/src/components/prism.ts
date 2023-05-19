@@ -1,6 +1,5 @@
 import type { Context } from '@lit-labs/context'
-// @ts-ignore
-import { Message } from '../../../common/messages.ts'
+import { Message } from 'common'
 
 export type Registry = { p: string[] }
 

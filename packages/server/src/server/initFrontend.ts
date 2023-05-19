@@ -1,4 +1,12 @@
-import { Application } from 'oak'
+import { Application, Context } from 'oak'
+
+function notFound(
+  context: Context<any, Record<string, any>>,
+  errMsg: string = 'Not Found!',
+) {
+  context.response.body = errMsg
+  context.response.status = 404
+}
 
 /**
  * Serving static assets under supported deno deploy mechanisms
@@ -8,15 +16,23 @@ import { Application } from 'oak'
 export function initFrontend(app: Application, clientPath: string) {
   traceAssets(clientPath)
 
-  app.use(async (context, next) => {
-    const pathname = context.request.url.pathname
-    if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
-      await next()
-    }
+  app.use(async (context) => {
+    try {
+      const pathname = context.request.url.pathname
+      if (pathname.indexOf('/api') > -1 || pathname.indexOf('/docs') > -1) {
+        notFound(context)
+      }
 
-    const { type, content } = getAsset(pathname, clientPath)
-    context.response.body = await content
-    context.response.type = type
+      const { type, content } = await getAsset(pathname, clientPath)
+      if (type !== 'error') {
+        context.response.body = content
+        context.response.type = type
+      } else {
+        notFound(context, String(content))
+      }
+    } catch (e) {
+      notFound(context, e.toString())
+    }
   })
 }
 
@@ -28,17 +44,28 @@ function traceAssets(clientPath: string) {
     }
 
     resolve(out)
-  }).then((o) => console.log(o))
+  })
+    .then((o) => console.log(o))
+    .catch((e) => console.error(e))
 }
 
-function getAsset(pathname: string, clientPath: string): { type: string; content: Promise<Uint8Array> } {
-  const filepath = pathname === '/' ? '/index.html' : pathname
-  const assetPath = `${clientPath}${filepath}`
+async function getAsset(
+  pathname: string,
+  clientPath: string,
+): Promise<{ type: string; content: Uint8Array | string }> {
+  try {
+    const filepath = pathname === '/' || pathname === '' ? '/index.html' : pathname
+    const assetPath = `${clientPath}${filepath}`
 
-  const content = Deno.readFile(assetPath)
+    await Deno.lstat(assetPath)
+    const content = await Deno.readFile(assetPath)
 
-  const type = getType(assetPath)
-  return { type, content }
+    const type = getType(assetPath)
+    return { type, content }
+  } catch (e) {
+    console.log('asset not found:', e.message)
+    return { type: 'error', content: `[${pathname}] not found: ${e.message}` }
+  }
 }
 
 function getType(assetPath: string) {

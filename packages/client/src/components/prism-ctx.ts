@@ -1,9 +1,8 @@
 import { Context, ContextProvider, provide } from '@lit-labs/context'
+import { Message, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-// @ts-ignore
-import { Message, PlayerRole } from '../../../common'
-import { GameController } from '../GameController'
+import { GameController } from '../controllers/GameController'
 import { key, messageKey, Registry } from './prism'
 
 @customElement('prism-ctx')
@@ -66,14 +65,16 @@ export class PrismCtx extends LitElement {
       this.registry.p.push(e.detail)
       this.registry = { p: this.registry.p }
     })
-
-    this.addEventListener('prism-message', (e: any) => {
-      this.game.sendMessage(e.detail.message)
-    })
   }
 
   connectedCallback() {
     super.connectedCallback()
+
+    const { searchParams } = new URL(window.location.toString())
+
+    if (searchParams.has('g')) {
+      this.gameId = searchParams.get('g')!
+    }
 
     this.provider = new ContextProvider(this, key, this.registry)
     fetch('/api')
@@ -90,7 +91,11 @@ export class PrismCtx extends LitElement {
         <h3>PRivacy & Identity SiMulator (PRISM)</h3>
         <h4># of players: ${this.registry.p.length}</h4>
         <h4>session: ${this.gameId}</h4>
-        <sl-button @click="${() => this.game.newGame()}">start</sl-button>
+        <sl-button
+          @click="${() => this.game.newGame()}"
+          ?disabled=${this.gameId}
+          >start</sl-button
+        >
         <sl-button @click="${() => this.game.endGame()}">stop</sl-button>
       </section>
       <section>

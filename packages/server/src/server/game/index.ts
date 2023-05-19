@@ -1,6 +1,5 @@
-import { Message } from '#/common/messages.ts'
 import { RouterContext, ServerSentEventTarget } from 'oak'
-import { GameID, PlayerID } from '#/common/players.ts'
+import { GameID, Message, PlayerID, Result } from '../../../../common/src/index.ts'
 
 export * from './game.ts'
 export * from './game-store.ts'
@@ -8,13 +7,14 @@ export * from './game-store.ts'
 export type Game = {
   key: GameID
   players: Player[]
-  openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>) => void
+  openChannel: (id: PlayerID, ctx: RouterContext<any, any, any>, max: number) => void
   forward(msg: Message): boolean
-  closeChannel(): void
+  closeAllChannels(): void
 }
 
 export type Player = {
   id: PlayerID
+  heartbeatId?: number
   mailbox: Message[]
   channel: ServerSentEventTarget | null
 }
@@ -26,10 +26,9 @@ export interface GameStore {
 
   end(id: GameID): boolean
 
-  addPlayerToGame(id: GameID, p: PlayerID): Result
+  addPlayerToGame(p: PlayerID): Result
 
   findPlayerBy(player: PlayerID): Player | undefined
 }
 
-export type Result = { success: boolean; messages: string[] }
 export { generateId } from './util.ts'

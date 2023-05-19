@@ -1,8 +1,10 @@
-import { Application } from 'oak'
+import { Application, isHttpError } from 'oak'
 import logger from 'oak_logger'
 
+const defaultPort: number = 8000
+
 export type Privatus = {
-  app: Application
+  getApp: () => Application
   start: (port: number) => Application
   startBlock: (port?: number) => void
 }
@@ -12,27 +14,40 @@ export function create(initFn: (app: Application<Record<string, any>>) => void):
   app.use(logger.logger)
   app.use(logger.responseTime)
 
-  initFn(app)
+  app.use(async (context, next) => {
+    try {
+      await next()
+    } catch (err) {
+      if (isHttpError(err)) {
+        context.response.status = err.status
+      } else {
+        context.response.status = 500
+      }
+      context.response.body = { error: err.message }
+      context.response.type = 'json'
+    }
+  })
 
-  const runningPort = 8000
+  function start(port: number) {
+    initFn(app)
+    app.addEventListener(
+      'listen',
+      () => console.log(`Listening on http://localhost:${port}}`),
+    )
+  }
 
   return {
-    app,
-    start: (port = runningPort): Application => {
-      app.addEventListener(
-        'listen',
-        () => console.log(`Listening on http://localhost:${port}}`),
-      )
-
+    getApp: (): Application => {
+      initFn(app)
+      return app
+    },
+    start: (port = defaultPort): Application => {
+      start(port)
       app.listen({ port })
       return app
     },
-    startBlock: async (port = runningPort) => {
-      app.addEventListener(
-        'listen',
-        () => console.log(`Listening on http://localhost:${port}}`),
-      )
-
+    startBlock: async (port = defaultPort) => {
+      start(port)
       await app.listen({ port })
     },
   }

@@ -6,7 +6,7 @@ import './components/index.js'
 
 @customElement('prism-app')
 export class PrismApp extends LitElement {
-  @property({ type: String }) header = 'My app'
+  @property({ type: String }) header = 'privatus app'
 
   static styles = css`
     :host {

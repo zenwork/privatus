@@ -212,3 +212,4 @@ dist
 
 **/*.iml
 **/.idea/**/*
+/packages/server/main.bundle.js

@@ -14,16 +14,21 @@ jobs:
         with:
           deno-version: "~1.32"
 
-      - name: install
+      - name: install:common
+        run: cd packages/common && yarn
+
+      - name: install:client
         run: cd packages/client && yarn
 
       - name: check:server:format
-        run: cd packages/server && deno fmt --check
+        run: cd packages/server && deno fmt --check .
       - name: check:server:lint
-        run: cd packages/server && deno lint
+        run: cd packages/server && deno lint .
       - name: check:client:lint&format
         run: cd packages/client && yarn run check
-      - name: build
+      - name: build:common
+        run: cd packages/common && yarn run build
+      - name: build:client
         run: cd packages/client && yarn run build
       - name: test:client
         run: cd packages/client && yarn run test
@@ -63,12 +68,19 @@ jobs:
           node-version: 19
       - uses: maximousblk/setup-deno@v2
 
+      - name: build common
+        run: cd packages/common && yarn && yarn run clean
+
       - name: build client
-        run: cd packages/client && yarn && yarn run deploy && yarn run clean
+        run: cd packages/client && yarn && yarn run build && yarn run clean
+
+      - name: build server
+        run: cd packages/server
 
       - name: deploy
         uses: denoland/deployctl@v1
         with:
           project: zenwork-privatus
+          root: "./packages/"
           entrypoint: "server/main.ts"
-          root: "./packages"
+          import-map: "server/import_map.json"

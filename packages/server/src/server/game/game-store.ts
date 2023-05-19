@@ -1,6 +1,7 @@
-import { GameID, PlayerID } from '#/common/players.ts'
+import { Result } from '../../../../common/src/messages.ts'
+import { GameID, PlayerID } from '../../../../common/src/players.ts'
 import { GameImplementation } from './game.ts'
-import { Game, GameStore, Player, Result } from './index.ts'
+import { Game, GameStore, Player } from './index.ts'
 import { generateId } from './util.ts'
 
 export class GameStoreImplementation implements GameStore {
@@ -14,7 +15,7 @@ export class GameStoreImplementation implements GameStore {
   }
 
   end(id: GameID): boolean {
-    this.games.get(id)?.closeChannel()
+    this.games.get(id)?.closeAllChannels()
     return this.games.delete(id)
   }
 
@@ -22,13 +23,13 @@ export class GameStoreImplementation implements GameStore {
     return this.games.get(id)
   }
 
-  addPlayerToGame(id: GameID, pid: PlayerID): Result {
+  addPlayerToGame(pid: PlayerID): Result {
     const result: Result = { success: false, messages: [] }
-    if (!this.games.has(id)) {
+    if (!this.games.has(pid.game)) {
       result.messages.push('game does not exist')
     }
 
-    const game = this.games.get(id)
+    const game = this.games.get(pid.game)
 
     if (game && !game.players.some((p) => p.id === pid)) {
       game.players.push({ id: pid, mailbox: [], channel: null })

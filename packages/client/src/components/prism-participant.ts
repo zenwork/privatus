@@ -1,11 +1,8 @@
-import { consume } from '@lit-labs/context'
-import { css, html, LitElement, PropertyValues } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
-// @ts-ignore
-import { Message, MessageType } from '../../../common/messages.ts'
-// @ts-ignore
-import { GameID, PlayerID, PlayerRole } from '../../../common/players.ts'
-import { key, messageKey, Registry } from './prism'
+import { GameID, Message, PlayerID, PlayerRole } from 'common'
+import { css, html, LitElement, nothing, PropertyValues } from 'lit'
+import { customElement, property, query, state } from 'lit/decorators.js'
+import { NONE } from '../controllers'
+import { PlayerController } from '../controllers/PlayerController'
 
 @customElement('prism-participant')
 export class PrismParticipant extends LitElement {
@@ -22,112 +19,98 @@ export class PrismParticipant extends LitElement {
     `,
   ]
 
-  @property({ reflect: true })
-  gameId: GameID = ''
+  @property({ reflect: true, converter: value => (!value ? NONE : value) })
+  gameId: GameID = NONE
 
   @property()
-  playerId = ''
+  playerId = NONE
 
   @property({ type: PlayerRole })
   playerType: PlayerRole = PlayerRole.NONE
 
-  @consume({ context: key, subscribe: true })
-  registry: Registry | undefined
-
   @state()
   hearbeatState = -1
 
-  @consume({ context: messageKey, subscribe: true })
   @state()
   lastSseMessage: Message | undefined
 
   @state()
-  private lastSseMessageOrigin = ''
+  lastSseMessageOrigin: PlayerID | undefined
 
-  private source!: EventSource
+  player: PlayerController
 
-  connectedCallback() {
-    super.connectedCallback()
+  @state()
+  pid: PlayerID = { game: NONE, key: NONE, type: PlayerRole.NONE }
 
-    const event = new CustomEvent('prism-register', {
-      detail: {
-        participant: { pid: this.playerId, ptype: this.playerType },
-      },
-      bubbles: true,
-      composed: true,
-    })
+  @query('#target')
+  target: HTMLSelectElement | null | undefined
 
-    this.dispatchEvent(event)
-  }
+  @state()
+  state: string = ''
 
-  private start() {
-    const event = new CustomEvent('prism-message', {
-      detail: {
-        message: this.createStartMessage(),
-      },
-      bubbles: true,
-      composed: true,
-    })
-
-    this.dispatchEvent(event)
-  }
-
-  private createStartMessage(): Message {
-    return {
-      type: MessageType.COMMAND,
-      body: 'start',
-      origin: this.getPlayer(),
-      destination: PlayerRole.SERVER,
-    }
-  }
-
-  private getPlayer(): PlayerID {
-    return { key: this.playerId, type: this.playerType }
-  }
-
-  updated(changed: PropertyValues<this>) {
-    if (changed.has('gameId')) {
-      if (this.source) this.source.close()
-      if (this.gameId) {
-        this.hearbeatState = -1
-        this.start()
-      } else {
-        this.hearbeatState = -1
-      }
-    }
+  constructor() {
+    super()
+    this.player = new PlayerController(this)
   }
 
   render(): unknown {
     return html`
       <div>
-        <h3>type:${this.playerType}</h3>
-        <h3>id:${this.gameId}-${this.playerId}</h3>
-        <prism-heartbeat status="${this.hearbeatState}"></prism-heartbeat>
-        <pre>msg:${this.lastSseMessage}</pre>
-        <pre>msg origin:${this.lastSseMessageOrigin}</pre>
-        <sl-button @click="${this.notify}" ?disabled="${!this.gameId}"
-          >message all
+        <h3>type: ${this.playerType}</h3>
+        <h3>id : ${this.playerId}</h3>
+
+        <prism-heartbeat
+          status="${this.hearbeatState}"
+          msg="${this.state}"
+        ></prism-heartbeat>
+        <pre>from:${this.lastSseMessageOrigin?.type}</pre>
+        <pre>msg :${this.lastSseMessage}</pre>
+        <sl-select id="target" ?disabled="${!this.gameId}">
+          <sl-option value="ALL">all</sl-option>
+          ${this.playerType === PlayerRole.CITIZEN
+            ? nothing
+            : html` <sl-option value="CITIZEN">citizen</sl-option>`}
+          ${this.playerType === PlayerRole.ISSUER
+            ? nothing
+            : html` <sl-option value="ISSUER">issuer</sl-option>`}
+          ${this.playerType === PlayerRole.PROVIDER
+            ? nothing
+            : html` <sl-option value="PROVIDER">provider</sl-option>`}
+          ${this.playerType === PlayerRole.PROFESSIONAL
+            ? nothing
+            : html` <sl-option value="PROFESSIONAL">professional</sl-option>`}
+        </sl-select>
+        <sl-button
+          @click="${this.send}"
+          ?disabled="${this.gameId === NONE || this.target?.value === ''}"
+          >send
         </sl-button>
       </div>
     `
   }
 
-  private notify() {
-    if (!this.gameId) return
+  send() {
+    if (this.target) {
+      const target: PlayerRole = <PlayerRole>this.target.value
+      this.player.sendMessage(
+        `hello ${target} [${Math.floor(Math.random() * 10)}]`,
+        target
+      )
+    }
+  }
 
-    const body = `hello! x ${Math.floor(Math.random() * 10)}`
-
-    fetch(`/api/game/${this.gameId}/message/all`, {
-      method: 'POST',
-      body: JSON.stringify({
-        type: 'text',
-        body,
-        origin: { id: this.id, type: this.playerType },
-        destination: 'all',
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+  protected updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties)
+    if (
+      changedProperties.has('gameId') ||
+      changedProperties.has('playerId') ||
+      changedProperties.has('playerType')
+    ) {
+      this.pid = {
+        game: this.gameId,
+        key: this.playerId,
+        type: this.playerType,
+      }
+    }
   }
 }
