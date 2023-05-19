@@ -68,7 +68,7 @@ export class GameImplementation implements Game {
     })
   }
 
-  private closeChannel(p: Player) {
+  private async closeChannel(p: Player) {
     p.mailbox.push({
       type: MessageType.TEXT,
       body: 'ending game',
@@ -77,7 +77,7 @@ export class GameImplementation implements Game {
     })
     this.clearMailbox(p)
     clearInterval(p.heartbeatId)
-    // await p.channel?.close()
+    await p.channel?.close()
   }
 
   private clearMailbox(player: Player) {
