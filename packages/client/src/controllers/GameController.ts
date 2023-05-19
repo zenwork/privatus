@@ -1,5 +1,5 @@
 import { ReactiveController } from 'lit'
-import { PrismCtx } from './components/prism-ctx'
+import { PrismCtx } from '../components/prism-ctx'
 
 export class GameController implements ReactiveController {
   host: PrismCtx

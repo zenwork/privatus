@@ -2,7 +2,7 @@ import { Context, ContextProvider, provide } from '@lit-labs/context'
 import { Message, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { GameController } from '../GameController'
+import { GameController } from '../controllers/GameController'
 import { key, messageKey, Registry } from './prism'
 
 @customElement('prism-ctx')

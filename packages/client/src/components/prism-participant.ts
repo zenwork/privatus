@@ -1,7 +1,8 @@
 import { GameID, Message, PlayerID, PlayerRole } from 'common'
 import { css, html, LitElement, nothing, PropertyValues } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
-import { NONE, PlayerController } from '../PlayerController'
+import { NONE } from '../controllers'
+import { PlayerController } from '../controllers/PlayerController'
 
 @customElement('prism-participant')
 export class PrismParticipant extends LitElement {
