@@ -15,7 +15,15 @@
     "inlineSources": false,
     "incremental": true,
     "allowImportingTsExtensions": false,
-    "declaration": true
+    "declaration": true,
+    "declarationMap": true,
+    "useDefineForClassFields": false,
+    "plugins"                     : [
+      {
+        "name"  : "ts-lit-plugin",
+        "strict": true
+      }
+    ]
   },
   "include": ["**/*.ts"],
 }

@@ -1,7 +1,7 @@
 import { Context, ContextProvider, provide } from '@lit-labs/context'
 import { Message, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
-import { customElement, state } from 'lit/decorators.js'
+import { customElement, property, state } from 'lit/decorators.js'
 import { GameController } from '../controllers/GameController'
 import { key, messageKey, Registry } from './prism'
 
@@ -43,23 +43,35 @@ export class PrismCtx extends LitElement {
     `,
   ]
 
+  @property({ converter: value => value?.split(',').map(v => <PlayerRole>v) })
+  declare players: PlayerRole[]
+
   @state()
-  registry: Registry = { p: [] }
+  declare registry: Registry
 
   @provide({ context: messageKey })
   @state()
-  message: Message | undefined
+  declare message: Message | undefined
 
   @state()
-  gameId = ''
+  declare gameId
 
   @state()
-  server = 'UNKNOWN'
+  declare server
 
   private provider?: ContextProvider<Context<'prism-registry', Registry>>
 
   constructor() {
     super()
+    this.players = [
+      PlayerRole.CITIZEN,
+      PlayerRole.ISSUER,
+      PlayerRole.PROVIDER,
+      PlayerRole.PROFESSIONAL,
+    ]
+    this.registry = { p: [] }
+    this.gameId = ''
+    this.server = 'UNKNOWN'
 
     this.addEventListener('prism-register', (e: any) => {
       this.registry.p.push(e.detail)
@@ -100,34 +112,17 @@ export class PrismCtx extends LitElement {
       </section>
       <section>
         <ul id="participants">
-          <li class="participant">
-            <prism-participant
-              playerid="p1"
-              playertype="${PlayerRole.CITIZEN}"
-              gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
-          <li class="participant">
-            <prism-participant
-              playerid="p2"
-              playertype="${PlayerRole.ISSUER}"
-              gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
-          <li class="participant">
-            <prism-participant
-              playerid="p3"
-              playertype="${PlayerRole.PROVIDER}"
-              gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
-          <li class="participant">
-            <prism-participant
-              playerid="p4"
-              playertype="${PlayerRole.PROFESSIONAL}"
-              gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
+          ${this.players.map(
+            p => html`
+              <li class="participant">
+                <prism-participant
+                  playerid="${p}"
+                  playertype="${p}"
+                  gameid="${this.gameId}"
+                ></prism-participant>
+              </li>
+            `
+          )}
         </ul>
       </section>
       <section>status: ${this.server}</section>

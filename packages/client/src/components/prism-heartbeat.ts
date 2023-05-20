@@ -1,13 +1,19 @@
-import { customElement, property } from 'lit/decorators.js'
 import { html, LitElement } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
 
 @customElement('prism-heartbeat')
 export class PrismHeartbeat extends LitElement {
   @property({ reflect: true, type: Number })
-  status = -1
+  declare status
 
   @property({ reflect: true })
-  msg = ''
+  declare msg
+
+  constructor() {
+    super()
+    this.status = -1
+    this.msg = ''
+  }
 
   render(): unknown {
     return html` <sl-badge

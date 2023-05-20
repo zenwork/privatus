@@ -20,37 +20,43 @@ export class PrismParticipant extends LitElement {
   ]
 
   @property({ reflect: true, converter: value => (!value ? NONE : value) })
-  gameId: GameID = NONE
+  declare gameId: GameID
 
   @property()
-  playerId = NONE
+  declare playerId
 
   @property({ type: PlayerRole })
-  playerType: PlayerRole = PlayerRole.NONE
+  declare playerType: PlayerRole
 
   @state()
-  hearbeatState = -1
+  declare hearbeatState
 
   @state()
-  lastSseMessage: Message | undefined
+  declare lastSseMessage: Message | undefined
 
   @state()
-  lastSseMessageOrigin: PlayerID | undefined
+  declare lastSseMessageOrigin: PlayerID | undefined
 
-  player: PlayerController
+  declare player: PlayerController
 
   @state()
-  pid: PlayerID = { game: NONE, key: NONE, type: PlayerRole.NONE }
+  declare pid: PlayerID
 
   @query('#target')
-  target: HTMLSelectElement | null | undefined
+  declare target: HTMLSelectElement | null | undefined
 
   @state()
-  state: string = ''
+  declare state: string
 
   constructor() {
     super()
     this.player = new PlayerController(this)
+    this.playerId = NONE
+    this.gameId = NONE
+    this.playerType = PlayerRole.NONE
+    this.hearbeatState = -1
+    this.pid = { game: NONE, key: NONE, type: PlayerRole.NONE }
+    this.state = ''
   }
 
   render(): unknown {

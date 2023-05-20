@@ -1,12 +1,14 @@
-import { LitElement, html, css } from 'lit'
-import { property, customElement } from 'lit/decorators.js'
+import { css, html, LitElement } from 'lit'
+import { customElement } from 'lit/decorators.js'
 
 import './components/index.js'
+import { NavigationController } from './controllers/NavigationController'
+
 // const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
 
 @customElement('prism-app')
 export class PrismApp extends LitElement {
-  @property({ type: String }) header = 'privatus app'
+  private navigation
 
   static styles = css`
     :host {
@@ -50,6 +52,11 @@ export class PrismApp extends LitElement {
       margin-left: 5px;
     }
   `
+
+  constructor() {
+    super()
+    this.navigation = new NavigationController(this)
+  }
 
   render() {
     return html`
