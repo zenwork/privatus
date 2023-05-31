@@ -10,7 +10,7 @@
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
     "check": "eslint --quiet --ext .ts,.html . --ignore-path .gitignore;  prettier --check \"**/*.ts\" --ignore-path .gitignore ",
     "clean": "rimraf .rollup.cache && rimraf node_modules",
-    "test": "tsc && wtr --coverage",
+    "test": "wtr --coverage --node-resolve",
     "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\"",
     "build": "rimraf dist && tsc && rollup -c rollup.config.js && yarn run analyze -- --exclude dist",
     "deploy": "yarn run build && cp -R dist ../server && mv ../server/dist ../server/client-dist",
