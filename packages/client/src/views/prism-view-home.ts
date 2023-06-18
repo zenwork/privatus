@@ -105,7 +105,7 @@ export class PrismViewHome extends LitElement {
               <h2>Create a new game</h2>
               <p>Start a new game as provider</p>
               <div class="row2">
-                <sl-input id="name" name="name" label="name"></sl-input>
+                <sl-input name="name" label="name"></sl-input>
                 <sl-button type="submit" variant="primary">CREATE</sl-button>
               </div>
             </form>
@@ -125,7 +125,6 @@ export class PrismViewHome extends LitElement {
               <h2>Join existing game</h2>
               <p>Join a game using the code shared by the provider</p>
               <sl-input
-                id="name"
                 name="name"
                 label="name"
                 pattern="[a-zA-Z0-9]{0,10}"

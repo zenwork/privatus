@@ -1,5 +1,5 @@
 import { html } from 'lit'
-import { fixture, expect } from '@open-wc/testing'
+import { fixture, expect, aTimeout } from '@open-wc/testing'
 
 import type { PrismApp } from '../src/prism-app'
 import '../src/prism-app'
@@ -10,9 +10,10 @@ describe('Prism App', () => {
     element = await fixture(html` <prism-app></prism-app>`)
   })
 
-  it('has 1 context', () => {
-    const badges = element.shadowRoot!.querySelectorAll('prism-ctx')!
-    expect(badges.length).to.eql(1)
+  it('has 1 view', async () => {
+    await aTimeout(10)
+    const elements = element.shadowRoot!.querySelectorAll('prism-view-home')!
+    expect(elements.length).to.eql(1)
   })
 
   it('passes the a11y audit', async () => {
