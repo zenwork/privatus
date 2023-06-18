@@ -1,0 +1,1 @@
+import './prism-view-home'

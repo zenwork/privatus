@@ -36,16 +36,13 @@ export class GameImplementation implements Game {
       return
     }
 
-    if (player && player.channel) {
-      // ctx.response.status = Status.Forbidden
-      // ctx.response.body = 'player channel already exists'
-      // return
-      // this.closeChannel(player)
-    }
-
     try {
       player.channel = ctx.sendEvents()
       let cycle = 0
+
+      if (player.heartbeatId) clearInterval(player.heartbeatId)
+      this.clearMailbox(player)
+
       player.heartbeatId = setInterval(async () => {
         if (max === INFINITE || cycle < max) {
           this.hearbeat(player, id)

@@ -1,5 +1,6 @@
 import { Context, ContextProvider, provide } from '@lit-labs/context'
-import { Message, PlayerRole } from 'common'
+import { Router } from '@vaadin/router'
+import { GameID, Message, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { GameController } from '../controllers/GameController'
@@ -8,6 +9,85 @@ import { key, messageKey, Registry } from './prism'
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
   private game = new GameController(this)
+
+  @property({ converter: value => value?.split(',').map(v => <PlayerRole>v) })
+  declare players: { id: string; role: PlayerRole }[]
+
+  @state()
+  declare registry: Registry
+
+  @provide({ context: messageKey })
+  @state()
+  declare message: Message | undefined
+
+  @state()
+  declare gameId: GameID
+
+  private provider?: ContextProvider<Context<'prism-registry', Registry>>
+
+  constructor() {
+    super()
+    this.players = [
+      // PlayerRole.CITIZEN,
+      // PlayerRole.ISSUER,
+      // { id: 'p1', role: PlayerRole.PROVIDER }
+      // PlayerRole.PROFESSIONAL,
+    ]
+    this.registry = { p: [] }
+    this.gameId = ''
+
+    this.addEventListener('prism-register', (e: any) => {
+      this.registry.p.push(e.detail)
+      this.registry = { p: this.registry.p }
+    })
+  }
+
+  connectedCallback() {
+    super.connectedCallback()
+    this.provider = new ContextProvider(this, key, this.registry)
+  }
+
+  /**
+   * Vaadin Router life-cycle call
+   */
+  onBeforeEnter(location: Router.Location) {
+    if (location.params.id) {
+      this.gameId = location.params.id as GameID
+    }
+
+    if (location.params.player) {
+      this.players = [
+        {
+          id: location.params.player as string,
+          role: location.params.role as PlayerRole,
+        },
+      ]
+    }
+  }
+
+  protected render(): unknown {
+    return html` <article>
+      <section id="header">
+        <h2>Privatus</h2>
+        <h4>game: ${this.gameId}</h4>
+      </section>
+      <section>
+        <ul id="participants">
+          ${this.players.map(
+            p => html`
+              <li class="participant">
+                <prism-participant
+                  playerid="${p.id}"
+                  playertype="${p.role}"
+                  gameid="${this.gameId}"
+                ></prism-participant>
+              </li>
+            `
+          )}
+        </ul>
+      </section>
+    </article>`
+  }
 
   static styles = [
     css`
@@ -42,90 +122,4 @@ export class PrismCtx extends LitElement {
       }
     `,
   ]
-
-  @property({ converter: value => value?.split(',').map(v => <PlayerRole>v) })
-  declare players: PlayerRole[]
-
-  @state()
-  declare registry: Registry
-
-  @provide({ context: messageKey })
-  @state()
-  declare message: Message | undefined
-
-  @state()
-  declare gameId
-
-  @state()
-  declare server
-
-  private provider?: ContextProvider<Context<'prism-registry', Registry>>
-
-  constructor() {
-    super()
-    this.players = [
-      PlayerRole.CITIZEN,
-      PlayerRole.ISSUER,
-      PlayerRole.PROVIDER,
-      PlayerRole.PROFESSIONAL,
-    ]
-    this.registry = { p: [] }
-    this.gameId = ''
-    this.server = 'UNKNOWN'
-
-    this.addEventListener('prism-register', (e: any) => {
-      this.registry.p.push(e.detail)
-      this.registry = { p: this.registry.p }
-    })
-  }
-
-  connectedCallback() {
-    super.connectedCallback()
-
-    const { searchParams } = new URL(window.location.toString())
-
-    if (searchParams.has('g')) {
-      this.gameId = searchParams.get('g')!
-    }
-
-    this.provider = new ContextProvider(this, key, this.registry)
-    fetch('/api')
-      .then(r => r.json())
-      .then(s => {
-        this.server = s.status
-      })
-  }
-
-  protected render(): unknown {
-    return html` <article>
-      <section id="header">
-        <h2>Privatus</h2>
-        <h3>PRivacy & Identity SiMulator (PRISM)</h3>
-        <h4># of players: ${this.registry.p.length}</h4>
-        <h4>session: ${this.gameId}</h4>
-        <sl-button
-          @click="${() => this.game.newGame()}"
-          ?disabled=${this.gameId}
-          >start</sl-button
-        >
-        <sl-button @click="${() => this.game.endGame()}">stop</sl-button>
-      </section>
-      <section>
-        <ul id="participants">
-          ${this.players.map(
-            p => html`
-              <li class="participant">
-                <prism-participant
-                  playerid="${p}"
-                  playertype="${p}"
-                  gameid="${this.gameId}"
-                ></prism-participant>
-              </li>
-            `
-          )}
-        </ul>
-      </section>
-      <section>status: ${this.server}</section>
-    </article>`
-  }
 }

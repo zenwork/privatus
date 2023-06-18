@@ -22,7 +22,8 @@
     "@lit-labs/context": "^0.2.0",
     "@web/dev-server-import-maps": "^0.1.1",
     "common": "^0.6.0",
-    "lit": "^2.6.1"
+    "lit": "^2.6.1",
+    "@vaadin/router":"^1.7.5"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
@@ -64,9 +65,9 @@
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-workbox": "^6.2.0",
+    "ts-lit-plugin": "^1.2.1",
     "tslib": "^2.3.1",
-    "typescript": "^5.0.3",
-    "ts-lit-plugin": "^1.2.1"
+    "typescript": "^5.0.3"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",

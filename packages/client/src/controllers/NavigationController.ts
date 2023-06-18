@@ -5,16 +5,7 @@ export class NavigationController implements ReactiveController {
   constructor(host: LitElement) {
     host.addController(this)
 
-    window.addEventListener(
-      'hashchange',
-      () => {
-        console.log(
-          'The hash has changed!',
-          new URL(document.location.href).hash
-        ) // eslint-disable-line no-console
-      },
-      false
-    )
+    window.addEventListener('hashchange', () => {}, false)
   }
 
   hostConnected(): void {}
