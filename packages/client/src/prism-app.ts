@@ -44,7 +44,8 @@ export class PrismApp extends LitElement {
       font-size: calc(10px + 2vmin);
       color: #1a2b42;
       max-width: 960px;
-      margin: 0 auto;
+      margin: 0;
+      padding: 0;
       text-align: center;
       background-color: var(--prism-app-background-color);
     }

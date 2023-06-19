@@ -19,7 +19,7 @@ export class PlayerController implements ReactiveController {
   setState(state: PlayerLifecycle) {
     this.state = state
     this.host.state = this.state
-    this.host.requestUpdate()
+    // this.host.requestUpdate()
   }
 
   join() {
@@ -51,7 +51,7 @@ export class PlayerController implements ReactiveController {
 
     this.source.onopen = () => {
       this.setState(PlayerLifecycle.CONNECTED)
-      this.host.requestUpdate()
+      // this.host.requestUpdate()
     }
 
     this.source.onerror = ev => {
@@ -61,31 +61,30 @@ export class PlayerController implements ReactiveController {
       ) {
         console.log('error', ev) // eslint-disable-line no-console
         this.setState(PlayerLifecycle.DISCONNECTED)
-        this.host.requestUpdate()
+        // this.host.requestUpdate()
       }
     }
 
     this.source.addEventListener('ping', () => {
-      if (this.host.hearbeatState !== 2) {
+      if (this.host.hearbeatState !== 1) {
         this.host.hearbeatState++
       } else {
         this.host.hearbeatState = 0
       }
-      this.host.requestUpdate()
+      // this.host.requestUpdate()
     })
 
     this.source.addEventListener('msg', msg => {
-      const data = JSON.parse(msg.data)
+      const message = JSON.parse(msg.data) as Message
 
-      if (data.body === 'ending game') {
+      if (message.body === 'ending game') {
         this.host.pid = { ...this.host.pid, game: NONE }
         this.source?.close()
         this.setState(PlayerLifecycle.DISCONNECTED)
       } else {
-        this.host.lastSseMessage = data.body
-        this.host.lastSseMessageOrigin = data.origin
+        this.host.lastSseMessage.push({ date: new Date(), msg: message })
       }
-      this.host.requestUpdate()
+      // this.host.requestUpdate()
     })
   }
 
@@ -138,7 +137,7 @@ export class PlayerController implements ReactiveController {
       this.setState(PlayerLifecycle.STOPPED)
       this.host.hearbeatState = -1
       this.host.pid = { ...this.host.pid, game: NONE }
-      this.host.requestUpdate()
+      // this.host.requestUpdate()
     }
   }
 

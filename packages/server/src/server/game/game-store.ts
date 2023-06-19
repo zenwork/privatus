@@ -50,4 +50,17 @@ export class GameStoreImplementation implements GameStore {
     }
     return found
   }
+
+  status(): Record<any, any> {
+    const games: Record<GameID, any> = {}
+    this.games.forEach(
+      (v, k) => (games[k] = {
+        players: v.players.map((p) => ({
+          id: p.id,
+          mailbox: p.mailbox.length,
+        })),
+      }),
+    )
+    return games
+  }
 }

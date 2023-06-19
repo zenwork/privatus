@@ -6,19 +6,6 @@ import { PlayerController } from '../controllers/PlayerController'
 
 @customElement('prism-participant')
 export class PrismParticipant extends LitElement {
-  static styles = [
-    css`
-      :host {
-      }
-
-      div {
-        border: solid 0.1rem #000000;
-        /*margin: .2rem;*/
-        padding: 0.5rem;
-      }
-    `,
-  ]
-
   @property({ reflect: true, converter: value => (!value ? NONE : value) })
   declare gameId: GameID
 
@@ -32,10 +19,7 @@ export class PrismParticipant extends LitElement {
   declare hearbeatState
 
   @state()
-  declare lastSseMessage: Message | undefined
-
-  @state()
-  declare lastSseMessageOrigin: PlayerID | undefined
+  declare lastSseMessage: { date: Date; msg: Message }[]
 
   declare player: PlayerController
 
@@ -57,20 +41,31 @@ export class PrismParticipant extends LitElement {
     this.hearbeatState = -1
     this.pid = { game: NONE, key: NONE, type: PlayerRole.NONE }
     this.state = ''
+    this.lastSseMessage = []
   }
 
   render(): unknown {
     return html`
-      <div>
-        <h3>type: ${this.playerType}</h3>
-        <h3>id : ${this.playerId}</h3>
+      <div id="participant">
+        <h3>${this.playerId}</h3>
+        <h4>${this.playerType}</h4>
 
         <prism-heartbeat
           status="${this.hearbeatState}"
-          msg="${this.state}"
+          msg="${this.state[0]}"
         ></prism-heartbeat>
-        <pre>from:${this.lastSseMessageOrigin?.type}</pre>
-        <pre>msg :${this.lastSseMessage}</pre>
+      </div>
+      <div id="log">
+        <ul>
+          ${this.lastSseMessage.map(
+            m => html` <li>
+              ${m.date.toISOString().substring(11, 19)}:
+              ${String(m.msg.origin.type).padEnd(20)}: ${m.msg.body}
+            </li>`
+          )}
+        </ul>
+      </div>
+      <div id="form">
         <sl-select id="target" ?disabled="${!this.gameId}">
           <sl-option value="ALL">all</sl-option>
           ${this.playerType === PlayerRole.CITIZEN
@@ -94,6 +89,67 @@ export class PrismParticipant extends LitElement {
       </div>
     `
   }
+
+  static styles = [
+    css`
+      :host {
+        max-height: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: min-content auto min-content;
+        border: solid 0.1rem #000000;
+        padding: 0.5rem;
+      }
+
+      #participant {
+        height: 2rem;
+        display: grid;
+        grid-template-columns: 10fr 5fr 1fr;
+        padding: 0.5rem;
+      }
+
+      #log {
+        align-self: stretch;
+        justify-self: stretch;
+        overflow-y: scroll;
+      }
+
+      #form {
+        height: 5rem;
+      }
+
+      h3 {
+        font-size: 0.9rem;
+        justify-self: start;
+      }
+
+      h4 {
+        font-size: 0.9rem;
+        justify-self: end;
+      }
+
+      prism-heartbeat {
+        justify-self: end;
+      }
+
+      h3,
+      h4,
+      prism-heartbeat {
+        align-self: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      ul {
+        list-style: none;
+        overflow: auto;
+      }
+
+      li {
+        justify-self: start;
+      }
+    `,
+  ]
 
   send() {
     if (this.target) {

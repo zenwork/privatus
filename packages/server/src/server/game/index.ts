@@ -29,6 +29,7 @@ export interface GameStore {
   addPlayerToGame(p: PlayerID): Result
 
   findPlayerBy(player: PlayerID): Player | undefined
+  status(): Record<any, any>
 }
 
 export { generateId } from './util.ts'

@@ -14,7 +14,7 @@ export function initBackend(app: Application): GameStore {
   const store = new GameStoreImplementation()
 
   router
-    .get('/api', healthcheck)
+    .get('/api', healthcheck(store))
 
   router
     .post('/api/game', createGame(store))

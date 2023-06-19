@@ -1,15 +1,12 @@
-import { Context, ContextProvider, provide } from '@lit-labs/context'
+import { provide } from '@lit-labs/context'
 import { Router } from '@vaadin/router'
 import { GameID, Message, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { GameController } from '../controllers/GameController'
-import { key, messageKey, Registry } from './prism'
+import { messageKey, Registry } from './prism'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
-  private game = new GameController(this)
-
   @property({ converter: value => value?.split(',').map(v => <PlayerRole>v) })
   declare players: { id: string; role: PlayerRole }[]
 
@@ -22,8 +19,6 @@ export class PrismCtx extends LitElement {
 
   @state()
   declare gameId: GameID
-
-  private provider?: ContextProvider<Context<'prism-registry', Registry>>
 
   constructor() {
     super()
@@ -40,11 +35,6 @@ export class PrismCtx extends LitElement {
       this.registry.p.push(e.detail)
       this.registry = { p: this.registry.p }
     })
-  }
-
-  connectedCallback() {
-    super.connectedCallback()
-    this.provider = new ContextProvider(this, key, this.registry)
   }
 
   /**
@@ -68,23 +58,19 @@ export class PrismCtx extends LitElement {
   protected render(): unknown {
     return html` <article>
       <section id="header">
-        <h2>Privatus</h2>
-        <h4>game: ${this.gameId}</h4>
+        <h1>PRIVATUS</h1>
+        <h2>GAME: ${this.gameId}</h2>
       </section>
-      <section>
-        <ul id="participants">
-          ${this.players.map(
-            p => html`
-              <li class="participant">
-                <prism-participant
-                  playerid="${p.id}"
-                  playertype="${p.role}"
-                  gameid="${this.gameId}"
-                ></prism-participant>
-              </li>
-            `
-          )}
-        </ul>
+      <section id="body">
+        ${this.players.map(
+          p => html`
+            <prism-participant
+              playerid="${p.id}"
+              playertype="${p.role}"
+              gameid="${this.gameId}"
+            ></prism-participant>
+          `
+        )}
       </section>
     </article>`
   }
@@ -94,31 +80,48 @@ export class PrismCtx extends LitElement {
       :host {
       }
 
+      article {
+        height: 100vh;
+        max-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 2rem calc(100vh - 2.6rem);
+      }
+
       section {
         border: solid 0.1rem #000000;
         margin: 0.2rem;
-        padding: 1rem;
+        padding: 0.1rem;
       }
 
-      /*noinspection ALL*/
-      #participants {
-        display: flex;
-        flex-wrap: wrap;
-        flex-flow: row wrap;
-        justify-content: space-evenly;
-        padding: 0;
+      prism-participant {
+        height: 100%;
         margin: 0;
-        list-style: none;
+        padding: 0;
       }
 
-      /*noinspection ALL*/
-      .participant {
-        padding: 5px;
-        width: 20rem;
-        min-width: 10rem;
-        margin-top: 10px;
-        text-align: center;
-        flex-grow: 1;
+      #header {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+      }
+
+      #body {
+      }
+
+      h1 {
+        justify-self: start;
+      }
+
+      h2 {
+        justify-self: end;
+      }
+
+      h1,
+      h2 {
+        font-size: 1rem;
+        align-self: end;
+        margin: 0;
+        padding: 0;
       }
     `,
   ]

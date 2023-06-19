@@ -14,7 +14,7 @@ describe('Prism Heartbeat', () => {
 
   it('check the presence of the badges', () => {
     const badges = element.shadowRoot!.querySelectorAll('sl-badge')!
-    expect(badges.length).to.eql(3)
+    expect(badges.length).to.eql(1)
   })
 
   it('passes the a11y audit', async () => {
