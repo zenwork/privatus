@@ -19,7 +19,6 @@ export class PlayerController implements ReactiveController {
   setState(state: PlayerLifecycle) {
     this.state = state
     this.host.state = this.state
-    // this.host.requestUpdate()
   }
 
   join() {
@@ -51,7 +50,6 @@ export class PlayerController implements ReactiveController {
 
     this.source.onopen = () => {
       this.setState(PlayerLifecycle.CONNECTED)
-      // this.host.requestUpdate()
     }
 
     this.source.onerror = ev => {
@@ -59,19 +57,17 @@ export class PlayerController implements ReactiveController {
         this.state === PlayerLifecycle.CONNECTED ||
         this.state === PlayerLifecycle.DISCONNECTING
       ) {
-        console.log('error', ev) // eslint-disable-line no-console
+        console.error('error', ev) // eslint-disable-line no-console
         this.setState(PlayerLifecycle.DISCONNECTED)
-        // this.host.requestUpdate()
       }
     }
 
     this.source.addEventListener('ping', () => {
       if (this.host.hearbeatState !== 1) {
-        this.host.hearbeatState++
+        this.host.hearbeatState = 1
       } else {
-        this.host.hearbeatState = 0
+        this.host.hearbeatState = 1
       }
-      // this.host.requestUpdate()
     })
 
     this.source.addEventListener('msg', msg => {
@@ -83,8 +79,8 @@ export class PlayerController implements ReactiveController {
         this.setState(PlayerLifecycle.DISCONNECTED)
       } else {
         this.host.lastSseMessage.push({ date: new Date(), msg: message })
+        this.host.requestUpdate('lastSseMessage')
       }
-      // this.host.requestUpdate()
     })
   }
 
@@ -93,24 +89,30 @@ export class PlayerController implements ReactiveController {
     if (this.source) this.source.close()
   }
 
-  sendMessage(msg: string, target: PlayerRole) {
-    if (this.state !== PlayerLifecycle.CONNECTED) return
+  async sendMessage(
+    msg: string,
+    target: PlayerRole
+  ): Promise<Message | undefined> {
+    if (this.state !== PlayerLifecycle.CONNECTED) return undefined
 
     const body = msg
     const { game } = this.host.pid
 
-    fetch(`/api/game/${game}/message`, {
+    const message = {
+      type: 'text',
+      body,
+      origin: this.host.pid,
+      destination: target,
+    } as Message
+    await fetch(`/api/game/${game}/message`, {
       method: 'POST',
-      body: JSON.stringify({
-        type: 'text',
-        body,
-        origin: this.host.pid,
-        destination: target,
-      } as Message),
+      body: JSON.stringify(message),
       headers: {
         'Content-Type': 'application/json',
       },
     })
+
+    return message
   }
 
   hostUpdate(): void {
@@ -137,7 +139,6 @@ export class PlayerController implements ReactiveController {
       this.setState(PlayerLifecycle.STOPPED)
       this.host.hearbeatState = -1
       this.host.pid = { ...this.host.pid, game: NONE }
-      // this.host.requestUpdate()
     }
   }
 

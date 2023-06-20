@@ -57,16 +57,32 @@ export class PrismParticipant extends LitElement {
       </div>
       <div id="log">
         <ul>
-          ${this.lastSseMessage.map(
-            m => html` <li>
-              ${m.date.toISOString().substring(11, 19)}:
-              ${String(m.msg.origin.type).padEnd(20)}: ${m.msg.body}
+          ${this.lastSseMessage.map(m => {
+            if (m.msg.origin.key !== this.playerId) {
+              return html` <li style="text-align: left ">
+                <code>
+                  ${m.date.toISOString().substring(11, 19)} -
+                  ${String(m.msg.origin.type).padEnd(20)} -
+                </code>
+                <span style="background: lightblue">${m.msg.body} </span>
+              </li>`
+            }
+            return html` <li style="text-align: right">
+              <span style="background: lightgoldenrodyellow"
+                >${m.msg.body}</span
+              >
+              -
+              <code> ${m.date.toISOString().substring(11, 19)} </code>
             </li>`
-          )}
+          })}
         </ul>
       </div>
       <div id="form">
-        <sl-select id="target" ?disabled="${!this.gameId}">
+        <sl-select
+          id="target"
+          @click="${() => this.requestUpdate()}"
+          ?disabled="${!this.gameId}"
+        >
           <sl-option value="ALL">all</sl-option>
           ${this.playerType === PlayerRole.CITIZEN
             ? nothing
@@ -154,10 +170,17 @@ export class PrismParticipant extends LitElement {
   send() {
     if (this.target) {
       const target: PlayerRole = <PlayerRole>this.target.value
-      this.player.sendMessage(
-        `hello ${target} [${Math.floor(Math.random() * 10)}]`,
-        target
-      )
+      this.player
+        .sendMessage(
+          `hello ${target} [${Math.floor(Math.random() * 10)}]`,
+          target
+        )
+        .then(msg => {
+          if (msg) {
+            this.lastSseMessage.push({ date: new Date(), msg })
+            this.requestUpdate('lastSseMessage')
+          }
+        })
     }
   }
 
