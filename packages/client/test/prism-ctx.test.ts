@@ -3,7 +3,7 @@ import { PlayerRole } from 'common'
 import { html } from 'lit'
 import { PrismCtx } from '../src/components/prism-ctx'
 
-import { PrismPlayer } from '../src/components/prism-player'
+import { PrismPlayer } from '../src/components/player/player'
 
 describe('Prism App', () => {
   let element: PrismCtx

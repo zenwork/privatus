@@ -1,6 +1,6 @@
 import { Message, PlayerRole, Result } from 'common'
 import { ReactiveController } from 'lit'
-import { PrismPlayer } from '../components/prism-player'
+import { PrismPlayer } from '../components/player/player'
 import { NONE, PlayerLifecycle } from './index'
 
 export class PlayerController implements ReactiveController {
