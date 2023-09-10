@@ -64,11 +64,11 @@ export class PrismCtx extends LitElement {
       <section id="body">
         ${this.players.map(
           p => html`
-            <prism-participant
+            <prism-player
               playerid="${p.id}"
               playertype="${p.role}"
               gameid="${this.gameId}"
-            ></prism-participant>
+            ></prism-player>
           `
         )}
       </section>
@@ -94,7 +94,7 @@ export class PrismCtx extends LitElement {
         padding: 0.1rem;
       }
 
-      prism-participant {
+      prism-player {
         height: 100%;
         margin: 0;
         padding: 0;

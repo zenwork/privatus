@@ -1,16 +1,16 @@
 import { Message, PlayerRole, Result } from 'common'
 import { ReactiveController } from 'lit'
-import { PrismParticipant } from '../components/prism-participant'
+import { PrismPlayer } from '../components/prism-player'
 import { NONE, PlayerLifecycle } from './index'
 
 export class PlayerController implements ReactiveController {
-  private host: PrismParticipant
+  private host: PrismPlayer
 
   private source: EventSource | null
 
   private state: PlayerLifecycle = PlayerLifecycle.STOPPED
 
-  constructor(host: PrismParticipant) {
+  constructor(host: PrismPlayer) {
     this.host = host
     this.host.addController(this)
     this.source = null
@@ -18,7 +18,6 @@ export class PlayerController implements ReactiveController {
 
   setState(state: PlayerLifecycle) {
     this.state = state
-    this.host.state = this.state
   }
 
   join() {
@@ -63,10 +62,10 @@ export class PlayerController implements ReactiveController {
     }
 
     this.source.addEventListener('ping', () => {
-      if (this.host.hearbeatState !== 1) {
-        this.host.hearbeatState = 1
+      if (this.host.heartbeat.id !== 1) {
+        this.host.heartbeat = { id: 1, state: this.state }
       } else {
-        this.host.hearbeatState = 1
+        this.host.heartbeat = { id: 1, state: this.state }
       }
     })
 
@@ -119,7 +118,7 @@ export class PlayerController implements ReactiveController {
     if (this.state === PlayerLifecycle.STOPPED) {
       const { game, key, type } = this.host.pid
       if (
-        this.host.hearbeatState === -1 &&
+        this.host.heartbeat.id === -1 &&
         game !== NONE &&
         key !== NONE &&
         type !== PlayerRole.NONE
@@ -137,7 +136,7 @@ export class PlayerController implements ReactiveController {
 
     if (this.state === PlayerLifecycle.DISCONNECTED) {
       this.setState(PlayerLifecycle.STOPPED)
-      this.host.hearbeatState = -1
+      this.host.heartbeat.id = -1
       this.host.pid = { ...this.host.pid, game: NONE }
     }
   }
