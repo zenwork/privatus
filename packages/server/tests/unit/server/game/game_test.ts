@@ -46,6 +46,23 @@ describe('use game', () => {
     assertEquals(result, { success: true, messages: ['player created'] })
   })
 
+  it('should not accept player creation when already exists', () => {
+    const id = store.create()
+    store.addPlayerToGame({
+      game: id,
+      key: 'foo',
+      type: PlayerRole.ISSUER,
+    })
+
+    const createSecondTime = store.addPlayerToGame({
+      game: id,
+      key: 'foo',
+      type: PlayerRole.ISSUER,
+    })
+
+    assertEquals(createSecondTime, { success: false, messages: ['player already exists'] })
+  })
+
   it('should fail to add player when game does not exist', () => {
     const result = store.addPlayerToGame({
       game: 'foobar',

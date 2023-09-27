@@ -26,8 +26,13 @@ export function createPlayer(store: GameStore) {
       ctx.response.status = Status.Created
       ctx.response.body = result
     } else {
-      ctx.response.status = Status.BadRequest
-      ctx.response.body = result
+      if (result.messages[0] === 'player already exists') {
+        ctx.response.status = Status.OK
+        ctx.response.body = result
+      } else {
+        ctx.response.status = Status.BadRequest
+        ctx.response.body = result
+      }
     }
   }
 }

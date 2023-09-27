@@ -2,7 +2,7 @@ import { Result } from '../../../../common/src/messages.ts'
 import { GameID, PlayerID } from '../../../../common/src/players.ts'
 import { GameImplementation } from './game.ts'
 import { Game, GameStore, Player } from './index.ts'
-import { generateId } from './util.ts'
+import { generateId, isSamePid } from './util.ts'
 
 export class GameStoreImplementation implements GameStore {
   private games: Map<GameID, Game> = new Map<GameID, Game>()
@@ -31,10 +31,15 @@ export class GameStoreImplementation implements GameStore {
 
     const game = this.games.get(pid.game)
 
-    if (game && !game.players.some((p) => p.id === pid)) {
-      game.players.push({ id: pid, mailbox: [], channel: null })
-      result.messages.push('player created')
-      result.success = true
+    if (game) {
+      if (!game.players.some((player) => isSamePid(player.id, pid))) {
+        game.players.push({ id: pid, mailbox: [], channel: null })
+        result.messages.push('player created')
+        result.success = true
+      } else {
+        result.messages.push('player already exists')
+        result.success = false
+      }
     }
 
     return result

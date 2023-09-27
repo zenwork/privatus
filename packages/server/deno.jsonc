@@ -1,14 +1,14 @@
 {
   "tasks": {
+    "test": "deno test -A --lock-write --trace-ops tests/unit && deno test -A --lock-write --trace-ops tests/e2e",
+    "test-watch": "deno test -A --lock-write --watch --trace-ops",
     "dev": "deno run -A --reload --lock-write --watch main.ts --dev",
     "dev:offline": "deno run -A --watch main.ts --dev",
-    "prod": "deno run -A --lock-write --watch main.ts",
-    "test": "deno test -A --lock-write --trace-ops tests/unit && deno test -A --lock-write --trace-ops tests/e2e",
-    "test:watch": "deno test -A --lock-write --watch --trace-ops tests",
     "check": "deno fmt --check . && deno lint .",
     "clean": "deno fmt . && deno lint .",
     "bundle": "deno bundle main.ts main.bundle.js",
-    "prod": "cd .. && deno run -c server/import_map.json -A server/main.ts"
+    "prod": "cd .. && deno run -c server/import_map.json -A server/main.ts",
+    "prod:run": "deno run -A --lock-write --watch main.ts"
   },
   "importMap": "./import_map.json",
   "compilerOptions": {
@@ -23,6 +23,11 @@
       "include": ["ban-untagged-todo", "no-global-assign"],
       "exclude": ["no-explicit-any", "no-inferrable-types", "no-async-promise-executor"]
     }
+  },
+  "test": {
+    "include": [
+      "tests/**/*_test.ts"
+    ]
   },
   "fmt": {
     "files": {
