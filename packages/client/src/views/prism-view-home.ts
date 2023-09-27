@@ -32,8 +32,12 @@ export class PrismViewHome extends LitElement {
         }
 
         h1 {
-          font-size: 10rem;
+          font-size: 15vw;
           margin: 2rem 0 0;
+        }
+
+        h2 {
+          font-size: 2rem;
         }
 
         a {
@@ -41,7 +45,6 @@ export class PrismViewHome extends LitElement {
         }
 
         div {
-          height: 100%;
           margin: 0;
         }
 
@@ -51,7 +54,7 @@ export class PrismViewHome extends LitElement {
           grid-template-columns: 1fr;
           grid-gap: 2rem;
           height: 100%;
-          max-width: 50rem;
+          max-width: 100%;
         }
 
         section {
@@ -63,28 +66,35 @@ export class PrismViewHome extends LitElement {
         }
 
         sl-input {
+          display: block;
+          margin: 0 auto;
           min-width: 3rem;
           max-width: 20rem;
         }
 
         sl-select {
+          display: block;
+          margin: 0 auto;
           width: 20rem;
         }
 
-        .row2 {
-          height: 5rem;
+        sl-button {
+          margin: 1rem;
         }
 
         #home-choices {
-          display: grid;
-          gap: 2rem;
-          grid-template-columns: 1fr 1fr;
-          justify-self: start;
-          margin: 2rem;
+          display: flex;
+          flex-flow: wrap;
+          width: 100vw;
+          gap: 3rem;
+          max-width: 60rem;
         }
 
-        #home-choice {
+        .home-choice {
+          flex-grow: 1;
+          flex-shrink: 1;
           padding: 0.5rem;
+          min-width: 10rem;
         }
       </style>
       <article>
@@ -130,7 +140,7 @@ export class PrismViewHome extends LitElement {
                 pattern="[a-zA-Z0-9]{0,10}"
                 required
               ></sl-input>
-              <div class="row2">
+              <div>
                 <sl-select id="type" name="type" label="type" required>
                   <sl-option value="ALL">all</sl-option>
                   <sl-option value="CITIZEN">citizen</sl-option>
