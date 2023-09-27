@@ -6,8 +6,7 @@ import { toPlayerType } from '../game/util.ts'
 import { PlayerParams } from '../initBackend.ts'
 
 function toParams(ctx: RouterContext<any, any, any>) {
-  const params = ctx.params as PlayerParams
-  return params
+  return ctx.params as PlayerParams
 }
 
 function toPlayerId(params: PlayerParams): PlayerID {
