@@ -2,8 +2,9 @@ import { Application, Router } from 'oak'
 import { openChannelWith } from './backend/channel.ts'
 import { createGame, deleteGame, forwardMessage } from './backend/game.ts'
 import { healthcheck } from './backend/monitoring.ts'
-import { createPlayer, getPlayer } from './backend/player.ts'
+import { createPlayer } from './backend/player.ts'
 import { GameStore, GameStoreImplementation } from './game/index.ts'
+import { mockFor } from './game/mock.ts'
 
 import { routes2Html } from './util/html.ts'
 
@@ -22,9 +23,12 @@ export function initBackend(app: Application): GameStore {
 
   router
     .put('/api/game/:game/:role/:player', createPlayer(store))
-    .get('/api/game/:game/:player', getPlayer(store))
+    // .get('/api/game/:game/:player', getPlayer(store))
     .get('/api/game/:game/channel/:role/:player', openChannelWith(store))
     .post('/api/game/:game/message', forwardMessage(store))
+
+  router
+    .get('/api/game/mock/for/:role', mockFor(store))
 
   router.get('api docs', '/api/docs', (ctx) => {
     routes2Html(router, ctx.response)

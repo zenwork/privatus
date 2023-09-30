@@ -79,7 +79,7 @@ export class GameImplementation implements Game {
     await p.channel?.close()
   }
 
-  private clearMailbox(player: Player) {
+  protected clearMailbox(player: Player) {
     if (player.mailbox.length > 0) {
       while (player.mailbox.length > 0) {
         const message = player.mailbox.splice(0, 1)[0]

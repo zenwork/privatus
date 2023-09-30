@@ -1,9 +1,12 @@
+import { assertEquals, assertExists } from 'deno/std/testing/asserts.ts'
+import { describe, it } from 'deno/std/testing/bdd.ts'
 import { Application } from 'oak'
 import { superoak } from 'superoak'
+import { PlayerRole } from '../../../common/src/index.ts'
+import { toPlayerRole } from '../../src/server/game/util.ts'
 import { initBackend } from '../../src/server/initBackend.ts'
 import { create } from '../../src/server/server.ts'
 import { equalOrError, matchOrError } from './bodyAssertions.ts'
-import { describe, it } from 'deno/std/testing/bdd.ts'
 
 describe({
   name: 'game and player',
@@ -100,6 +103,43 @@ describe({
             .expect(201)
             .expect('Content-Type', 'application/json; charset=UTF-8')
             .expect({ success: true, messages: ['player created'] })
+        })
+      },
+    )
+
+    describe(
+      'create mock game',
+      () => {
+        let app: Application
+        let gameId = ''
+
+        it('init', () => {
+          app = create((app: Application) => {
+            initBackend(app)
+          }).getApp()
+        })
+
+        it('create mock game', async () => {
+          const request = await superoak(app)
+          await request.get('/api/game/mock/for/CITIZEN')
+            .expect((response) => {
+              gameId = response.body.gameId
+              assertExists(gameId, 'game id is not defined ')
+            })
+        })
+
+        it('should contain 3 mocked players before test player joining', async () => {
+          const request = await superoak(app)
+          await request.get(`/api`)
+            .expect(200)
+            .expect('Content-Type', 'application/json; charset=UTF-8')
+            .expect((response) => {
+              const players: [] = response.body.store[gameId].players
+              assertEquals(players.length, 5)
+
+              const mockPlayer: any[] = players.filter((p: any) => toPlayerRole(p.id.type) === PlayerRole.CITIZEN)
+              assertEquals(mockPlayer.length, 0)
+            })
         })
       },
     )

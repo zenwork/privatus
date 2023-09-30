@@ -23,7 +23,7 @@ export function generateId(length = 5): string {
   return result
 }
 
-export function toPlayerType(role: string): PlayerRole {
+export function toPlayerRole(role: string): PlayerRole {
   const ptype: PlayerRole = PlayerRole[role as keyof typeof PlayerRole]
   return ptype ? ptype : PlayerRole.NONE
 }

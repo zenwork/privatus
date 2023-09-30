@@ -2,7 +2,7 @@ import { Status } from 'https://deno.land/std@0.178.0/http/http_status.ts'
 import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
 import { PlayerID } from '../../../../common/src/index.ts'
 import { GameStore } from '../game/index.ts'
-import { toPlayerType } from '../game/util.ts'
+import { toPlayerRole } from '../game/util.ts'
 import { PlayerParams } from '../initBackend.ts'
 
 function toParams(ctx: RouterContext<any, any, any>) {
@@ -13,7 +13,7 @@ function toPlayerId(params: PlayerParams): PlayerID {
   return {
     game: params.game,
     key: params.player,
-    type: toPlayerType(params.role),
+    type: toPlayerRole(params.role),
   }
 }
 

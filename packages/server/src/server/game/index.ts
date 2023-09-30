@@ -22,6 +22,8 @@ export type Player = {
 export interface GameStore {
   create(): GameID
 
+  createMock(): GameID
+
   get(id: GameID): Game | undefined
 
   end(id: GameID): boolean

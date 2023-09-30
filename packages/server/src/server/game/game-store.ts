@@ -2,6 +2,7 @@ import { Result } from '../../../../common/src/messages.ts'
 import { GameID, PlayerID } from '../../../../common/src/players.ts'
 import { GameImplementation } from './game.ts'
 import { Game, GameStore, Player } from './index.ts'
+import { MockGame } from './mock.ts'
 import { generateId, isSamePid } from './util.ts'
 
 export class GameStoreImplementation implements GameStore {
@@ -11,7 +12,14 @@ export class GameStoreImplementation implements GameStore {
     const id = generateId()
     this.games.set(id, new GameImplementation(id))
     console.log('new game created:', id)
-    return id
+    return id as GameID
+  }
+
+  createMock(): GameID {
+    const id = generateId()
+    this.games.set(id, new MockGame(id))
+    console.log('new mock game created:', id)
+    return id as GameID
   }
 
   end(id: GameID): boolean {
@@ -34,9 +42,11 @@ export class GameStoreImplementation implements GameStore {
     if (game) {
       if (!game.players.some((player) => isSamePid(player.id, pid))) {
         game.players.push({ id: pid, mailbox: [], channel: null })
+        console.log(`player created: ${JSON.stringify(pid)}`)
         result.messages.push('player created')
         result.success = true
       } else {
+        console.log(`player already exists: ${JSON.stringify(pid)}`)
         result.messages.push('player already exists')
         result.success = false
       }
