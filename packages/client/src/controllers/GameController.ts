@@ -28,6 +28,13 @@ export class GameController implements ReactiveController {
       .catch(() => '')
   }
 
+  static createMockGameFor(role: string): Promise<string> {
+    return fetch(`/api/game/mock/for/${role}`, { method: 'GET' })
+      .then(response => response.json())
+      .then((json: Record<any, any>) => json.gameId)
+      .catch(() => '')
+  }
+
   endGame() {
     return fetch(`/api/game/${this.id}`, { method: 'DELETE' })
       .then(r => r.json())

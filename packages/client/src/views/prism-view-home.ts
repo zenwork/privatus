@@ -87,14 +87,14 @@ export class PrismViewHome extends LitElement {
           flex-flow: wrap;
           width: 100vw;
           gap: 3rem;
-          max-width: 60rem;
+          max-width: 90rem;
         }
 
         .home-choice {
           flex-grow: 1;
           flex-shrink: 1;
           padding: 0.5rem;
-          min-width: 10rem;
+          min-width: 6rem;
         }
       </style>
       <article>
@@ -157,6 +157,37 @@ export class PrismViewHome extends LitElement {
                 >
                 </sl-input>
                 <sl-button type="submit" variant="primary">JOIN</sl-button>
+              </div>
+            </form>
+          </div>
+          <div class="home-choice">
+            <form
+              @submit="${(event: any) => {
+                event.preventDefault()
+                const data = new FormData(event.target)
+                const type = (data.get('type') as string) ?? ''
+                GameController.createMockGameFor(type).then((id: string) =>
+                  Router.go(`/game/${id}/McMock/${type}`)
+                )
+              }}"
+            >
+              <h2>Start Mock Game</h2>
+              <p>test setup with simulated users</p>
+              <div>
+                <sl-select
+                  id="type"
+                  name="type"
+                  label="type"
+                  value="CITIZEN"
+                  required
+                >
+                  <sl-option value="CITIZEN">citizen</sl-option>
+                  <sl-option value="ISSUER">issuer</sl-option>
+                  <sl-option value="PROVIDER">provider</sl-option>
+                  <sl-option value="PROFESSIONAL">professional</sl-option>
+                </sl-select>
+
+                <sl-button type="submit" variant="primary">START</sl-button>
               </div>
             </form>
           </div>
