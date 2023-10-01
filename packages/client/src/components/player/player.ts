@@ -44,22 +44,21 @@ export class PrismPlayer extends LitElement {
       <div id="log">
         <ul>
           ${this.lastSseMessage.map(m => {
-            if (m.msg.origin.key !== this.pid.key) {
-              return html` <li style="text-align: left;font-size: 1rem ">
-                <code>
-                  ${m.date.toISOString().substring(11, 19)} -
-                  ${String(m.msg.origin.type).padEnd(20)} -
-                </code>
-                <span style="background: lightblue">${m.msg.body} </span>
-              </li>`
-            }
-            return html` <li style="text-align: right;font-size: 1rem">
-              <span style="background: lightgoldenrodyellow"
-                >${m.msg.body}</span
+            if (this.isMe(m)) {
+              return html` <prism-player-chat-bubble
+                .date=${m.date}
+                name="${String(m.msg.destination)}"
+                me
               >
-              -
-              <code> ${m.date.toISOString().substring(11, 19)} </code>
-            </li>`
+                ${m.msg.body}
+              </prism-player-chat-bubble>`
+            }
+            return html` <prism-player-chat-bubble
+              .date=${m.date}
+              name="${String(m.msg.origin.type)}"
+            >
+              ${m.msg.body}
+            </prism-player-chat-bubble>`
           })}
         </ul>
       </div>
@@ -70,6 +69,10 @@ export class PrismPlayer extends LitElement {
     `
   }
 
+  private isMe(m: { date: Date; msg: Message }) {
+    return m.msg.origin.key === this.pid.key
+  }
+
   static styles = [
     css`
       :host {
@@ -78,6 +81,7 @@ export class PrismPlayer extends LitElement {
         grid-template-columns: 1fr;
         grid-template-rows: min-content auto min-content;
         border: solid 0.1rem #000000;
+        border-radius: 1rem;
         padding: 0.5rem;
       }
 

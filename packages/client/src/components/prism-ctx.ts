@@ -78,9 +78,12 @@ export class PrismCtx extends LitElement {
   static styles = [
     css`
       :host {
+        display: grid;
       }
 
       article {
+        justify-self: center;
+        width: 95vw;
         height: 100vh;
         max-height: 100vh;
         display: grid;
@@ -89,7 +92,7 @@ export class PrismCtx extends LitElement {
       }
 
       section {
-        border: solid 0.1rem #000000;
+        /*border: solid 0.1rem #000000;*/
         margin: 0.2rem;
         padding: 0.1rem;
       }
@@ -103,6 +106,8 @@ export class PrismCtx extends LitElement {
       #header {
         display: grid;
         grid-template-columns: 2fr 1fr;
+        padding-left: 1rem;
+        padding-right: 1rem;
       }
 
       #body {

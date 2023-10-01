@@ -30,6 +30,7 @@ export class PrismPlayerHeader extends LitElement {
         display: grid;
         grid-template-columns: 10fr 5fr 1fr;
         padding: 0.5rem;
+        border-bottom: 0.2rem solid rgba(0, 0, 0, 0.3);
       }
 
       h3 {

@@ -46,7 +46,14 @@ export class PrismPlayerForm extends LitElement {
   static styles = [
     css`
       :host {
-        height: 5rem;
+        display: grid;
+        grid-template-columns: 80% 20%;
+        /*height: 5rem;*/
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        border-top: 0.2rem solid rgba(0, 0, 0, 0.3);
       }
     `,
   ]
