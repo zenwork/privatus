@@ -1,6 +1,6 @@
+import { toPlayerRole } from '../../../../common/src/index.ts'
 import { RouterContext, Status } from 'oak'
 import { GameStore, INFINITE } from '../game/index.ts'
-import { toPlayerRole } from '../game/util.ts'
 import { PlayerParams } from '../initBackend.ts'
 
 export const xKillAfterMaxHearbeats = 'x-kill-after-max-hearbeats'

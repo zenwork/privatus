@@ -1,7 +1,6 @@
 import { assertEquals } from 'deno/std/testing/asserts.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
-import { PlayerRole } from '../../../../../common/src/players.ts'
-import { toPlayerRole } from '../../../../src/server/game/util.ts'
+import { PlayerRole, toPlayerRole } from '../../../../../common/src/players.ts'
 
 describe('test util functions', () => {
   describe('player type conversion', () => {

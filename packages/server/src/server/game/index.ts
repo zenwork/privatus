@@ -35,4 +35,3 @@ export interface GameStore {
 }
 
 export { generateId } from './util.ts'
-export { isSamePid } from './util.ts'

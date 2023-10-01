@@ -1,8 +1,7 @@
 import { Status } from 'https://deno.land/std@0.178.0/http/http_status.ts'
 import { RouterContext } from 'https://deno.land/x/oak@v12.1.0/router.ts'
-import { GameID, Message, MessageType, PlayerRole } from '../../../../common/src/index.ts'
+import { GameID, Message, MessageType, PlayerRole, toPlayerRole } from '../../../../common/src/index.ts'
 import { GameImplementation, GameStore } from './index.ts'
-import { toPlayerRole } from './util.ts'
 
 export function mockFor(store: GameStore) {
   return (ctx: RouterContext<any, any, any>) => {

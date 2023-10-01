@@ -1,4 +1,4 @@
-import { PlayerID, PlayerRole } from '../../../../common/src/players.ts'
+import { PlayerRole } from '../../../../common/src/players.ts'
 import { Player } from './index.ts'
 
 export const LedgerPlayerFactory = (): Player => ({
@@ -21,15 +21,4 @@ export function generateId(length = 5): string {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return result
-}
-
-export function toPlayerRole(role: string): PlayerRole {
-  const ptype: PlayerRole = PlayerRole[role as keyof typeof PlayerRole]
-  return ptype ? ptype : PlayerRole.NONE
-}
-
-export function isSamePid(pid1: PlayerID, pid2: PlayerID): boolean {
-  return (
-    pid1.game === pid2.game && pid1.key === pid2.key && pid1.type === pid2.type
-  )
 }

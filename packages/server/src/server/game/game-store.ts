@@ -1,9 +1,9 @@
 import { Result } from '../../../../common/src/messages.ts'
-import { GameID, PlayerID } from '../../../../common/src/players.ts'
+import { GameID, isSamePid, PlayerID } from '../../../../common/src/players.ts'
 import { GameImplementation } from './game.ts'
 import { Game, GameStore, Player } from './index.ts'
 import { MockGame } from './mock.ts'
-import { generateId, isSamePid } from './util.ts'
+import { generateId } from './util.ts'
 
 export class GameStoreImplementation implements GameStore {
   private games: Map<GameID, Game> = new Map<GameID, Game>()
