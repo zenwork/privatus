@@ -8,18 +8,28 @@
   <meta content='text/html;charset=UTF-8' http-equiv='Content-Type'>
   <link href='./assets/index.css' rel='stylesheet'>
   <link rel='icon' type='image/x-icon' href='./assets/favicon.ico'>
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.4.0/dist/themes/light.css' />
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.0/cdn/themes/light.css' />
   <script type='module'
-          src='https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.3.0/dist/shoelace.js'></script>
+          src='https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.0/cdn/shoelace.js'></script>
   <base href='/'>
 
   <style>
       html,
       body {
+          height: 100%;
+          overflow: auto;
+          display: grid;
+          grid-template-columns: 1fr;
           margin: 0;
           padding: 0;
           font-family: sans-serif;
-          background-color: #ededed;
+          background-color: #e3e3e3;
+      }
+      prism-app {
+          height: 100vh;
+          width: 100vw;
+          margin: 0;
+          padding: 0;
       }
   </style>
   <title>prism-app</title>

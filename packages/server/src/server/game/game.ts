@@ -1,5 +1,5 @@
 import { RouterContext, ServerSentEvent, Status } from 'oak'
-import { GameID, Message, MessageType, PlayerID, PlayerRole } from '../../../../common/src/index.ts'
+import { GameID, isSamePid, Message, MessageType, PlayerID, PlayerRole } from '../../../../common/src/index.ts'
 import { Game, Player } from './index.ts'
 import { LedgerPlayerFactory, ServerPlayerFactory } from './util.ts'
 
@@ -20,7 +20,9 @@ export class GameImplementation implements Game {
 
   forward(msg: Message) {
     this.players.forEach((p) => {
-      if (msg.destination === PlayerRole.ALL || msg.destination === p.id.type) {
+      if (msg.destination === PlayerRole.ALL && !isSamePid(msg.origin, p.id)) {
+        p.mailbox.push(msg)
+      } else if (msg.destination === p.id.type) {
         p.mailbox.push(msg)
       }
     })
@@ -36,16 +38,13 @@ export class GameImplementation implements Game {
       return
     }
 
-    if (player && player.channel) {
-      // ctx.response.status = Status.Forbidden
-      // ctx.response.body = 'player channel already exists'
-      // return
-      // this.closeChannel(player)
-    }
-
     try {
       player.channel = ctx.sendEvents()
       let cycle = 0
+
+      if (player.heartbeatId) clearInterval(player.heartbeatId)
+      this.clearMailbox(player)
+
       player.heartbeatId = setInterval(async () => {
         if (max === INFINITE || cycle < max) {
           this.hearbeat(player, id)
@@ -80,7 +79,7 @@ export class GameImplementation implements Game {
     await p.channel?.close()
   }
 
-  private clearMailbox(player: Player) {
+  protected clearMailbox(player: Player) {
     if (player.mailbox.length > 0) {
       while (player.mailbox.length > 0) {
         const message = player.mailbox.splice(0, 1)[0]

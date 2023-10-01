@@ -1,14 +1,14 @@
 {
   "tasks": {
-    "dev": "deno run -A --reload --lock-write --watch main.ts --dev",
-    "dev:offline": "deno run -A --watch main.ts --dev",
-    "prod": "deno run -A --lock-write --watch main.ts",
     "test": "deno test -A --lock-write --trace-ops tests/unit && deno test -A --lock-write --trace-ops tests/e2e",
-    "test:watch": "deno test -A --lock-write --watch --trace-ops tests",
+    "test-watch": "deno test -A --lock-write --watch --trace-ops",
+    "dev": "deno run -A --watch main.ts --dev",
+    "dev:offline": "deno run -A --watch main.ts --dev",
     "check": "deno fmt --check . && deno lint .",
     "clean": "deno fmt . && deno lint .",
     "bundle": "deno bundle main.ts main.bundle.js",
-    "prod": "cd .. && deno run -c server/import_map.json -A server/main.ts"
+    "prod": "cd .. && deno run -c server/import_map.json -A server/main.ts",
+    "prod:run": "deno run -A --lock-write --watch main.ts"
   },
   "importMap": "./import_map.json",
   "compilerOptions": {
@@ -24,16 +24,19 @@
       "exclude": ["no-explicit-any", "no-inferrable-types", "no-async-promise-executor"]
     }
   },
+  "test": {
+    "include": [
+      "tests/**/*_test.ts"
+    ]
+  },
   "fmt": {
     "files": {
       "include": ["server/src/", "server/tests/"]
     },
-    "options": {
-      "lineWidth": 140,
-      "indentWidth": 2,
-      "semiColons": false,
-      "singleQuote": true,
-      "proseWrap": "preserve"
-    }
+    "lineWidth": 140,
+    "indentWidth": 2,
+    "semiColons": false,
+    "singleQuote": true,
+    "proseWrap": "preserve"
   }
 }

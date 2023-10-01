@@ -71,7 +71,7 @@ describe({
           await request.get('/api')
             .expect(200)
             .expect('Content-Type', 'application/json; charset=UTF-8')
-            .expect({ status: 'OK' })
+            .expect({ status: 'OK', store: {} })
         })
 
         it('check docs', async () => {

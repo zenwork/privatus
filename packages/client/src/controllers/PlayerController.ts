@@ -1,16 +1,16 @@
 import { Message, PlayerRole, Result } from 'common'
 import { ReactiveController } from 'lit'
-import { PrismParticipant } from '../components/prism-participant'
+import { PrismPlayer } from '../components/player/player'
 import { NONE, PlayerLifecycle } from './index'
 
 export class PlayerController implements ReactiveController {
-  private host: PrismParticipant
+  private host: PrismPlayer
 
   private source: EventSource | null
 
   private state: PlayerLifecycle = PlayerLifecycle.STOPPED
 
-  constructor(host: PrismParticipant) {
+  constructor(host: PrismPlayer) {
     this.host = host
     this.host.addController(this)
     this.source = null
@@ -18,8 +18,6 @@ export class PlayerController implements ReactiveController {
 
   setState(state: PlayerLifecycle) {
     this.state = state
-    this.host.state = this.state
-    this.host.requestUpdate()
   }
 
   join() {
@@ -51,7 +49,6 @@ export class PlayerController implements ReactiveController {
 
     this.source.onopen = () => {
       this.setState(PlayerLifecycle.CONNECTED)
-      this.host.requestUpdate()
     }
 
     this.source.onerror = ev => {
@@ -59,33 +56,30 @@ export class PlayerController implements ReactiveController {
         this.state === PlayerLifecycle.CONNECTED ||
         this.state === PlayerLifecycle.DISCONNECTING
       ) {
-        console.log('error', ev) // eslint-disable-line no-console
+        console.error('error', ev) // eslint-disable-line no-console
         this.setState(PlayerLifecycle.DISCONNECTED)
-        this.host.requestUpdate()
       }
     }
 
     this.source.addEventListener('ping', () => {
-      if (this.host.hearbeatState !== 2) {
-        this.host.hearbeatState++
+      if (this.host.heartbeat.id !== 1) {
+        this.host.heartbeat = { id: 1, state: this.state }
       } else {
-        this.host.hearbeatState = 0
+        this.host.heartbeat = { id: 1, state: this.state }
       }
-      this.host.requestUpdate()
     })
 
     this.source.addEventListener('msg', msg => {
-      const data = JSON.parse(msg.data)
+      const message = JSON.parse(msg.data) as Message
 
-      if (data.body === 'ending game') {
+      if (message.body === 'ending game') {
         this.host.pid = { ...this.host.pid, game: NONE }
         this.source?.close()
         this.setState(PlayerLifecycle.DISCONNECTED)
       } else {
-        this.host.lastSseMessage = data.body
-        this.host.lastSseMessageOrigin = data.origin
+        this.host.lastSseMessage.push({ date: new Date(), msg: message })
+        this.host.requestUpdate('lastSseMessage')
       }
-      this.host.requestUpdate()
     })
   }
 
@@ -94,31 +88,37 @@ export class PlayerController implements ReactiveController {
     if (this.source) this.source.close()
   }
 
-  sendMessage(msg: string, target: PlayerRole) {
-    if (this.state !== PlayerLifecycle.CONNECTED) return
+  async sendMessage(
+    msg: string,
+    target: PlayerRole
+  ): Promise<Message | undefined> {
+    if (this.state !== PlayerLifecycle.CONNECTED) return undefined
 
     const body = msg
     const { game } = this.host.pid
 
-    fetch(`/api/game/${game}/message`, {
+    const message = {
+      type: 'text',
+      body,
+      origin: this.host.pid,
+      destination: target,
+    } as Message
+    await fetch(`/api/game/${game}/message`, {
       method: 'POST',
-      body: JSON.stringify({
-        type: 'text',
-        body,
-        origin: this.host.pid,
-        destination: target,
-      } as Message),
+      body: JSON.stringify(message),
       headers: {
         'Content-Type': 'application/json',
       },
     })
+
+    return message
   }
 
   hostUpdate(): void {
     if (this.state === PlayerLifecycle.STOPPED) {
       const { game, key, type } = this.host.pid
       if (
-        this.host.hearbeatState === -1 &&
+        this.host.heartbeat.id === -1 &&
         game !== NONE &&
         key !== NONE &&
         type !== PlayerRole.NONE
@@ -136,9 +136,8 @@ export class PlayerController implements ReactiveController {
 
     if (this.state === PlayerLifecycle.DISCONNECTED) {
       this.setState(PlayerLifecycle.STOPPED)
-      this.host.hearbeatState = -1
+      this.host.heartbeat.id = -1
       this.host.pid = { ...this.host.pid, game: NONE }
-      this.host.requestUpdate()
     }
   }
 

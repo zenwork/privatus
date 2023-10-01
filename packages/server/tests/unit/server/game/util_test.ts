@@ -1,23 +1,23 @@
 import { assertEquals } from 'deno/std/testing/asserts.ts'
 import { describe, it } from 'deno/std/testing/bdd.ts'
-import { PlayerRole } from '../../../../../common/src/players.ts'
-import { toPlayerType } from '../../../../src/server/game/util.ts'
+import { PlayerRole, toPlayerRole } from '../../../../../common/src/players.ts'
 
-describe('use game', () => {
-  describe('util', () => {
-    describe('to player type', () => {
-      it('should map to none by default', () => {
-        assertEquals(toPlayerType('blabla'), PlayerRole.NONE)
-        assertEquals(toPlayerType(''), PlayerRole.NONE)
-        assertEquals(toPlayerType(null as unknown as string), PlayerRole.NONE)
-        assertEquals(toPlayerType(undefined as unknown as string), PlayerRole.NONE)
-      })
-      it('ALL should map to ALL', () => {
-        assertEquals(toPlayerType('ALL'), PlayerRole.ALL)
-      })
-      it('ISSUER should map to ISSUER', () => {
-        assertEquals(toPlayerType('ISSUER'), PlayerRole.ISSUER)
-      })
+describe('test util functions', () => {
+  describe('player type conversion', () => {
+    it('should map to none by default', () => {
+      assertEquals(toPlayerRole('blabla'), PlayerRole.NONE)
+      assertEquals(toPlayerRole(''), PlayerRole.NONE)
+      assertEquals(toPlayerRole(null as unknown as string), PlayerRole.NONE)
+      assertEquals(
+        toPlayerRole(undefined as unknown as string),
+        PlayerRole.NONE,
+      )
+    })
+    it('should map \'ALL\' to ALL', () => {
+      assertEquals(toPlayerRole('ALL'), PlayerRole.ALL)
+    })
+    it('should map \'ISSUER\' to ISSUER', () => {
+      assertEquals(toPlayerRole('ISSUER'), PlayerRole.ISSUER)
     })
   })
 })

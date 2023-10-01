@@ -1,6 +1,6 @@
+import { toPlayerRole } from '../../../../common/src/index.ts'
 import { RouterContext, Status } from 'oak'
 import { GameStore, INFINITE } from '../game/index.ts'
-import { toPlayerType } from '../game/util.ts'
 import { PlayerParams } from '../initBackend.ts'
 
 export const xKillAfterMaxHearbeats = 'x-kill-after-max-hearbeats'
@@ -14,7 +14,7 @@ export function openChannelWith(store: GameStore) {
         {
           game: params.game,
           key: params.player,
-          type: toPlayerType(params.role),
+          type: toPlayerRole(params.role),
         },
         ctx,
         ctx.request.headers.has(xKillAfterMaxHearbeats) ? Number(ctx.request.headers.get(xKillAfterMaxHearbeats)) : INFINITE,

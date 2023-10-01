@@ -1,71 +1,59 @@
-import { LitElement, html, css } from 'lit'
-import { property, customElement } from 'lit/decorators.js'
+import { Router } from '@vaadin/router'
+import { css, html, LitElement, render } from 'lit'
+import { customElement } from 'lit/decorators.js'
 
-import './components/index.js'
-// const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
+import { http404 } from './http404'
+import './components/index'
+import './views/index'
 
 @customElement('prism-app')
 export class PrismApp extends LitElement {
-  @property({ type: String }) header = 'privatus app'
+  firstUpdated() {
+    const outlet = this.shadowRoot?.querySelector('.main')
+    const router = new Router(outlet)
+
+    router.setRoutes([
+      { path: '/', component: 'prism-view-home' },
+      { path: '/game/:id/:player/:role', component: 'prism-ctx' },
+      { path: '/game/:id', component: 'prism-ctx' },
+      { path: '(.*)', action: this.wrap(http404()) },
+    ])
+  }
+
+  wrap(template: any) {
+    return (context: any, commands: any) => {
+      const stubElement: HTMLDivElement = commands.component('div')
+      stubElement.style.height = '100%'
+      stubElement.style.display = 'block'
+      stubElement.style.margin = '0'
+      stubElement.style.padding = '0'
+      render(template, stubElement)
+      return stubElement
+    }
+  }
+
+  render = () => html`<main class="main"></main>`
 
   static styles = css`
     :host {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      height: 100vh;
+      /*display: flex;    */
+      /*flex-direction: column;*/
       align-items: center;
-      justify-content: flex-start;
+      /*justify-content: flex-start;*/
       font-size: calc(10px + 2vmin);
       color: #1a2b42;
       max-width: 960px;
-      margin: 0 auto;
+      margin: 0;
+      padding: 0;
       text-align: center;
       background-color: var(--prism-app-background-color);
     }
 
     main {
-      flex-grow: 1;
-    }
-
-    .logo {
-      margin-top: 36px;
-      animation: app-logo-spin infinite 20s linear;
-    }
-
-    @keyframes app-logo-spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .app-footer {
-      font-size: calc(12px + 0.5vmin);
-      align-items: center;
-    }
-
-    .app-footer a {
-      margin-left: 5px;
+      display: grid;
+      width: 100vw;
+      height: 100vh;
     }
   `
-
-  render() {
-    return html`
-      <main>
-        <prism-ctx></prism-ctx>
-      </main>
-
-      <p class="app-footer">
-        🚽 Made with love by
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/open-wc"
-          >open-wc</a
-        >.
-      </p>
-    `
-  }
 }

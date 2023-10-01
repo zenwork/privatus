@@ -1,11 +1,9 @@
-import { hmrPlugin, presets } from '@open-wc/dev-server-hmr';
-import proxy from 'koa-proxies';
-import copy  from 'rollup-plugin-copy';
-import typescript from '@rollup/plugin-typescript'
-import { fromRollup } from '@web/dev-server-rollup';
+import { hmrPlugin, presets } from '@open-wc/dev-server-hmr'
+import resolve                from '@rollup/plugin-node-resolve'
+import { esbuildPlugin }    from '@web/dev-server-esbuild'
 import { importMapsPlugin } from '@web/dev-server-import-maps'
-import resolve              from '@rollup/plugin-node-resolve'
-
+import proxy                from 'koa-proxies'
+import copy                 from 'rollup-plugin-copy'
 
 /** Use Hot Module replacement by adding --hmr to the start command */
 const hmr = process.argv.includes('--hmr');
@@ -25,7 +23,8 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   appIndex:'./index.html',
 
   plugins:[
-    fromRollup(typescript)(),
+    // fromRollup(typescript)({sourceMap: true}),
+    esbuildPlugin({ ts:true }),
     resolve(),
     importMapsPlugin(),
     /** Use Hot Module Replacement by uncommenting. Requires @open-wc/dev-server-hmr plugin */

@@ -1,4 +1,6 @@
-import './prism'
 import './prism-ctx'
-import './prism-participant'
+import './player/player-header'
+import './player/chat-bubble'
+import './player/player-form'
+import './player/player'
 import './prism-heartbeat'

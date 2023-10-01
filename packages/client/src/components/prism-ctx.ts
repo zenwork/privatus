@@ -1,136 +1,113 @@
-import { Context, ContextProvider, provide } from '@lit-labs/context'
-import { Message, PlayerRole } from 'common'
+import { Router } from '@vaadin/router'
+import { GameID, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
-import { customElement, state } from 'lit/decorators.js'
-import { GameController } from '../controllers/GameController'
-import { key, messageKey, Registry } from './prism'
+import { customElement, property, state } from 'lit/decorators.js'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
-  private game = new GameController(this)
-
-  static styles = [
-    css`
-      :host {
-      }
-
-      section {
-        border: solid 0.1rem #000000;
-        margin: 0.2rem;
-        padding: 1rem;
-      }
-
-      /*noinspection ALL*/
-      #participants {
-        display: flex;
-        flex-wrap: wrap;
-        flex-flow: row wrap;
-        justify-content: space-evenly;
-        padding: 0;
-        margin: 0;
-        list-style: none;
-      }
-
-      /*noinspection ALL*/
-      .participant {
-        padding: 5px;
-        width: 20rem;
-        min-width: 10rem;
-        margin-top: 10px;
-        text-align: center;
-        flex-grow: 1;
-      }
-    `,
-  ]
+  @property({ converter: value => value?.split(',').map(v => <PlayerRole>v) })
+  declare players: { id: string; role: PlayerRole }[]
 
   @state()
-  registry: Registry = { p: [] }
-
-  @provide({ context: messageKey })
-  @state()
-  message: Message | undefined
-
-  @state()
-  gameId = ''
-
-  @state()
-  server = 'UNKNOWN'
-
-  private provider?: ContextProvider<Context<'prism-registry', Registry>>
+  declare gameId: GameID
 
   constructor() {
     super()
-
-    this.addEventListener('prism-register', (e: any) => {
-      this.registry.p.push(e.detail)
-      this.registry = { p: this.registry.p }
-    })
+    this.players = []
+    this.gameId = ''
   }
 
-  connectedCallback() {
-    super.connectedCallback()
-
-    const { searchParams } = new URL(window.location.toString())
-
-    if (searchParams.has('g')) {
-      this.gameId = searchParams.get('g')!
+  /**
+   * Vaadin Router life-cycle call
+   */
+  onBeforeEnter(location: Router.Location) {
+    if (location.params.id) {
+      this.gameId = location.params.id as GameID
     }
 
-    this.provider = new ContextProvider(this, key, this.registry)
-    fetch('/api')
-      .then(r => r.json())
-      .then(s => {
-        this.server = s.status
-      })
+    if (location.params.player) {
+      this.players = [
+        {
+          id: location.params.player as string,
+          role: location.params.role as PlayerRole,
+        },
+      ]
+    }
   }
 
   protected render(): unknown {
     return html` <article>
       <section id="header">
-        <h2>Privatus</h2>
-        <h3>PRivacy & Identity SiMulator (PRISM)</h3>
-        <h4># of players: ${this.registry.p.length}</h4>
-        <h4>session: ${this.gameId}</h4>
-        <sl-button
-          @click="${() => this.game.newGame()}"
-          ?disabled=${this.gameId}
-          >start</sl-button
-        >
-        <sl-button @click="${() => this.game.endGame()}">stop</sl-button>
+        <h1>PRIVATUS</h1>
+        <h2>GAME: ${this.gameId}</h2>
       </section>
-      <section>
-        <ul id="participants">
-          <li class="participant">
-            <prism-participant
-              playerid="p1"
-              playertype="${PlayerRole.CITIZEN}"
+      <section id="body">
+        ${this.players.map(
+          p => html`
+            <prism-player
+              playerid="${p.id}"
+              playertype="${p.role}"
               gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
-          <li class="participant">
-            <prism-participant
-              playerid="p2"
-              playertype="${PlayerRole.ISSUER}"
-              gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
-          <li class="participant">
-            <prism-participant
-              playerid="p3"
-              playertype="${PlayerRole.PROVIDER}"
-              gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
-          <li class="participant">
-            <prism-participant
-              playerid="p4"
-              playertype="${PlayerRole.PROFESSIONAL}"
-              gameid="${this.gameId}"
-            ></prism-participant>
-          </li>
-        </ul>
+            ></prism-player>
+          `
+        )}
       </section>
-      <section>status: ${this.server}</section>
     </article>`
   }
+
+  static styles = [
+    css`
+      :host {
+        display: grid;
+      }
+
+      article {
+        justify-self: center;
+        width: 95vw;
+        height: 100vh;
+        max-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 2rem calc(100vh - 2.6rem);
+      }
+
+      section {
+        /*border: solid 0.1rem #000000;*/
+        margin: 0.2rem;
+        padding: 0.1rem;
+      }
+
+      prism-player {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #header {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      #body {
+      }
+
+      h1 {
+        justify-self: start;
+      }
+
+      h2 {
+        justify-self: end;
+      }
+
+      h1,
+      h2 {
+        font-size: 1rem;
+        align-self: end;
+        margin: 0;
+        padding: 0;
+      }
+    `,
+  ]
 }
