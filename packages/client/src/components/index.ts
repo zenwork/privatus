@@ -1,4 +1,3 @@
-import './prism'
 import './prism-ctx'
 import './player/player-header'
 import './player/chat-bubble'

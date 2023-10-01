@@ -1,9 +1,7 @@
-import { provide } from '@lit-labs/context'
 import { Router } from '@vaadin/router'
-import { GameID, Message, PlayerRole } from 'common'
+import { GameID, PlayerRole } from 'common'
 import { css, html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { messageKey, Registry } from './prism'
 
 @customElement('prism-ctx')
 export class PrismCtx extends LitElement {
@@ -11,30 +9,12 @@ export class PrismCtx extends LitElement {
   declare players: { id: string; role: PlayerRole }[]
 
   @state()
-  declare registry: Registry
-
-  @provide({ context: messageKey })
-  @state()
-  declare message: Message | undefined
-
-  @state()
   declare gameId: GameID
 
   constructor() {
     super()
-    this.players = [
-      // PlayerRole.CITIZEN,
-      // PlayerRole.ISSUER,
-      // { id: 'p1', role: PlayerRole.PROVIDER }
-      // PlayerRole.PROFESSIONAL,
-    ]
-    this.registry = { p: [] }
+    this.players = []
     this.gameId = ''
-
-    this.addEventListener('prism-register', (e: any) => {
-      this.registry.p.push(e.detail)
-      this.registry = { p: this.registry.p }
-    })
   }
 
   /**

@@ -86,18 +86,18 @@ export class PrismPlayer extends LitElement {
       }
 
       #log {
+        background: #ededed;
         align-self: stretch;
         justify-self: stretch;
         overflow-y: scroll;
+        width: 100%;
       }
 
       ul {
         list-style: none;
         overflow: auto;
-      }
-
-      li {
-        justify-self: start;
+        padding: 0;
+        width: 100%;
       }
     `,
   ]

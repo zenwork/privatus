@@ -24,21 +24,24 @@ export class ChatBubble extends LitElement {
   private mine() {
     return html`
       <li class="mine">
-        <span> ${this.date.toISOString().substring(11, 19)} </span>
-        <hr />
-        <span class="message"><slot></slot></span>
+        <div>
+          <span> ${this.date.toISOString().substring(11, 19)} </span>
+          <hr />
+          <span class="message"><slot></slot></span>
+        </div>
       </li>
-      <li>&nbsp;</li>
     `
   }
 
   private theirs() {
     return html`
       <li class="theirs">
-        <span>${this.date.toISOString().substring(11, 19)}</span>
-        <span>${String(this.name).padEnd(20)}</span>
-        <hr />
-        <span class="message"><slot></slot></span>
+        <div>
+          <span>${this.date.toISOString().substring(11, 19)}</span>
+          <span>${String(this.name).padEnd(20)}</span>
+          <hr />
+          <span class="message"><slot></slot></span>
+        </div>
       </li>
     `
   }
@@ -46,25 +49,55 @@ export class ChatBubble extends LitElement {
   static styles = [
     css`
       :host {
+        width: 100%;
       }
 
       li {
+        width: 100%;
+      }
+
+      div {
         font-size: 1rem;
-        width: 40%;
+        min-height: 3rem;
+        justify-self: start;
         margin: 0.5rem;
         padding: 0.5rem 0.5rem 1rem;
-        min-height: 3rem;
         border-radius: 0.5rem;
+        overflow: hidden;
+      }
+
+      @media (max-width: 349px) {
+        div {
+          width: calc(100% - 2rem);
+        }
+      }
+
+      @media (min-width: 350px) {
+        div {
+          width: calc(55% - 2rem);
+        }
       }
 
       li.mine {
-        background: lightgoldenrodyellow;
+        display: grid;
+        grid-template-columns: auto;
+      }
+
+      li.mine > div {
+        background: #fcfca7;
+
+        justify-self: end;
         text-align: right;
-        float: right;
       }
 
       li.theirs {
+        display: grid;
+        grid-template-columns: auto;
+      }
+
+      li.theirs > div {
         background: lightblue;
+        justify-self: start;
         text-align: left;
       }
 
@@ -78,7 +111,7 @@ export class ChatBubble extends LitElement {
       }
 
       hr {
-        border: 0.1rem solid white;
+        border: 0.1rem solid #ededed;
         border-radius: 0.1rem;
         opacity: 50%;
       }
