@@ -22,7 +22,7 @@
     "@lit-labs/context": "^0.2.0",
     "@web/dev-server-import-maps": "^0.1.1",
     "common": "^0.6.0",
-    "lit": "^2.6.1",
+    "lit": "^3.0.0-pre.1",
     "@vaadin/router":"^1.7.5"
   },
   "devDependencies": {
