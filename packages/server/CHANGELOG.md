@@ -1,5 +1,16 @@
 # server
 
+## 0.7.0
+
+### Minor Changes
+
+- 51d34b9: added mock game implementation to simplify testing
+- 51d34b9: fixed double message and double player creation bugs
+
+### Patch Changes
+
+- 51d34b9: support users attaching to an existing game
+
 ## 0.6.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # client
 
+## 0.7.0
+
+### Minor Changes
+
+- 51d34b9: added mock game implementation to simplify testing
+- 51d34b9: setup home view with create and join forms
+- 51d34b9: improve overall look and feel
+
 ## 0.6.0
 
 ### Minor Changes

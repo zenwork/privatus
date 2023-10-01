@@ -3,7 +3,7 @@
   "description": "Webcomponent prism-app following open-wc recommendations",
   "license": "MIT",
   "author": "prism-app",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
@@ -23,7 +23,7 @@
     "@web/dev-server-import-maps": "^0.1.1",
     "common": "^0.6.0",
     "lit": "^3.0.0-pre.1",
-    "@vaadin/router":"^1.7.5"
+    "@vaadin/router": "^1.7.5"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
