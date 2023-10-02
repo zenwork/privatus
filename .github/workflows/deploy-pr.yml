@@ -2,15 +2,13 @@ name: Deploy PR
 
 on:
   push:
-    tags:
-      - "*"
-    branches:
+    branches-ignore:
       - main
 
 jobs:
   pre_job:
     runs-on: ubuntu-latest
-    if: "startsWith(github.ref, 'refs/tags/')"
+    if: "!startsWith(github.ref, 'refs/tags/')"
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
