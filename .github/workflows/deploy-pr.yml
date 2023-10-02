@@ -57,7 +57,7 @@ jobs:
 
   check:
     name: Check if should deploy
-    needs: ci
+    needs: pre_job
     runs-on: ubuntu-latest
     outputs:
       deploy: ${{ steps.check.outputs.deploy }}
@@ -73,7 +73,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: check
+    needs: [ci, check]
     runs-on: ubuntu-latest
     # deploy only if changesets have been released
     if: needs.check.outputs.deploy == 'true'
