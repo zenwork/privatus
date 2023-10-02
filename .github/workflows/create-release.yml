@@ -43,6 +43,6 @@ jobs:
         with:
           publish: changeset tag
           commit: release
-          title: Release Candidate PR
+          title: Release Candidate
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
