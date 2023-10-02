@@ -1,11 +1,22 @@
-#file: noinspection YAMLSchemaValidation
 name: Deploy
-on: [ push ]
+on:
+  workflow_dispatch:
+    push:
+      branches:
+        - main
+      if: "!startsWith(github.ref, 'refs/tags/')"
+
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+    if: "startsWith(github.ref, 'refs/tags/')"
+
 jobs:
   pre_job:
-    # continue-on-error: true # Uncomment once integration is finished
     runs-on: ubuntu-latest
-    # Map a step output to a job output
+    if: ${{ github.ref != 'refs/heads/main' || (github.ref == 'refs/heads/main' && startsWith(github.ref, 'refs/tags/')) }}
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
