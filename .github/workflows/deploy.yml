@@ -2,8 +2,25 @@
 name: Deploy
 on: [ push ]
 jobs:
+  pre_job:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'never'
+          skip_after_successful_duplicate: 'true'
+          paths_ignore: '["**/README.md"]'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
+
   ci:
     name: CI
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +53,7 @@ jobs:
         run: cd packages/server && deno task test
 
   check:
-    name: Should Deploy
+    name: Check if should deploy
     needs: ci
     runs-on: ubuntu-latest
     outputs:
@@ -52,7 +69,7 @@ jobs:
         run: ./tools/check.sh
 
   deploy:
-    name: CD
+    name: Deploy
     needs: check
     runs-on: ubuntu-latest
     # deploy only if changesets have been released
