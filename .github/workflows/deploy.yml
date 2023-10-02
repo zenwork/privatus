@@ -40,7 +40,7 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     outputs:
-      status: ${{ steps.early.outputs.status }}
+      deploy: ${{ steps.check.outputs.deploy }}
     steps:
       - uses: actions/checkout@v3
       - uses: denoland/setup-deno@v1
@@ -48,7 +48,7 @@ jobs:
           deno-version: "~1.36"
 
       - name: Run Script
-        id: early
+        id: check
         run: ./tools/check.sh
 
   deploy:
@@ -56,7 +56,7 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     # deploy only if changesets have been released
-    if: needs.check.outputs.status == 'deploy'
+    if: needs.check.outputs.deploy == 'true'
     permissions:
       id-token: write
       contents: read
