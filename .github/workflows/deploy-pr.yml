@@ -7,7 +7,7 @@ on:
 
 jobs:
   pre_job:
-    uses: ./.github/workflows/pre_job.yml
+    uses: zenwork/privatus/.github/workflows/pre_job.yml@31-release-workflow-should-not-run-when-a-release-pr-is-merged
     secrets: inherit
 
   ci:
