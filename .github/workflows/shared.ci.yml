@@ -5,7 +5,7 @@ on:
     inputs:
       deno-version:
         type: string
-        required: true
+        required: false
         default: '~1.36"'
 
 jobs:
