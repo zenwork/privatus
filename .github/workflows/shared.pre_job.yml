@@ -7,13 +7,12 @@ on:
         type: string
         required: true
         default: 'false'
+    outputs:
+      should_skip:
+        type: boolean
+        required: true
 
 jobs:
-#  pre_job:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: my-step
-#        run: echo "Hello World!"
   pre_job:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') || ${{ inputs.on_branch == 'true'}}
@@ -27,4 +26,3 @@ jobs:
           skip_after_successful_duplicate: 'true'
           paths_ignore: '["**/README.md"]'
           do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
-#
