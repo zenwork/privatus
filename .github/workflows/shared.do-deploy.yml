@@ -1,0 +1,36 @@
+name: Pre Job Check
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 19
+      - uses: maximousblk/setup-deno@v2
+
+      - name: build common
+        run: cd packages/common && yarn && yarn run clean
+
+      - name: build client
+        run: cd packages/client && yarn && yarn run build && yarn run clean
+
+      - name: build server
+        run: cd packages/server
+
+      - name: deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: zenwork-privatus
+          root: "./packages/"
+          entrypoint: "server/main.ts"
+          import-map: "server/import_map.json"
