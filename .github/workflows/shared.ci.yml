@@ -6,7 +6,7 @@ on:
       deno-version:
         type: string
         required: false
-        default: '~1.36"'
+        default: '~1.36'
 
 jobs:
   ci:
@@ -19,7 +19,7 @@ jobs:
           node-version: 19
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: ${{ inputs.deno-version}}
+          deno-version: ${{ inputs.deno-version }}
 
       - name: install:common
         run: cd packages/common && yarn
