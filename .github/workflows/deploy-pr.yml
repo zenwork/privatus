@@ -9,8 +9,6 @@ jobs:
   pre_job:
     name: pre-job
     uses: ./.github/workflows/pre_job.yml
-    with:
-      env: ${{ github.event.inputs.environment }}
     secrets: inherit
 
   ci:
