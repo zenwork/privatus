@@ -2,6 +2,7 @@ name: Pre Job Check
 
 on:
   workflow_call:
+
     inputs:
       deno-version:
         type: string

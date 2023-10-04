@@ -17,36 +17,7 @@ jobs:
     name: CI
     needs: pre_job
     if: needs.pre_job.outputs.should_skip != 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
-        with:
-          node-version: 19
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: "~1.36"
-
-      - name: install:common
-        run: cd packages/common && yarn
-
-      - name: install:client
-        run: cd packages/client && yarn
-
-      - name: check:server:format
-        run: cd packages/server && deno fmt --check .
-      - name: check:server:lint
-        run: cd packages/server && deno lint .
-      - name: check:client:lint&format
-        run: cd packages/client && yarn run check
-      - name: build:common
-        run: cd packages/common && yarn run build
-      - name: build:client
-        run: cd packages/client && yarn run build
-      - name: test:client
-        run: cd packages/client && yarn run test
-      - name: test:server
-        run: cd packages/server && deno task test
+    uses: ./.github/workflows/shared.ci.yml
 
   check:
     name: Check if should deploy

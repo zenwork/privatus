@@ -8,33 +8,19 @@ on:
 
 jobs:
   pre_job:
-    name: pre_job
     uses: ./.github/workflows/shared.pre_job.yml
     with:
       on_branch: 'true'
     secrets: inherit
 
   ci:
-    name: CI
     needs: pre_job
     if: needs.pre_job.outputs.should_skip != 'true'
     uses: ./.github/workflows/shared.ci.yml
 
   check:
-    name: Check if should deploy
     needs: pre_job
-    runs-on: ubuntu-latest
-    outputs:
-      deploy: ${{ steps.check.outputs.deploy }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: "~1.36"
-
-      - name: Run Script
-        id: check
-        run: ./tools/check.sh
+    uses: ./.github/workflows/shared.should-deploy.yml
 
   deploy:
     name: Deploy

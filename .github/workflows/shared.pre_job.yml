@@ -2,11 +2,13 @@ name: Pre Job Check
 
 on:
   workflow_call:
+
     inputs:
       on_branch:
         type: string
         required: true
         default: 'false'
+
     outputs:
       should_skip:
         value: ${{ jobs.pre_job.outputs.should_skip }}
