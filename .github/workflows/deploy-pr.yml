@@ -10,6 +10,8 @@ jobs:
   pre_job:
     name: pre_job
     uses: ./.github/workflows/pre_job.yml
+    with:
+      on_branch: 'true'
     secrets: inherit
 
   ci:
