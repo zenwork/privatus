@@ -9,8 +9,7 @@ on:
         default: 'false'
     outputs:
       should_skip:
-        type: boolean
-        required: true
+        value: ${{ jobs.pre_job.outputs.should_skip }}
 
 jobs:
   pre_job:
