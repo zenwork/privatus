@@ -1,4 +1,4 @@
-name: Deploy PROD
+name: Deploy On Main
 
 on:
   push:
@@ -14,57 +14,19 @@ jobs:
     secrets: inherit
 
   ci:
-    name: CI
     needs: pre_job
     if: needs.pre_job.outputs.should_skip != 'true'
     uses: ./.github/workflows/shared.ci.yml
+    secrets: inherit
 
   check:
-    name: Check if should deploy
     needs: pre_job
-    runs-on: ubuntu-latest
-    outputs:
-      deploy: ${{ steps.check.outputs.deploy }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: "~1.36"
-
-      - name: Run Script
-        id: check
-        run: ./tools/check.sh
+    if: needs.pre_job.outputs.should_skip != 'true'
+    uses: ./.github/workflows/shared.should-deploy.yml
+    secrets: inherit
 
   deploy:
-    name: Deploy
-    needs: [check,ci]
-    runs-on: ubuntu-latest
-    # deploy only if changesets have been released
-    if: needs.check.outputs.deploy == 'true'
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
-        with:
-          node-version: 19
-      - uses: maximousblk/setup-deno@v2
-
-      - name: build common
-        run: cd packages/common && yarn && yarn run clean
-
-      - name: build client
-        run: cd packages/client && yarn && yarn run build && yarn run clean
-
-      - name: build server
-        run: cd packages/server
-
-      - name: deploy
-        uses: denoland/deployctl@v1
-        with:
-          project: zenwork-privatus
-          root: "./packages/"
-          entrypoint: "server/main.ts"
-          import-map: "server/import_map.json"
+    needs: [ ci, check ]
+    if: needs.pre_job.outputs.should_skip != 'true'
+    uses: ./.github/workflows/shared.do-deploy.yml
+    secrets: inherit

@@ -1,4 +1,4 @@
-name: Pre Job Check
+name: Should Deploy Test
 
 on:
   workflow_call:
@@ -15,7 +15,7 @@ on:
 
 jobs:
   check:
-    name: Check if should deploy
+    name: Test for existance of unmerged changesets
     runs-on: ubuntu-latest
     outputs:
       deploy: ${{ steps.check.outputs.deploy }}
