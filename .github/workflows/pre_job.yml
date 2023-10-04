@@ -1,4 +1,4 @@
-name: Deploy PROD
+name: Pre Job Check
 
 on:
   workflow_call:

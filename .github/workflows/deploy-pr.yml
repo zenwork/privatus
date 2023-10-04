@@ -9,7 +9,7 @@ on:
 jobs:
   pre_job:
     name: pre_job
-    uses: ./.github/workflows/pre_job.yml
+    uses: "./.github/workflows/pre_job.yml"
     secrets: inherit
 
   ci:
