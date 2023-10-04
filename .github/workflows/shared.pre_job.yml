@@ -15,6 +15,7 @@ on:
 
 jobs:
   pre_job:
+    name: Job Pre-Checks to Skip Workflow
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') || ${{ inputs.on_branch == 'true'}}
     outputs:
