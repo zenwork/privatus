@@ -21,7 +21,7 @@ jobs:
 
 
   pre_job:
-    name: Job Pre-Checks to Skip Workflow
+    name: Check Skip Conditions
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') || ${{ inputs.on_branch == 'true'}}
     outputs:
@@ -37,8 +37,9 @@ jobs:
 
 
   ci:
+    needs: [pre_job]
     if: needs.pre_job.outputs.should_skip != 'true'
-    name: Continuous Integration
+    name: Run CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

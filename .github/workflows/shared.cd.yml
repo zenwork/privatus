@@ -17,7 +17,7 @@ jobs:
 
 
   check:
-    name: Test for existence of unmerged changesets
+    name: Check Unmerged Changesets
     runs-on: ubuntu-latest
     outputs:
       deploy: ${{ steps.check.outputs.deploy }}
