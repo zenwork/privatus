@@ -37,7 +37,7 @@ jobs:
 
 
   ci:
-    if: jobs.pre_job.outputs.should_skip != 'true'
+    if: needs.pre_job.outputs.should_skip != 'true'
     name: Continuous Integration
     runs-on: ubuntu-latest
     steps:
