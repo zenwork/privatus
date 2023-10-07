@@ -34,6 +34,7 @@ jobs:
 
   deploy:
     needs: check
+    if: needs.check.outputs.deploy == 'true'
     name: Deploy
     runs-on: ubuntu-latest
     permissions:
