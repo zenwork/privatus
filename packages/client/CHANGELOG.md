@@ -1,5 +1,11 @@
 # client
 
+## 0.9.0
+
+### Minor Changes
+
+- e5f8d02: triggering the release
+
 ## 0.8.0
 
 ### Minor Changes

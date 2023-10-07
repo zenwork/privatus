@@ -3,7 +3,7 @@
   "description": "Webcomponent prism-app following open-wc recommendations",
   "license": "MIT",
   "author": "prism-app",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "type": "module",
   "scripts": {
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
