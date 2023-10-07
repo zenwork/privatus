@@ -1,5 +1,18 @@
 # client
 
+## 0.8.0
+
+### Minor Changes
+
+- f2c266b: split worflows into PR and MAIN scripts
+- 67f6b01: added logic to reduce action execution when not needed (updating docs, skip duplicate jobs, etc.)
+
+### Patch Changes
+
+- Updated dependencies [f2c266b]
+- Updated dependencies [67f6b01]
+  - common@0.8.0
+
 ## 0.7.0
 
 ### Minor Changes
