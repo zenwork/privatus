@@ -8,24 +8,12 @@ on:
       - main
 
 jobs:
-  pre_ci:
-    uses: ./.github/workflows/shared.pre_job.yml
-    secrets: inherit
-
   ci:
-    needs: pre_ci
-    if: needs.pre_ci.outputs.should_skip != 'true'
     uses: ./.github/workflows/shared.ci.yml
     secrets: inherit
 
-  pre_cd:
-    needs: pre_ci
-    if: needs.pre_ci.outputs.should_skip != 'true'
-    uses: ./.github/workflows/shared.should-deploy.yml
-    secrets: inherit
-
   cd:
-    needs: [ci, pre_cd]
+    needs: [ci]
     if: needs.pre_ci.outputs.should_skip != 'true'
-    uses: ./.github/workflows/shared.do-deploy.yml
+    uses: ./.github/workflows/shared.cd.yml
     secrets: inherit

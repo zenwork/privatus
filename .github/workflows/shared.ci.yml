@@ -1,4 +1,4 @@
-name: Pre Job Check
+name: CI
 
 on:
   workflow_call:
@@ -8,9 +8,36 @@ on:
         type: string
         required: false
         default: '~1.36'
+      on_branch:
+        type: string
+        required: false
+        default: 'false'
+
+    outputs:
+      should_skip:
+        value: ${{ jobs.pre_job.outputs.should_skip }}
 
 jobs:
+
+
+  pre_job:
+    name: Job Pre-Checks to Skip Workflow
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || ${{ inputs.on_branch == 'true'}}
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'never'
+          skip_after_successful_duplicate: 'true'
+          paths_ignore: '["**/README.md"]'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
+
+
   ci:
+    if: jobs.pre_job.outputs.should_skip != 'true'
     name: Continuous Integration
     runs-on: ubuntu-latest
     steps:
