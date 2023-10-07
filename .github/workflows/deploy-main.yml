@@ -1,0 +1,19 @@
+name: Deploy On Main
+
+on:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+jobs:
+  ci:
+    uses: ./.github/workflows/shared.ci.yml
+    secrets: inherit
+
+  cd:
+    needs: [ci]
+    if: needs.pre_ci.outputs.should_skip != 'true'
+    uses: ./.github/workflows/shared.cd.yml
+    secrets: inherit

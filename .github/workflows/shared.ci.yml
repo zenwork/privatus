@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  workflow_call:
+
+    inputs:
+      deno-version:
+        type: string
+        required: false
+        default: '~1.36'
+      on_branch:
+        type: string
+        required: false
+        default: 'false'
+
+    outputs:
+      should_skip:
+        value: ${{ jobs.pre_job.outputs.should_skip }}
+
+jobs:
+
+
+  pre_job:
+    name: Check Skip Conditions
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || ${{ inputs.on_branch == 'true'}}
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'never'
+          skip_after_successful_duplicate: 'true'
+          paths_ignore: '["**/README.md"]'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
+
+
+  ci:
+    needs: [pre_job]
+    if: needs.pre_job.outputs.should_skip != 'true'
+    name: Run CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 19
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: ${{ inputs.deno-version }}
+
+      - name: install:common
+        run: cd packages/common && yarn
+
+      - name: install:client
+        run: cd packages/client && yarn
+
+      - name: check:server:format
+        run: cd packages/server && deno fmt --check .
+      - name: check:server:lint
+        run: cd packages/server && deno lint .
+      - name: check:client:lint&format
+        run: cd packages/client && yarn run check
+      - name: build:common
+        run: cd packages/common && yarn run build
+      - name: build:client
+        run: cd packages/client && yarn run build
+      - name: test:client
+        run: cd packages/client && yarn run test
+      - name: test:server
+        run: cd packages/server && deno task test

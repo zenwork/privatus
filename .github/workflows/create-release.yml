@@ -8,8 +8,23 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'never'
+          skip_after_successful_duplicate: 'true'
+          paths_ignore: '["**/README.md"]'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
+
   release:
     name: Create Release
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -28,6 +43,6 @@ jobs:
         with:
           publish: changeset tag
           commit: release
-          title: Release Candidate PR
+          title: Release Candidate
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}

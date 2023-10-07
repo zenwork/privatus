@@ -1,0 +1,66 @@
+name: CD
+
+on:
+  workflow_call:
+
+    inputs:
+      deno-version:
+        type: string
+        required: false
+        default: '~1.36'
+
+    outputs:
+      deploy:
+        value: ${{ jobs.check.outputs.deploy }}
+
+jobs:
+
+
+  check:
+    name: Check Unmerged Changesets
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.check.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: ${{ inputs.deno-version }}
+
+      - name: Run Script
+        id: check
+        run: ./tools/check.sh
+
+
+  deploy:
+    needs: check
+    if: needs.check.outputs.deploy == 'true'
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 19
+      - uses: maximousblk/setup-deno@v2
+
+      - name: build common
+        run: cd packages/common && yarn && yarn run clean
+
+      - name: build client
+        run: cd packages/client && yarn && yarn run build && yarn run clean
+
+      - name: build server
+        run: cd packages/server
+
+      - name: deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: zenwork-privatus
+          root: "./packages/"
+          entrypoint: "server/main.ts"
+          import-map: "server/import_map.json"
