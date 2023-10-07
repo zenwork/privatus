@@ -7,7 +7,7 @@ on:
 
 jobs:
   ci:
-    uses: ./.github/workflows/shared.pre_job.yml
+    uses: ./.github/workflows/shared.ci.yml
     with:
       on_branch: 'true'
     secrets: inherit
@@ -15,5 +15,5 @@ jobs:
   cd:
     needs: [ci]
     if: needs.pre_ci.outputs.should_skip != 'true'
-    uses: ./.github/workflows/shared.do-deploy.yml
+    uses: ./.github/workflows/shared.cd.yml
     secrets: inherit
