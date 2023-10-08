@@ -26,6 +26,7 @@ jobs:
         run: ./tools/check.sh
 
   ci:
+    needs: [check]
     if: |
       needs.check.outputs.deployable == 'true' &&
       github.event_name == 'pull_request' && 
