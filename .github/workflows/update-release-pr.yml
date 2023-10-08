@@ -41,7 +41,8 @@ jobs:
       - name: Create Release Pull Request
         uses: changesets/action@v1
         with:
-          publish: changeset version && changeset tag
+          publish: changeset tag
+          version: yarn changeset version
           commit: release
           title: Release Candidate
         env:
