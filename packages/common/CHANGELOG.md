@@ -1,5 +1,11 @@
 # common
 
+## 0.9.3
+
+### Patch Changes
+
+- 540b978: tweak the publishing steps
+
 ## 0.9.2
 
 ### Patch Changes
