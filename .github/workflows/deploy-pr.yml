@@ -1,4 +1,4 @@
-name: CI/CD ON FEATURE BRANCH
+name: CI/CD [ON FEATURE BRANCH]
 
 on:
   push:
