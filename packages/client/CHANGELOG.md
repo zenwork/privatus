@@ -1,5 +1,15 @@
 # client
 
+## 0.9.2
+
+### Patch Changes
+
+- a21bf04: fix deploy-main script
+- 4eb5f00: missing needs
+- Updated dependencies [a21bf04]
+- Updated dependencies [4eb5f00]
+  - common@0.9.2
+
 ## 0.9.1
 
 ### Patch Changes

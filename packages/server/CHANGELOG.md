@@ -1,5 +1,12 @@
 # server
 
+## 0.9.2
+
+### Patch Changes
+
+- a21bf04: fix deploy-main script
+- 4eb5f00: missing needs
+
 ## 0.9.1
 
 ### Patch Changes
