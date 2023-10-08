@@ -25,9 +25,6 @@ jobs:
 
       - name: find changesets
         id: check
-        outputs:
-          deployable:
-            type: string
         run: ./tools/check.sh
 
   ci:

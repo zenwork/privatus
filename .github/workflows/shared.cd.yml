@@ -29,9 +29,6 @@ jobs:
 
       - name: Run Script
         id: check
-        outputs:
-          deployable:
-            type: string
         run: ./tools/check.sh
 
 
