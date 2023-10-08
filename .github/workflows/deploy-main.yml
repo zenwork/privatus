@@ -8,7 +8,34 @@ on:
       - main
 
 jobs:
+
+  check:
+    name: Check Unmerged Changesets
+    runs-on: ubuntu-latest
+    outputs:
+      deployable: ${{ steps.check.outputs.deployable }}
+    steps:
+      - nmae: checkout
+        uses: actions/checkout@v3
+
+      - name: setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: ${{ inputs.deno-version }}
+
+      - name: find changesets
+        id: check
+        outputs:
+          deployable:
+            type: string
+        run: ./tools/check.sh
+
   ci:
+    if: |
+      needs.check.outputs.deployable == 'true' &&
+      github.event_name == 'pull_request' && 
+      github.event.action == 'closed' && 
+      github.event.pull_request.merged == true
     uses: ./.github/workflows/shared.ci.yml
     secrets: inherit
 
