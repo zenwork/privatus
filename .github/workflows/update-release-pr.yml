@@ -1,4 +1,4 @@
-name: Release
+name: CHANGESET- Create/Update Release PR
 
 on:
   push:

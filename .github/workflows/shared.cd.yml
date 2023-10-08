@@ -11,7 +11,7 @@ on:
 
     outputs:
       deploy:
-        value: ${{ jobs.check.outputs.deploy }}
+        value: ${{ jobs.check.outputs.deployable }}
 
 jobs:
 
@@ -20,7 +20,7 @@ jobs:
     name: Check Unmerged Changesets
     runs-on: ubuntu-latest
     outputs:
-      deploy: ${{ steps.check.outputs.deploy }}
+      deployable: ${{ steps.check.outputs.deployable }}
     steps:
       - uses: actions/checkout@v3
       - uses: denoland/setup-deno@v1
@@ -34,7 +34,7 @@ jobs:
 
   deploy:
     needs: check
-    if: needs.check.outputs.deploy == 'true'
+    if: needs.check.outputs.deployable == 'true'
     name: Deploy
     runs-on: ubuntu-latest
     permissions:
