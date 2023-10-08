@@ -1,4 +1,4 @@
-name: CHANGESET [Create/Update Release PR]
+name: CHANGESET [Create/Update Release PR ]
 
 on:
   push:
@@ -41,7 +41,7 @@ jobs:
       - name: Create Release Pull Request
         uses: changesets/action@v1
         with:
-          publish: changeset tag
+          publish: changeset version && changeset tag
           commit: release
           title: Release Candidate
         env:
