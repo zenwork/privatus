@@ -1,5 +1,13 @@
 # client
 
+## 0.9.3
+
+### Patch Changes
+
+- 540b978: tweak the publishing steps
+- Updated dependencies [540b978]
+  - common@0.9.3
+
 ## 0.9.2
 
 ### Patch Changes
