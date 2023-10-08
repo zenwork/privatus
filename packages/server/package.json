@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.9.1",
+  "version": "0.8.0",
   "description": "Privatus edge server",
   "scripts": {
     "start": "deno run --watch main.ts",
