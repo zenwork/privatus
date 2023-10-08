@@ -1,4 +1,4 @@
-name: Deploy On Main
+name: CI/CD ON MAIN
 
 on:
   push:
