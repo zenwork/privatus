@@ -1,5 +1,11 @@
 # server
 
+## 0.9.1
+
+### Patch Changes
+
+- 9f76392: tuning release workflow
+
 ## 0.8.0
 
 ### Minor Changes

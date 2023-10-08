@@ -1,5 +1,13 @@
 # client
 
+## 0.9.1
+
+### Patch Changes
+
+- 9f76392: tuning release workflow
+- Updated dependencies [9f76392]
+  - common@0.9.1
+
 ## 0.9.0
 
 ### Minor Changes
