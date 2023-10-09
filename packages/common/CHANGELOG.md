@@ -1,5 +1,11 @@
 # common
 
+## 0.9.4
+
+### Patch Changes
+
+- 17d9b03: add github release process
+
 ## 0.9.3
 
 ### Patch Changes
