@@ -32,4 +32,4 @@ jobs:
             --repo ${{ github.repository }} \
             --target ${{ github.event.pull_request.merge_commit_sha }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
