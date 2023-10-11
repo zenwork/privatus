@@ -15,12 +15,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Setup GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh
+
+      - name: Authenticate with GitHub CLI
+        run: gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Create GitHub Release
-        uses: gh-actions/create-release@v1
+        run: |
+          gh release create \
+            "v${{ github.event.pull_request.merged_commit_sha }}" \
+            --title "Release v${{ github.event.pull_request.merged_commit_sha }}" \
+            --notes "Release notes for v${{ github.event.pull_request.merged_commit_sha }}" \
+            --repo ${{ github.repository }} \
+            --target ${{ github.event.pull_request.merge_commit_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.event.pull_request.merged_commit_sha }}
-          release_name: Release ${{ github.event.pull_request.merged_commit_sha }}
-          body: |
-            Release notes for ${{ github.event.pull_request.merged_commit_sha }}
