@@ -1,5 +1,11 @@
 # common
 
+## 0.9.7
+
+### Patch Changes
+
+- 961317d: still trying to fix it
+
 ## 0.9.6
 
 ### Patch Changes
