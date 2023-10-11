@@ -1,5 +1,13 @@
 # client
 
+## 0.9.7
+
+### Patch Changes
+
+- 961317d: still trying to fix it
+- Updated dependencies [961317d]
+  - common@0.9.7
+
 ## 0.9.6
 
 ### Patch Changes
