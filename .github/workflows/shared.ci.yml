@@ -21,7 +21,7 @@ jobs:
 
 
   pre_job:
-    name: Check Skip Conditions
+    name: Skip or Do
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') || ${{ inputs.on_branch == 'true'}}
     outputs:
@@ -39,7 +39,7 @@ jobs:
   ci:
     needs: [pre_job]
     if: needs.pre_job.outputs.should_skip != 'true'
-    name: Run CI
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

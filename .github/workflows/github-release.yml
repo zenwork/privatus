@@ -9,6 +9,7 @@ on:
 
 jobs:
   release:
+    name: GH Release
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Version Packages')
     runs-on: ubuntu-latest
     steps:
