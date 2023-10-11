@@ -23,5 +23,6 @@ jobs:
 
       - name: Create/Update Release PR
         uses: changesets/action@v1
+        publish: changeset tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
