@@ -17,7 +17,7 @@ jobs:
 
 
   check:
-    name: Check Has Changesets
+    name: Deploy Or Not
     runs-on: ubuntu-latest
     outputs:
       deployable: ${{ steps.check.outputs.deployable }}
