@@ -1,5 +1,13 @@
 # client
 
+## 0.9.6
+
+### Patch Changes
+
+- 7b998f9: testing release
+- Updated dependencies [7b998f9]
+  - common@0.9.6
+
 ## 0.9.5
 
 ### Patch Changes
