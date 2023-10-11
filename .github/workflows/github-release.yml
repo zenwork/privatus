@@ -1,11 +1,12 @@
 name: Release
 
 on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
+  workflow_call:
+#  pull_request:
+#    types:
+#      - closed
+#    branches:
+#      - main
 
 jobs:
   release:
