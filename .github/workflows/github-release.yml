@@ -1,20 +1,21 @@
 name: Release
 
 on:
-  pull_request:
-    types:
-      - closed
+#  pull_request:
+#    types:
+#      - closed
+  push:
     branches:
       - main
 
 jobs:
   release:
     name: GH Release
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Version Packages')
+#    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Version Packages')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup GitHub CLI
         run: |
