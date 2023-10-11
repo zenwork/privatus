@@ -7,6 +7,7 @@ on:
 
 jobs:
   changesets:
+    name: Create PR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -20,7 +21,7 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-      - name: Create Release Pull Request or Update Existing One
+      - name: Create/Update Release PR
         uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,4 +1,4 @@
-name: CI/CD [ON MAIN]
+name: CI/CD
 
 on:
   push:
@@ -6,6 +6,11 @@ on:
       - "*"
     branches:
       - main
+    inputs:
+      deno-version:
+        type: string
+        required: false
+        default: '~1.36'
 
 jobs:
 
@@ -37,6 +42,6 @@ jobs:
 
   cd:
     needs: [ci]
-    if: needs.pre_ci.outputs.should_skip != 'true'
+    if: needs.ci.outputs.should_skip != 'true'
     uses: ./.github/workflows/shared.cd.yml
     secrets: inherit

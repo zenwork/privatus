@@ -17,7 +17,7 @@ jobs:
 
 
   check:
-    name: Check Unmerged Changesets
+    name: Deploy Or Not
     runs-on: ubuntu-latest
     outputs:
       deployable: ${{ steps.check.outputs.deployable }}
@@ -35,7 +35,7 @@ jobs:
   deploy:
     needs: check
     if: needs.check.outputs.deployable == 'true'
-    name: Deploy
+    name: Deno Deploy
     runs-on: ubuntu-latest
     permissions:
       id-token: write
