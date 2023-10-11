@@ -17,18 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup GitHub CLI
-        run: |
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-          sudo apt-add-repository https://cli.github.com/packages
-          sudo apt update
-          sudo apt install gh
-
-      - name: Authenticate with GitHub CLI
-        run: gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+      - name: Install the gh cli
+        uses: ksivamuthu/actions-setup-gh-cli@v2
+        with:
+          version: 2.24.3
 
       - name: Create GitHub Release
         run: |
+          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
           gh release create \
             "v${{ github.event.pull_request.merged_commit_sha }}" \
             --title "Release v${{ github.event.pull_request.merged_commit_sha }}" \
