@@ -24,7 +24,7 @@ jobs:
 
       - name: Create GitHub Release
         run: |
-          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
           gh release create \
             "v${{ github.event.pull_request.merged_commit_sha }}" \
             --title "Release v${{ github.event.pull_request.merged_commit_sha }}" \
