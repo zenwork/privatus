@@ -1,5 +1,13 @@
 # client
 
+## 0.9.5
+
+### Patch Changes
+
+- bdb609e: fixing github release
+- Updated dependencies [bdb609e]
+  - common@0.9.5
+
 ## 0.9.4
 
 ### Patch Changes
